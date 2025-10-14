@@ -1,0 +1,13 @@
+# Ignore local environment files containing secrets
+.env
+env_new.env
+
+# Ignore Python virtualenv
+.venv/
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+
+# Logs
+logs/

@@ -1,0 +1,325 @@
+{"timestamp": "2025-10-13T21:06:15.723327", "level": "INFO", "text": "Dashboard supervisor starting up - initializing all systems", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T21:06:18.723862", "level": "INFO", "text": "Dashboard web interface is now running and accessible", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T21:06:50.724679", "level": "WARNING", "text": "Hive Mind connection lost, attempting to reconnect", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T21:07:22.725621", "level": "WARNING", "text": "Hive Mind connection lost, attempting to reconnect", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T21:08:22.727094", "level": "WARNING", "text": "Hive Mind connection lost, attempting to reconnect", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T21:09:22.727799", "level": "WARNING", "text": "Hive Mind connection lost, attempting to reconnect", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T21:10:22.727646", "level": "WARNING", "text": "Hive Mind connection lost, attempting to reconnect", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T21:10:52.727340", "level": "INFO", "text": "System health check: All components operational, uptime 0h 4m 37s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T21:11:22.727533", "level": "WARNING", "text": "Hive Mind connection lost, attempting to reconnect", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T21:12:22.728421", "level": "WARNING", "text": "Hive Mind connection lost, attempting to reconnect", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T21:13:22.727552", "level": "WARNING", "text": "Hive Mind connection lost, attempting to reconnect", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T21:14:22.727593", "level": "WARNING", "text": "Hive Mind connection lost, attempting to reconnect", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T21:15:22.728171", "level": "WARNING", "text": "Hive Mind connection lost, attempting to reconnect", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T21:15:52.729752", "level": "INFO", "text": "System health check: All components operational, uptime 0h 9m 37s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T21:16:22.731246", "level": "WARNING", "text": "Hive Mind connection lost, attempting to reconnect", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T21:17:22.730109", "level": "WARNING", "text": "Hive Mind connection lost, attempting to reconnect", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T21:18:22.730301", "level": "WARNING", "text": "Hive Mind connection lost, attempting to reconnect", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T21:19:22.730729", "level": "WARNING", "text": "Dashboard process stopped unexpectedly, initiating automatic restart", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T21:19:25.731326", "level": "INFO", "text": "Dashboard web interface is now running and accessible", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T21:19:25.731404", "level": "WARNING", "text": "Hive Mind connection lost, attempting to reconnect", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T21:20:22.735552", "level": "WARNING", "text": "Hive Mind connection lost, attempting to reconnect", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T21:20:52.731752", "level": "INFO", "text": "System health check: All components operational, uptime 0h 14m 37s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T21:21:22.731948", "level": "WARNING", "text": "Dashboard process stopped unexpectedly, initiating automatic restart", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T21:21:25.735486", "level": "WARNING", "text": "Hive Mind connection lost, attempting to reconnect", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T21:22:22.735773", "level": "WARNING", "text": "Dashboard process stopped unexpectedly, initiating automatic restart", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T21:22:25.736538", "level": "INFO", "text": "Dashboard web interface is now running and accessible", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T21:22:25.736664", "level": "WARNING", "text": "Hive Mind connection lost, attempting to reconnect", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T21:23:22.733839", "level": "WARNING", "text": "Hive Mind connection lost, attempting to reconnect", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T21:24:22.733240", "level": "WARNING", "text": "Hive Mind connection lost, attempting to reconnect", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T21:25:22.734086", "level": "WARNING", "text": "Hive Mind connection lost, attempting to reconnect", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T21:25:52.733552", "level": "INFO", "text": "System health check: All components operational, uptime 0h 19m 37s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T21:26:22.733783", "level": "WARNING", "text": "Hive Mind connection lost, attempting to reconnect", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T21:27:22.734131", "level": "WARNING", "text": "Hive Mind connection lost, attempting to reconnect", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T21:28:22.733777", "level": "WARNING", "text": "Hive Mind connection lost, attempting to reconnect", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T21:29:22.733969", "level": "WARNING", "text": "Hive Mind connection lost, attempting to reconnect", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T21:30:22.735737", "level": "WARNING", "text": "Hive Mind connection lost, attempting to reconnect", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T21:30:52.736480", "level": "INFO", "text": "System health check: All components operational, uptime 0h 24m 37s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T21:31:22.736780", "level": "WARNING", "text": "Hive Mind connection lost, attempting to reconnect", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T21:32:22.735398", "level": "WARNING", "text": "Hive Mind connection lost, attempting to reconnect", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T21:33:22.735782", "level": "WARNING", "text": "Hive Mind connection lost, attempting to reconnect", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T21:34:22.736030", "level": "WARNING", "text": "Hive Mind connection lost, attempting to reconnect", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T21:35:22.737380", "level": "WARNING", "text": "Hive Mind connection lost, attempting to reconnect", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T21:35:52.736138", "level": "INFO", "text": "System health check: All components operational, uptime 0h 29m 37s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T21:36:22.736283", "level": "WARNING", "text": "Hive Mind connection lost, attempting to reconnect", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T21:37:22.737557", "level": "WARNING", "text": "Hive Mind connection lost, attempting to reconnect", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T21:38:22.736506", "level": "WARNING", "text": "Hive Mind connection lost, attempting to reconnect", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T21:39:22.736766", "level": "WARNING", "text": "Hive Mind connection lost, attempting to reconnect", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T21:40:22.737018", "level": "WARNING", "text": "Hive Mind connection lost, attempting to reconnect", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T21:40:52.736770", "level": "INFO", "text": "System health check: All components operational, uptime 0h 34m 37s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T21:41:22.736945", "level": "WARNING", "text": "Hive Mind connection lost, attempting to reconnect", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T21:42:22.737129", "level": "WARNING", "text": "Hive Mind connection lost, attempting to reconnect", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T21:43:22.738222", "level": "WARNING", "text": "Hive Mind connection lost, attempting to reconnect", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T21:44:22.739900", "level": "WARNING", "text": "Hive Mind connection lost, attempting to reconnect", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T21:45:22.739164", "level": "WARNING", "text": "Hive Mind connection lost, attempting to reconnect", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T21:45:52.739285", "level": "INFO", "text": "System health check: All components operational, uptime 0h 39m 37s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T21:46:22.739854", "level": "WARNING", "text": "Hive Mind connection lost, attempting to reconnect", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T21:47:22.739270", "level": "WARNING", "text": "Hive Mind connection lost, attempting to reconnect", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T21:48:22.739540", "level": "WARNING", "text": "Hive Mind connection lost, attempting to reconnect", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T21:49:22.740258", "level": "WARNING", "text": "Hive Mind connection lost, attempting to reconnect", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T21:50:22.739678", "level": "WARNING", "text": "Hive Mind connection lost, attempting to reconnect", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T21:50:52.739613", "level": "INFO", "text": "System health check: All components operational, uptime 0h 44m 37s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T21:51:22.739822", "level": "WARNING", "text": "Hive Mind connection lost, attempting to reconnect", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T21:52:22.740351", "level": "WARNING", "text": "Hive Mind connection lost, attempting to reconnect", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T21:53:22.739941", "level": "WARNING", "text": "Hive Mind connection lost, attempting to reconnect", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T21:54:22.740110", "level": "WARNING", "text": "Hive Mind connection lost, attempting to reconnect", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T21:55:22.740165", "level": "WARNING", "text": "Hive Mind connection lost, attempting to reconnect", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T21:55:52.740211", "level": "INFO", "text": "System health check: All components operational, uptime 0h 49m 37s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T21:56:22.740540", "level": "WARNING", "text": "Hive Mind connection lost, attempting to reconnect", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T21:57:22.743006", "level": "WARNING", "text": "Hive Mind connection lost, attempting to reconnect", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T21:58:22.742084", "level": "WARNING", "text": "Hive Mind connection lost, attempting to reconnect", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T21:59:22.743814", "level": "WARNING", "text": "Hive Mind connection lost, attempting to reconnect", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T22:00:22.741295", "level": "WARNING", "text": "Hive Mind connection lost, attempting to reconnect", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T22:00:52.740864", "level": "INFO", "text": "System health check: All components operational, uptime 0h 54m 37s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T22:01:22.741883", "level": "WARNING", "text": "Hive Mind connection lost, attempting to reconnect", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T22:02:22.744556", "level": "WARNING", "text": "Hive Mind connection lost, attempting to reconnect", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T22:03:22.744826", "level": "WARNING", "text": "Hive Mind connection lost, attempting to reconnect", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T22:04:22.745679", "level": "WARNING", "text": "Hive Mind connection lost, attempting to reconnect", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T22:05:22.745192", "level": "WARNING", "text": "Hive Mind connection lost, attempting to reconnect", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T22:05:52.745158", "level": "INFO", "text": "System health check: All components operational, uptime 0h 59m 37s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T22:06:22.745475", "level": "WARNING", "text": "Hive Mind connection lost, attempting to reconnect", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T22:07:22.745286", "level": "WARNING", "text": "Hive Mind connection lost, attempting to reconnect", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T22:08:22.747187", "level": "WARNING", "text": "Hive Mind connection lost, attempting to reconnect", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T22:09:22.746600", "level": "WARNING", "text": "Hive Mind connection lost, attempting to reconnect", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T22:10:22.746723", "level": "WARNING", "text": "Hive Mind connection lost, attempting to reconnect", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T22:10:52.746601", "level": "INFO", "text": "System health check: All components operational, uptime 1h 4m 37s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T22:11:22.746834", "level": "WARNING", "text": "Hive Mind connection lost, attempting to reconnect", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T22:12:22.746722", "level": "WARNING", "text": "Hive Mind connection lost, attempting to reconnect", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T22:13:22.746864", "level": "WARNING", "text": "Hive Mind connection lost, attempting to reconnect", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T22:14:22.746924", "level": "WARNING", "text": "Hive Mind connection lost, attempting to reconnect", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T22:15:22.746971", "level": "WARNING", "text": "Hive Mind connection lost, attempting to reconnect", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T22:15:52.746999", "level": "INFO", "text": "System health check: All components operational, uptime 1h 9m 37s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T22:15:56.357228", "level": "INFO", "text": "Dashboard supervisor received shutdown signal, cleaning up processes", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T22:15:56.421191", "level": "INFO", "text": "Dashboard supervisor has shutdown cleanly", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T22:15:58.379637", "level": "INFO", "text": "Dashboard supervisor starting up - initializing all systems", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T22:16:01.380200", "level": "INFO", "text": "Dashboard web interface is now running and accessible", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T22:16:01.380309", "level": "INFO", "text": "Hive Mind integration disabled - system running in standalone mode", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T22:18:31.381987", "level": "INFO", "text": "System health check: All components operational, uptime 0h 2m 33s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T22:21:01.383204", "level": "INFO", "text": "System health check: All components operational, uptime 0h 5m 3s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T22:23:31.390047", "level": "INFO", "text": "System health check: All components operational, uptime 0h 7m 33s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T22:26:01.391613", "level": "INFO", "text": "System health check: All components operational, uptime 0h 10m 3s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T22:28:31.392786", "level": "INFO", "text": "System health check: All components operational, uptime 0h 12m 33s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T22:31:01.394194", "level": "INFO", "text": "System health check: All components operational, uptime 0h 15m 3s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T22:33:31.395309", "level": "INFO", "text": "System health check: All components operational, uptime 0h 17m 33s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T22:36:01.396537", "level": "INFO", "text": "System health check: All components operational, uptime 0h 20m 3s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T22:38:31.398848", "level": "INFO", "text": "System health check: All components operational, uptime 0h 22m 33s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T22:41:01.408733", "level": "INFO", "text": "System health check: All components operational, uptime 0h 25m 3s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T22:43:31.409952", "level": "INFO", "text": "System health check: All components operational, uptime 0h 27m 33s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T22:46:01.414093", "level": "INFO", "text": "System health check: All components operational, uptime 0h 30m 3s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T22:48:31.415301", "level": "INFO", "text": "System health check: All components operational, uptime 0h 32m 33s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T22:51:01.416627", "level": "INFO", "text": "System health check: All components operational, uptime 0h 35m 3s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T22:53:31.418208", "level": "INFO", "text": "System health check: All components operational, uptime 0h 37m 33s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T22:56:01.421660", "level": "INFO", "text": "System health check: All components operational, uptime 0h 40m 3s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T22:58:31.422948", "level": "INFO", "text": "System health check: All components operational, uptime 0h 42m 33s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T23:01:01.425819", "level": "INFO", "text": "System health check: All components operational, uptime 0h 45m 3s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T23:03:31.428110", "level": "INFO", "text": "System health check: All components operational, uptime 0h 47m 33s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T23:06:01.429316", "level": "INFO", "text": "System health check: All components operational, uptime 0h 50m 3s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T23:08:31.430467", "level": "INFO", "text": "System health check: All components operational, uptime 0h 52m 33s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T23:11:01.438893", "level": "INFO", "text": "System health check: All components operational, uptime 0h 55m 3s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T23:13:31.440372", "level": "INFO", "text": "System health check: All components operational, uptime 0h 57m 33s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T23:16:01.442328", "level": "INFO", "text": "System health check: All components operational, uptime 1h 0m 3s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T23:18:31.443621", "level": "INFO", "text": "System health check: All components operational, uptime 1h 2m 33s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T23:21:01.453105", "level": "INFO", "text": "System health check: All components operational, uptime 1h 5m 3s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T23:23:31.456163", "level": "INFO", "text": "System health check: All components operational, uptime 1h 7m 33s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T23:26:01.457487", "level": "INFO", "text": "System health check: All components operational, uptime 1h 10m 3s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T23:28:31.458718", "level": "INFO", "text": "System health check: All components operational, uptime 1h 12m 33s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T23:31:01.460119", "level": "INFO", "text": "System health check: All components operational, uptime 1h 15m 3s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T23:33:31.461162", "level": "INFO", "text": "System health check: All components operational, uptime 1h 17m 33s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T23:36:01.462505", "level": "INFO", "text": "System health check: All components operational, uptime 1h 20m 3s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T23:38:31.463798", "level": "INFO", "text": "System health check: All components operational, uptime 1h 22m 33s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T23:41:01.465518", "level": "INFO", "text": "System health check: All components operational, uptime 1h 25m 3s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T23:43:31.466737", "level": "INFO", "text": "System health check: All components operational, uptime 1h 27m 33s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T23:46:01.469616", "level": "INFO", "text": "System health check: All components operational, uptime 1h 30m 3s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T23:48:31.472190", "level": "INFO", "text": "System health check: All components operational, uptime 1h 32m 33s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T23:51:01.473275", "level": "INFO", "text": "System health check: All components operational, uptime 1h 35m 3s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T23:53:31.475978", "level": "INFO", "text": "System health check: All components operational, uptime 1h 37m 33s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T23:56:01.080126", "level": "INFO", "text": "System health check: All components operational, uptime 1h 40m 2s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-13T23:58:31.084671", "level": "INFO", "text": "System health check: All components operational, uptime 1h 42m 32s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T00:01:01.085761", "level": "INFO", "text": "System health check: All components operational, uptime 1h 45m 2s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T00:03:30.687425", "level": "INFO", "text": "System health check: All components operational, uptime 1h 47m 32s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T00:06:00.688647", "level": "INFO", "text": "System health check: All components operational, uptime 1h 50m 2s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T00:08:30.689869", "level": "INFO", "text": "System health check: All components operational, uptime 1h 52m 32s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T00:11:00.693974", "level": "INFO", "text": "System health check: All components operational, uptime 1h 55m 2s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T00:13:30.270008", "level": "INFO", "text": "System health check: All components operational, uptime 1h 57m 31s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T00:16:00.274526", "level": "INFO", "text": "System health check: All components operational, uptime 2h 0m 1s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T00:18:30.289135", "level": "INFO", "text": "System health check: All components operational, uptime 2h 2m 31s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T00:21:00.296149", "level": "INFO", "text": "System health check: All components operational, uptime 2h 5m 1s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T00:23:30.300250", "level": "INFO", "text": "System health check: All components operational, uptime 2h 7m 31s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T00:26:00.305705", "level": "INFO", "text": "System health check: All components operational, uptime 2h 10m 1s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T00:28:30.316902", "level": "INFO", "text": "System health check: All components operational, uptime 2h 12m 31s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T00:31:00.318282", "level": "INFO", "text": "System health check: All components operational, uptime 2h 15m 1s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T00:33:30.353313", "level": "INFO", "text": "System health check: All components operational, uptime 2h 17m 31s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T00:36:00.362814", "level": "INFO", "text": "System health check: All components operational, uptime 2h 20m 1s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T00:38:30.365791", "level": "INFO", "text": "System health check: All components operational, uptime 2h 22m 31s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T00:41:00.369100", "level": "INFO", "text": "System health check: All components operational, uptime 2h 25m 1s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T00:43:30.374212", "level": "INFO", "text": "System health check: All components operational, uptime 2h 27m 31s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T00:46:00.375523", "level": "INFO", "text": "System health check: All components operational, uptime 2h 30m 1s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T00:48:29.964417", "level": "INFO", "text": "System health check: All components operational, uptime 2h 32m 31s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T00:50:59.966529", "level": "INFO", "text": "System health check: All components operational, uptime 2h 35m 1s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T00:53:29.968218", "level": "INFO", "text": "System health check: All components operational, uptime 2h 37m 31s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T00:55:59.976307", "level": "INFO", "text": "System health check: All components operational, uptime 2h 40m 1s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T00:58:29.980823", "level": "INFO", "text": "System health check: All components operational, uptime 2h 42m 31s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T01:00:59.984878", "level": "INFO", "text": "System health check: All components operational, uptime 2h 45m 1s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T01:03:29.985992", "level": "INFO", "text": "System health check: All components operational, uptime 2h 47m 31s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T01:05:59.987281", "level": "INFO", "text": "System health check: All components operational, uptime 2h 50m 1s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T01:08:29.988367", "level": "INFO", "text": "System health check: All components operational, uptime 2h 52m 31s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T01:10:59.991502", "level": "INFO", "text": "System health check: All components operational, uptime 2h 55m 1s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T01:13:29.994062", "level": "INFO", "text": "System health check: All components operational, uptime 2h 57m 31s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T01:15:59.995296", "level": "INFO", "text": "System health check: All components operational, uptime 3h 0m 1s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T01:18:30.017450", "level": "INFO", "text": "System health check: All components operational, uptime 3h 2m 31s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T01:21:00.020469", "level": "INFO", "text": "System health check: All components operational, uptime 3h 5m 1s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T01:23:30.021572", "level": "INFO", "text": "System health check: All components operational, uptime 3h 7m 31s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T01:26:00.029996", "level": "INFO", "text": "System health check: All components operational, uptime 3h 10m 1s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T01:28:30.035028", "level": "INFO", "text": "System health check: All components operational, uptime 3h 12m 31s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T01:31:00.043391", "level": "INFO", "text": "System health check: All components operational, uptime 3h 15m 1s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T01:33:30.044587", "level": "INFO", "text": "System health check: All components operational, uptime 3h 17m 31s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T01:36:00.051423", "level": "INFO", "text": "System health check: All components operational, uptime 3h 20m 1s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T01:38:29.643352", "level": "INFO", "text": "System health check: All components operational, uptime 3h 22m 31s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T01:40:59.644840", "level": "INFO", "text": "System health check: All components operational, uptime 3h 25m 1s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T01:43:29.239317", "level": "INFO", "text": "System health check: All components operational, uptime 3h 27m 30s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T01:45:59.240832", "level": "INFO", "text": "System health check: All components operational, uptime 3h 30m 0s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T01:48:29.251467", "level": "INFO", "text": "System health check: All components operational, uptime 3h 32m 30s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T01:50:58.844209", "level": "INFO", "text": "System health check: All components operational, uptime 3h 35m 0s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T01:53:28.424016", "level": "INFO", "text": "System health check: All components operational, uptime 3h 37m 30s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T01:55:58.426071", "level": "INFO", "text": "System health check: All components operational, uptime 3h 40m 0s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T01:58:28.427351", "level": "INFO", "text": "System health check: All components operational, uptime 3h 42m 30s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T02:00:58.430174", "level": "INFO", "text": "System health check: All components operational, uptime 3h 45m 0s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T02:03:28.432194", "level": "INFO", "text": "System health check: All components operational, uptime 3h 47m 30s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T02:05:58.433503", "level": "INFO", "text": "System health check: All components operational, uptime 3h 50m 0s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T02:08:28.438691", "level": "INFO", "text": "System health check: All components operational, uptime 3h 52m 30s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T02:10:58.440914", "level": "INFO", "text": "System health check: All components operational, uptime 3h 55m 0s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T02:13:28.448157", "level": "INFO", "text": "System health check: All components operational, uptime 3h 57m 30s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T02:15:58.451679", "level": "INFO", "text": "System health check: All components operational, uptime 4h 0m 0s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T02:18:28.452734", "level": "INFO", "text": "System health check: All components operational, uptime 4h 2m 30s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T02:20:58.457759", "level": "INFO", "text": "System health check: All components operational, uptime 4h 5m 0s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T02:23:28.460782", "level": "INFO", "text": "System health check: All components operational, uptime 4h 7m 30s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T02:25:58.462065", "level": "INFO", "text": "System health check: All components operational, uptime 4h 10m 0s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T02:28:28.463261", "level": "INFO", "text": "System health check: All components operational, uptime 4h 12m 30s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T02:30:58.464435", "level": "INFO", "text": "System health check: All components operational, uptime 4h 15m 0s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T02:33:28.021609", "level": "INFO", "text": "System health check: All components operational, uptime 4h 17m 29s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T02:35:58.031142", "level": "INFO", "text": "System health check: All components operational, uptime 4h 19m 59s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T02:38:27.580010", "level": "INFO", "text": "System health check: All components operational, uptime 4h 22m 29s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T02:40:57.147282", "level": "INFO", "text": "System health check: All components operational, uptime 4h 24m 58s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T02:43:27.148274", "level": "INFO", "text": "System health check: All components operational, uptime 4h 27m 28s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T02:45:57.156806", "level": "INFO", "text": "System health check: All components operational, uptime 4h 29m 58s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T02:48:27.160171", "level": "INFO", "text": "System health check: All components operational, uptime 4h 32m 28s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T02:50:57.161195", "level": "INFO", "text": "System health check: All components operational, uptime 4h 34m 58s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T02:53:27.165569", "level": "INFO", "text": "System health check: All components operational, uptime 4h 37m 28s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T02:55:57.167123", "level": "INFO", "text": "System health check: All components operational, uptime 4h 39m 58s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T02:58:26.705679", "level": "INFO", "text": "System health check: All components operational, uptime 4h 42m 28s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T03:00:56.291589", "level": "INFO", "text": "System health check: All components operational, uptime 4h 44m 57s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T03:03:26.293015", "level": "INFO", "text": "System health check: All components operational, uptime 4h 47m 27s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T03:05:56.295918", "level": "INFO", "text": "System health check: All components operational, uptime 4h 49m 57s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T03:08:26.300516", "level": "INFO", "text": "System health check: All components operational, uptime 4h 52m 27s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T03:10:56.306217", "level": "INFO", "text": "System health check: All components operational, uptime 4h 54m 57s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T03:13:26.323557", "level": "INFO", "text": "System health check: All components operational, uptime 4h 57m 27s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T03:15:56.339582", "level": "INFO", "text": "System health check: All components operational, uptime 4h 59m 57s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T03:18:26.343059", "level": "INFO", "text": "System health check: All components operational, uptime 5h 2m 27s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T03:20:56.352277", "level": "INFO", "text": "System health check: All components operational, uptime 5h 4m 57s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T03:23:26.372408", "level": "INFO", "text": "System health check: All components operational, uptime 5h 7m 27s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T03:25:56.381291", "level": "INFO", "text": "System health check: All components operational, uptime 5h 9m 58s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T03:28:26.384542", "level": "INFO", "text": "System health check: All components operational, uptime 5h 12m 28s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T03:30:56.391319", "level": "INFO", "text": "System health check: All components operational, uptime 5h 14m 58s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T03:33:26.394629", "level": "INFO", "text": "System health check: All components operational, uptime 5h 17m 28s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T03:35:56.427050", "level": "INFO", "text": "System health check: All components operational, uptime 5h 19m 58s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T03:38:26.443128", "level": "INFO", "text": "System health check: All components operational, uptime 5h 22m 28s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T03:40:56.445619", "level": "INFO", "text": "System health check: All components operational, uptime 5h 24m 58s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T03:43:26.451311", "level": "INFO", "text": "System health check: All components operational, uptime 5h 27m 28s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T03:45:55.994343", "level": "INFO", "text": "System health check: All components operational, uptime 5h 29m 57s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T03:48:26.017729", "level": "INFO", "text": "System health check: All components operational, uptime 5h 32m 27s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T03:50:56.019062", "level": "INFO", "text": "System health check: All components operational, uptime 5h 34m 57s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T03:53:26.021127", "level": "INFO", "text": "System health check: All components operational, uptime 5h 37m 27s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T03:55:54.807607", "level": "INFO", "text": "System health check: All components operational, uptime 5h 39m 56s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T03:58:24.842672", "level": "INFO", "text": "System health check: All components operational, uptime 5h 42m 26s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T04:00:54.844381", "level": "INFO", "text": "System health check: All components operational, uptime 5h 44m 56s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T04:03:24.859316", "level": "INFO", "text": "System health check: All components operational, uptime 5h 47m 26s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T04:05:54.882287", "level": "INFO", "text": "System health check: All components operational, uptime 5h 49m 56s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T04:08:24.883547", "level": "INFO", "text": "System health check: All components operational, uptime 5h 52m 26s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T04:10:54.924462", "level": "INFO", "text": "System health check: All components operational, uptime 5h 54m 56s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T04:13:24.926353", "level": "INFO", "text": "System health check: All components operational, uptime 5h 57m 26s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T04:15:54.937795", "level": "INFO", "text": "System health check: All components operational, uptime 5h 59m 56s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T04:18:24.993806", "level": "INFO", "text": "System health check: All components operational, uptime 6h 2m 26s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T04:20:54.996291", "level": "INFO", "text": "System health check: All components operational, uptime 6h 4m 56s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T04:23:24.997506", "level": "INFO", "text": "System health check: All components operational, uptime 6h 7m 26s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T04:25:54.999964", "level": "INFO", "text": "System health check: All components operational, uptime 6h 9m 56s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T04:28:25.022592", "level": "INFO", "text": "System health check: All components operational, uptime 6h 12m 26s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T04:30:55.028286", "level": "INFO", "text": "System health check: All components operational, uptime 6h 14m 56s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T04:33:25.046457", "level": "INFO", "text": "System health check: All components operational, uptime 6h 17m 26s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T04:35:55.047743", "level": "INFO", "text": "System health check: All components operational, uptime 6h 19m 56s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T04:38:25.049659", "level": "INFO", "text": "System health check: All components operational, uptime 6h 22m 26s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T04:40:55.063666", "level": "INFO", "text": "System health check: All components operational, uptime 6h 24m 56s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T04:43:25.066203", "level": "INFO", "text": "System health check: All components operational, uptime 6h 27m 26s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T04:45:55.070025", "level": "INFO", "text": "System health check: All components operational, uptime 6h 29m 56s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T04:48:25.072825", "level": "INFO", "text": "System health check: All components operational, uptime 6h 32m 26s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T04:50:55.075406", "level": "INFO", "text": "System health check: All components operational, uptime 6h 34m 56s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T04:53:25.086536", "level": "INFO", "text": "System health check: All components operational, uptime 6h 37m 26s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T04:55:54.126135", "level": "INFO", "text": "System health check: All components operational, uptime 6h 39m 55s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T04:58:24.131608", "level": "INFO", "text": "System health check: All components operational, uptime 6h 42m 25s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T05:00:53.666073", "level": "INFO", "text": "System health check: All components operational, uptime 6h 44m 55s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T05:03:23.667397", "level": "INFO", "text": "System health check: All components operational, uptime 6h 47m 25s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T05:05:53.668694", "level": "INFO", "text": "System health check: All components operational, uptime 6h 49m 55s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T05:08:23.673268", "level": "INFO", "text": "System health check: All components operational, uptime 6h 52m 25s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T05:10:53.678434", "level": "INFO", "text": "System health check: All components operational, uptime 6h 54m 55s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T05:13:23.682208", "level": "INFO", "text": "System health check: All components operational, uptime 6h 57m 25s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T05:15:53.691609", "level": "INFO", "text": "System health check: All components operational, uptime 6h 59m 55s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T05:18:23.695550", "level": "INFO", "text": "System health check: All components operational, uptime 7h 2m 25s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T05:20:53.229219", "level": "INFO", "text": "System health check: All components operational, uptime 7h 4m 54s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T05:23:23.234009", "level": "INFO", "text": "System health check: All components operational, uptime 7h 7m 24s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T05:25:52.766517", "level": "INFO", "text": "System health check: All components operational, uptime 7h 9m 54s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T05:28:22.777382", "level": "INFO", "text": "System health check: All components operational, uptime 7h 12m 24s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T05:30:52.779347", "level": "INFO", "text": "System health check: All components operational, uptime 7h 14m 54s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T05:33:22.822984", "level": "INFO", "text": "System health check: All components operational, uptime 7h 17m 24s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T05:35:52.827698", "level": "INFO", "text": "System health check: All components operational, uptime 7h 19m 54s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T05:38:22.361887", "level": "INFO", "text": "System health check: All components operational, uptime 7h 22m 23s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T05:40:52.363529", "level": "INFO", "text": "System health check: All components operational, uptime 7h 24m 53s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T05:43:22.367251", "level": "INFO", "text": "System health check: All components operational, uptime 7h 27m 23s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T05:45:52.369031", "level": "INFO", "text": "System health check: All components operational, uptime 7h 29m 53s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T05:48:22.370310", "level": "INFO", "text": "System health check: All components operational, uptime 7h 32m 23s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T05:50:52.371596", "level": "INFO", "text": "System health check: All components operational, uptime 7h 34m 53s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T05:53:22.373818", "level": "INFO", "text": "System health check: All components operational, uptime 7h 37m 23s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T05:55:52.375445", "level": "INFO", "text": "System health check: All components operational, uptime 7h 39m 53s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T05:58:22.376704", "level": "INFO", "text": "System health check: All components operational, uptime 7h 42m 23s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T06:00:52.383304", "level": "INFO", "text": "System health check: All components operational, uptime 7h 44m 54s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T06:03:22.387750", "level": "INFO", "text": "System health check: All components operational, uptime 7h 47m 24s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T06:05:51.978005", "level": "INFO", "text": "System health check: All components operational, uptime 7h 49m 53s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T06:08:21.579615", "level": "INFO", "text": "System health check: All components operational, uptime 7h 52m 23s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T06:10:51.182896", "level": "INFO", "text": "System health check: All components operational, uptime 7h 54m 52s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T06:13:21.187957", "level": "INFO", "text": "System health check: All components operational, uptime 7h 57m 22s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T06:15:49.812587", "level": "INFO", "text": "System health check: All components operational, uptime 7h 59m 51s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T06:18:19.825119", "level": "INFO", "text": "System health check: All components operational, uptime 8h 2m 21s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T06:20:49.437934", "level": "INFO", "text": "System health check: All components operational, uptime 8h 4m 51s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T06:23:18.605496", "level": "INFO", "text": "System health check: All components operational, uptime 8h 7m 20s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T06:25:47.401947", "level": "INFO", "text": "System health check: All components operational, uptime 8h 9m 49s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T06:28:15.332112", "level": "INFO", "text": "System health check: All components operational, uptime 8h 12m 16s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T06:30:43.253832", "level": "INFO", "text": "System health check: All components operational, uptime 8h 14m 44s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T06:33:11.576625", "level": "INFO", "text": "System health check: All components operational, uptime 8h 17m 13s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T06:35:39.190480", "level": "INFO", "text": "System health check: All components operational, uptime 8h 19m 40s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T06:38:07.197473", "level": "INFO", "text": "System health check: All components operational, uptime 8h 22m 8s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T06:40:34.777341", "level": "INFO", "text": "System health check: All components operational, uptime 8h 24m 36s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T06:43:02.326534", "level": "INFO", "text": "System health check: All components operational, uptime 8h 27m 3s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T06:45:30.299884", "level": "INFO", "text": "System health check: All components operational, uptime 8h 29m 31s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T06:47:57.648096", "level": "INFO", "text": "System health check: All components operational, uptime 8h 31m 59s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T06:50:25.026502", "level": "INFO", "text": "System health check: All components operational, uptime 8h 34m 26s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T06:52:53.000917", "level": "INFO", "text": "System health check: All components operational, uptime 8h 36m 54s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T06:55:22.513549", "level": "INFO", "text": "System health check: All components operational, uptime 8h 39m 24s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T06:57:52.526343", "level": "INFO", "text": "System health check: All components operational, uptime 8h 41m 54s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T07:00:22.529917", "level": "INFO", "text": "System health check: All components operational, uptime 8h 44m 24s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T07:02:52.049181", "level": "INFO", "text": "System health check: All components operational, uptime 8h 46m 53s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T07:05:22.053488", "level": "INFO", "text": "System health check: All components operational, uptime 8h 49m 23s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T07:07:51.570740", "level": "INFO", "text": "System health check: All components operational, uptime 8h 51m 53s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T07:10:20.667060", "level": "INFO", "text": "System health check: All components operational, uptime 8h 54m 22s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T07:12:48.843918", "level": "INFO", "text": "System health check: All components operational, uptime 8h 56m 50s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T07:15:16.527680", "level": "INFO", "text": "System health check: All components operational, uptime 8h 59m 18s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T07:17:44.277094", "level": "INFO", "text": "System health check: All components operational, uptime 9h 1m 45s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T07:20:12.317241", "level": "INFO", "text": "System health check: All components operational, uptime 9h 4m 13s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T07:22:39.767445", "level": "INFO", "text": "System health check: All components operational, uptime 9h 6m 41s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T07:25:07.729666", "level": "INFO", "text": "System health check: All components operational, uptime 9h 9m 9s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T07:27:35.105366", "level": "INFO", "text": "System health check: All components operational, uptime 9h 11m 36s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T07:30:02.408901", "level": "INFO", "text": "System health check: All components operational, uptime 9h 14m 4s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T07:32:30.170647", "level": "INFO", "text": "System health check: All components operational, uptime 9h 16m 31s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T07:34:57.468973", "level": "INFO", "text": "System health check: All components operational, uptime 9h 18m 59s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T07:37:24.707724", "level": "INFO", "text": "System health check: All components operational, uptime 9h 21m 26s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T07:39:52.480388", "level": "INFO", "text": "System health check: All components operational, uptime 9h 23m 54s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T07:42:19.617118", "level": "INFO", "text": "System health check: All components operational, uptime 9h 26m 21s", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T07:43:34.976437", "level": "INFO", "text": "Dashboard supervisor received shutdown signal, cleaning up processes", "source": "dashboard_supervisor"}
+{"timestamp": "2025-10-14T07:43:39.417262", "level": "INFO", "text": "Dashboard supervisor has shutdown cleanly", "source": "dashboard_supervisor"}
