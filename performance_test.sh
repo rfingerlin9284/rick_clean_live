@@ -70,10 +70,8 @@ find "$TEST_BASE" -type d -exec chmod 700 {} + 2>/dev/null
 echo "⏱️  Testing OPTIMIZED approach (consolidated + batched)..."
 start_time=$(date +%s.%N)
 
-find "$TEST_BASE" \( \
-    -type d -exec chmod 755 {} + \
-    -o -type f -exec chmod 644 {} + \
-\)
+find "$TEST_BASE" -type d -exec chmod 755 {} +
+find "$TEST_BASE" -type f -exec chmod 644 {} +
 
 find "$TEST_BASE" -type f \( \
     -name "*.sh" \
@@ -96,7 +94,7 @@ echo "✅ Optimized approach completed in: ${optimized_time}s"
 echo ""
 
 # Calculate improvement
-if command -v bc >/dev/null 2>&1; then
+if command -v bc >/dev/null 2>&1 && (( $(echo "$optimized_time > 0" | bc -l) )); then
     speedup=$(echo "scale=2; $original_time / $optimized_time" | bc)
     improvement=$(echo "scale=1; ($original_time - $optimized_time) / $original_time * 100" | bc)
     

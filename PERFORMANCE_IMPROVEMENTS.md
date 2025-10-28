@@ -39,18 +39,16 @@ Original scripts used `-exec command {} \;` which:
 
 ## Optimizations Implemented
 
-### 1. **Single-Pass Directory Traversal**
-Combined multiple find operations into one traversal:
+### 1. **Single-Pass Directory Traversal with Batching**
+Combined operations and used batched execution:
 ```bash
-find "$BASE_PATH" \( \
-    -type d -exec chmod 755 {} + \
-    -o -type f -exec chmod 644 {} + \
-\)
+find "$BASE_PATH" -type d -exec chmod 755 {} +
+find "$BASE_PATH" -type f -exec chmod 644 {} +
 ```
 
 **Benefits**:
-- Directory tree traversed only once for setting base permissions
-- Dramatically reduces I/O operations
+- Only 2 directory tree traversals instead of 10+
+- Batched execution reduces process spawns
 - 5-10x faster on typical directory structures
 
 ### 2. **Batched Execution with `+`**
@@ -107,16 +105,16 @@ find "$BASE_PATH" -type f \( \
 - Single traversal for all script/executable patterns
 - Clearer logic and easier to maintain
 
-## Performance Comparison
+### Performance Comparison
 
 ### Original Script Performance (estimated on 10,000 files):
-- Directory traversals: 5-7 separate full traversals
+- Directory traversals: 10+ separate full traversals
 - Process spawns: ~10,000-15,000 for chmod operations
 - Ownership operations: 20-30 separate chown -R calls
 - **Estimated time**: 30-120 seconds (depending on filesystem)
 
 ### Optimized Script Performance (estimated on 10,000 files):
-- Directory traversals: 3-4 separate full traversals (consolidated)
+- Directory traversals: 4 separate traversals (consolidated)
 - Process spawns: ~50-200 for chmod operations (batched)
 - Ownership operations: 1 chown -R call
 - **Estimated time**: 3-15 seconds (depending on filesystem)

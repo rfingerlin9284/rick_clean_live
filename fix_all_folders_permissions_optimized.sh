@@ -12,12 +12,10 @@ echo "🔓 FIXING PERMISSIONS FOR ALL FOLDERS UNDER $BASE_PATH ..."
 echo "📋 Taking ownership of ALL folders and files..."
 sudo chown -R ing:ing "$BASE_PATH"
 
-# 2. Set all permissions in a single find traversal (much faster)
-echo "🛠️ Setting permissions in optimized single pass..."
-find "$BASE_PATH" \( \
-    -type d -exec chmod 755 {} + \
-    -o -type f -exec chmod 644 {} + \
-\)
+# 2. Set all permissions in two optimized passes (directories, then files)
+echo "🛠️ Setting permissions in optimized passes..."
+find "$BASE_PATH" -type d -exec chmod 755 {} +
+find "$BASE_PATH" -type f -exec chmod 644 {} +
 
 # 3. Make scripts and executables executable in one pass
 echo "🚀 Setting executable permissions for scripts and programs..."
