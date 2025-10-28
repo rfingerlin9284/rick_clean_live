@@ -2,7 +2,215 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "Update secret",
+      "label": "🚀 START RICK + HIVE MIND (Always-Running)",
+      "type": "shell",
+      "command": "tmux kill-session -t rick_system 2>/dev/null; tmux new-session -d -s rick_system && tmux send-keys -t rick_system 'cd /home/ing/RICK/RICK_LIVE_CLEAN && python3 -c \"from util.rick_narrator import RickNarrator; from hive.rick_hive_mind import RickHiveMind; rick = RickNarrator(); hive = RickHiveMind(); print(\\\"🤖 RICK LLM ACTIVE\\\"); print(\\\"🧠 HIVE MIND ACTIVE\\\"); import time; time.sleep(999999)\"' Enter && echo '✅ RICK + HIVE MIND started in tmux session: rick_system'",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "panel": "shared"
+      },
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": [],
+      "detail": "Starts Rick LLM + Hive Mind in tmux (always-running background session)"
+    },
+    {
+      "label": "🛑 STOP RICK + HIVE MIND",
+      "type": "shell",
+      "command": "tmux kill-session -t rick_system 2>/dev/null && echo '✅ RICK + HIVE MIND stopped' || echo '⚠️ No rick_system session running'",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "panel": "shared"
+      },
+      "problemMatcher": [],
+      "detail": "Stops the Rick LLM + Hive Mind tmux session"
+    },
+    {
+      "label": "🛡️ START GUARDIAN GATES",
+      "type": "shell",
+      "command": "tmux kill-session -t guardian_gates 2>/dev/null; tmux new-session -d -s guardian_gates && tmux send-keys -t guardian_gates 'cd /home/ing/RICK/RICK_LIVE_CLEAN && python3 hive/guardian_gates.py' Enter && echo '✅ GUARDIAN GATES started in tmux session: guardian_gates'",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "panel": "shared"
+      },
+      "problemMatcher": [],
+      "detail": "Starts Guardian Gates 4-gate validation system"
+    },
+    {
+      "label": "🛑 STOP GUARDIAN GATES",
+      "type": "shell",
+      "command": "tmux kill-session -t guardian_gates 2>/dev/null && echo '✅ GUARDIAN GATES stopped' || echo '⚠️ No guardian_gates session running'",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "panel": "shared"
+      },
+      "problemMatcher": [],
+      "detail": "Stops the Guardian Gates tmux session"
+    },
+    {
+      "label": "📊 START DASHBOARD",
+      "type": "shell",
+      "command": "tmux kill-session -t dashboard 2>/dev/null; tmux new-session -d -s dashboard && tmux send-keys -t dashboard 'cd /home/ing/RICK/RICK_LIVE_CLEAN && python3 dashboard/app.py' Enter && echo '✅ DASHBOARD started in tmux session: dashboard (http://localhost:8080)'",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "panel": "shared"
+      },
+      "problemMatcher": [],
+      "detail": "Starts web dashboard for monitoring (http://localhost:8080)"
+    },
+    {
+      "label": "🛑 STOP DASHBOARD",
+      "type": "shell",
+      "command": "tmux kill-session -t dashboard 2>/dev/null && echo '✅ DASHBOARD stopped' || echo '⚠️ No dashboard session running'",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "panel": "shared"
+      },
+      "problemMatcher": [],
+      "detail": "Stops the Dashboard tmux session"
+    },
+    {
+      "label": "🎮 OPEN RICK SESSION (tmux)",
+      "type": "shell",
+      "command": "tmux attach-session -t rick_system",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "panel": "shared"
+      },
+      "problemMatcher": [],
+      "detail": "Attach to Rick LLM + Hive Mind tmux session"
+    },
+    {
+      "label": "🎮 OPEN GUARDIAN GATES SESSION (tmux)",
+      "type": "shell",
+      "command": "tmux attach-session -t guardian_gates",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "panel": "shared"
+      },
+      "problemMatcher": [],
+      "detail": "Attach to Guardian Gates tmux session"
+    },
+    {
+      "label": "🎮 OPEN DASHBOARD SESSION (tmux)",
+      "type": "shell",
+      "command": "tmux attach-session -t dashboard",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "panel": "shared"
+      },
+      "problemMatcher": [],
+      "detail": "Attach to Dashboard tmux session"
+    },
+    {
+      "label": "📋 SWITCH TO CANARY MODE (Paper Trading)",
+      "type": "shell",
+      "command": "python3 -c \"from util.mode_manager import switch_mode; switch_mode('CANARY')\"",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "panel": "shared"
+      },
+      "problemMatcher": [],
+      "detail": "Switch system to CANARY mode (paper trading with practice account)"
+    },
+    {
+      "label": "⚡ SWITCH TO LIVE MODE (Real Trading)",
+      "type": "shell",
+      "command": "python3 -c \"from util.mode_manager import switch_mode; switch_mode('LIVE', pin=841921)\"",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "panel": "shared"
+      },
+      "problemMatcher": [],
+      "detail": "Switch system to LIVE mode (real money trading with PIN 841921)"
+    },
+    {
+      "label": "🛑 STOP RICK SESSION",
+      "type": "shell",
+      "command": "tmux kill-session -t rick_system 2>/dev/null && echo '✅ Rick session stopped' || echo '⚠️ Rick session not running'",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "panel": "shared"
+      },
+      "problemMatcher": [],
+      "detail": "Stop Rick LLM + Hive Mind session"
+    },
+    {
+      "label": "🛑 STOP GUARDIAN GATES SESSION",
+      "type": "shell",
+      "command": "tmux kill-session -t guardian_gates 2>/dev/null && echo '✅ Guardian Gates session stopped' || echo '⚠️ Guardian Gates session not running'",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "panel": "shared"
+      },
+      "problemMatcher": [],
+      "detail": "Stop Guardian Gates session"
+    },
+    {
+      "label": "🛑 STOP DASHBOARD SESSION",
+      "type": "shell",
+      "command": "tmux kill-session -t dashboard 2>/dev/null && echo '✅ Dashboard session stopped' || echo '⚠️ Dashboard session not running'",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "panel": "shared"
+      },
+      "problemMatcher": [],
+      "detail": "Stop Dashboard session"
+    },
+    {
+      "label": "📊 STATUS: Show All Running Sessions",
+      "type": "shell",
+      "command": "echo '🔍 RICK SYSTEM STATUS:' && tmux list-sessions 2>/dev/null || echo 'No tmux sessions running'",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "panel": "shared"
+      },
+      "problemMatcher": [],
+      "detail": "Show all active tmux sessions"
+    },
+    {
+      "label": "🛑 STOP ALL SYSTEMS",
+      "type": "shell",
+      "command": "echo '🛑 Stopping all RICK systems...' && tmux kill-session -t rick_system 2>/dev/null; tmux kill-session -t guardian_gates 2>/dev/null; tmux kill-session -t dashboard 2>/dev/null; echo '✅ All systems stopped'",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "panel": "shared"
+      },
+      "problemMatcher": [],
+      "detail": "Stop all RICK tmux sessions at once"
+    },
+    {
+      "label": "🔄 RESTART ALL SYSTEMS",
+      "type": "shell",
+      "command": "tmux kill-server 2>/dev/null; sleep 1; tmux new-session -d -s rick_system && tmux send-keys -t rick_system 'cd /home/ing/RICK/RICK_LIVE_CLEAN && python3 -c \"from util.rick_narrator import RickNarrator; from hive.rick_hive_mind import RickHiveMind; rick = RickNarrator(); hive = RickHiveMind(); print(\\\"🤖 RICK LLM ACTIVE\\\"); print(\\\"🧠 HIVE MIND ACTIVE\\\"); import time; time.sleep(999999)\"' Enter && sleep 2 && tmux new-session -d -s guardian_gates && tmux send-keys -t guardian_gates 'cd /home/ing/RICK/RICK_LIVE_CLEAN && python3 hive/guardian_gates.py' Enter && sleep 2 && tmux new-session -d -s dashboard && tmux send-keys -t dashboard 'cd /home/ing/RICK/RICK_LIVE_CLEAN && python3 dashboard/app.py' Enter && echo '✅ All systems restarted'",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "panel": "shared"
+      },
+      "problemMatcher": [],
+      "detail": "Kill all sessions and restart everything fresh"
+    },
+    {
+      "label": "🔑 Update secret",
       "type": "shell",
       "command": "./scripts/update_secret.sh",
       "presentation": {
@@ -10,40 +218,8 @@
         "reveal": "always",
         "panel": "shared"
       },
-      "problemMatcher": []
-    },
-    {
-      "label": "Confirm CANARY Mode",
-      "type": "shell",
-      "command": "python3 -c \"from util.mode_manager import switch_mode; switch_mode('CANARY')\"",
-      "group": {
-        "kind": "build",
-        "isDefault": true
-      },
       "problemMatcher": [],
-      "detail": "Switches the system to CANARY mode for validation."
-    },
-    {
-      "label": "Activate Live Trading Dashboard",
-      "type": "shell",
-      "command": "python3 -c \"from util.mode_manager import switch_mode; switch_mode('LIVE', pin=841921)\"",
-      "group": {
-        "kind": "build",
-        "isDefault": false
-      },
-      "problemMatcher": [],
-      "detail": "Switches the system to LIVE mode and activates the dashboard."
-    },
-    {
-      "label": "Run Dashboard",
-      "type": "shell",
-      "command": "python3 dashboard/app.py",
-      "group": {
-        "kind": "build",
-        "isDefault": false
-      },
-      "problemMatcher": [],
-      "detail": "Runs the web dashboard for live monitoring."
+      "detail": "Update system secret/credentials"
     }
   ]
 }

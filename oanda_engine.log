@@ -1,0 +1,135 @@
+nohup: ignoring input
+[H[2J[3JWARNING:brokers.oanda_connector:PRACTICE OCO latency 577.4ms exceeds Charter limit
+ERROR:util.rick_narrator:Ollama query error: HTTPConnectionPool(host='127.0.0.1', port=11434): Read timed out. (read timeout=10)
+WARNING:brokers.oanda_connector:PRACTICE OCO latency 591.6ms exceeds Charter limit
+ERROR:util.rick_narrator:Ollama query error: HTTPConnectionPool(host='127.0.0.1', port=11434): Read timed out. (read timeout=10)
+WARNING:brokers.oanda_connector:PRACTICE OCO latency 588.3ms exceeds Charter limit
+⚠️  ML modules not available - running in basic mode
+[92m✅ ✅ PRACTICE API connected[0m
+   Account: 101-001-31210531-002
+   Endpoint: https://api-fxpractice.oanda.com
+[92m✅ ✅ Hive Mind connected[0m
+[92m✅ ✅ Momentum/Trailing system loaded[0m
+
+================================================================================
+[1m[96m                     🤖 RBOTzilla TRADING ENGINE (PRACTICE)                      [0m
+[90m            Charter-Compliant OANDA | PIN: 841921 | 2025-10-15 20:07            [0m
+================================================================================
+
+
+[1m[93m▶ CHARTER COMPLIANCE STATUS[0m
+[90m──────────────────────────────────────────────────────────────────────────────[0m
+[90m  • [0m[37mPIN Validated:[0m [92m841921 ✅[0m
+[90m  • [0m[37mCharter Version:[0m [96mRBOTzilla UNI Phase 9[0m
+[90m  • [0m[37mImmutable OCO:[0m [92mENFORCED (All orders)[0m
+[90m  • [0m[37mMin R:R Ratio:[0m [92m3.2:1 (Charter Immutable)[0m
+[90m  • [0m[37mMin Notional:[0m [92m$15,000 (Charter Immutable)[0m
+[90m  • [0m[37mMax Daily Loss:[0m [92m5.0% (Charter Breaker)[0m
+[90m  • [0m[37mMax Latency:[0m [92m300ms (Charter 2.1)[0m
+
+[1m[93m▶ ENVIRONMENT CONFIGURATION[0m
+[90m──────────────────────────────────────────────────────────────────────────────[0m
+[90m  • [0m[37mEnvironment:[0m [93mPRACTICE[0m
+[90m  • [0m[37mAPI Endpoint:[0m [96mhttps://api-fxpractice.oanda.com[0m
+[90m  • [0m[37mAccount ID:[0m [96m101-001-31210531-002[0m
+[90m  • [0m[37mMarket Data:[0m [92mReal-time OANDA API[0m
+[90m  • [0m[37mOrder Execution:[0m [93mOANDA PRACTICE API[0m
+
+[1m[93m▶ SYSTEM COMPONENTS[0m
+[90m──────────────────────────────────────────────────────────────────────────────[0m
+[90m  • [0m[37mNarration Logging:[0m [92mACTIVE → narration.jsonl[0m
+[90m  • [0m[37mML Intelligence:[0m [90mDISABLED[0m
+[90m  • [0m[37mHive Mind:[0m [92mCONNECTED[0m
+[90m  • [0m[37mMomentum System:[0m [92mACTIVE (rbotzilla_golden_age)[0m
+
+[1m[93m▶ RISK PARAMETERS[0m
+[90m──────────────────────────────────────────────────────────────────────────────[0m
+[90m  • [0m[37mPosition Size:[0m [96m~14,000 units (dynamic per pair)[0m
+[90m  • [0m[37mStop Loss:[0m [96m20 pips[0m
+[90m  • [0m[37mTake Profit:[0m [96m64 pips (3.2:1 R:R)[0m
+[90m  • [0m[37mMax Positions:[0m [96m3 concurrent[0m
+
+[93m⚠️  ⚠️  Charter requires $15k min notional - positions sized accordingly[0m
+
+[1m[93m▶ OANDA CONNECTION[0m
+[90m──────────────────────────────────────────────────────────────────────────────[0m
+  🔴 [37mOANDA PRACTICE API  [0m [91mREADY[0m
+
+
+[92m✅ ✅ RBOTzilla Engine Ready - PRACTICE Environment[0m
+[90m────────────────────────────────────────────────────────────────────────────────[0m
+
+
+[92m✅ Starting trading engine with PRACTICE API...[0m
+
+[96mℹ️ 📊 Market Data: PRACTICE OANDA API (real-time)[0m
+
+[96mℹ️ 💰 Orders: PRACTICE OANDA API[0m
+
+
+[1m[93m▶ MARKET SCAN[0m
+[90m──────────────────────────────────────────────────────────────────────────────[0m
+[92m✅ ✅ Real-time OANDA API data[0m
+  [96m📊 AUD_USD[0m [32mBID: 0.65078[0m | [31mASK: 0.65092[0m | [33mSpread: 14000.0 pips[0m
+[90m  • [0m[37mPosition Size:[0m [96m23,100 units (dynamic)[0m
+[90m  • [0m[37mNotional Value:[0m [92m$15,036 ✅[0m
+[90m  • [0m[37mR:R Ratio:[0m [92m3.20:1 ✅[0m
+
+[96mℹ️ Placing Charter-compliant BUY OCO order for AUD_USD...[0m
+[91m❌ ❌ CHARTER VIOLATION: Latency 577.4ms > 300ms[0m
+
+[44m[37m OPEN [0m [92m[1mAUD_USD BUY[0m [36m@ 0.65092[0m 📈
+      [90mStop: 0.64892 | Target: 0.65732 | Size: 23,100 units | Notional: $15,036[0m
+
+[92m✅ ✅ OCO order placed! Order ID: 23[0m
+[90m  • [0m[37mLatency:[0m [96m577.4ms[0m
+
+[95m💬 Rick:[0m [3m[37m📌 TRADE_OPENED: Event logged[0m
+[90m────────────────────────────────────────────────────────────────────────────────[0m
+
+
+[96mℹ️ Waiting 15 minutes before next trade (M15 Charter)...[0m
+
+[1m[93m▶ MARKET SCAN[0m
+[90m──────────────────────────────────────────────────────────────────────────────[0m
+[92m✅ ✅ Real-time OANDA API data[0m
+  [96m📊 EUR_USD[0m [32mBID: 1.16530[0m | [31mASK: 1.16545[0m | [33mSpread: 15000.0 pips[0m
+[90m  • [0m[37mPosition Size:[0m [96m12,900 units (dynamic)[0m
+[90m  • [0m[37mNotional Value:[0m [92m$15,034 ✅[0m
+[90m  • [0m[37mR:R Ratio:[0m [92m3.20:1 ✅[0m
+
+[96mℹ️ Placing Charter-compliant BUY OCO order for EUR_USD...[0m
+[91m❌ ❌ CHARTER VIOLATION: Latency 591.6ms > 300ms[0m
+
+[44m[37m OPEN [0m [92m[1mEUR_USD BUY[0m [36m@ 1.16545[0m 📈
+      [90mStop: 1.16345 | Target: 1.17185 | Size: 12,900 units | Notional: $15,034[0m
+
+[92m✅ ✅ OCO order placed! Order ID: 29[0m
+[90m  • [0m[37mLatency:[0m [96m591.6ms[0m
+
+[95m💬 Rick:[0m [3m[37m📌 TRADE_OPENED: Event logged[0m
+[90m────────────────────────────────────────────────────────────────────────────────[0m
+
+
+[96mℹ️ Waiting 15 minutes before next trade (M15 Charter)...[0m
+
+[1m[93m▶ MARKET SCAN[0m
+[90m──────────────────────────────────────────────────────────────────────────────[0m
+[92m✅ ✅ Real-time OANDA API data[0m
+  [96m📊 AUD_USD[0m [32mBID: 0.64807[0m | [31mASK: 0.64821[0m | [33mSpread: 14000.0 pips[0m
+[90m  • [0m[37mPosition Size:[0m [96m23,200 units (dynamic)[0m
+[90m  • [0m[37mNotional Value:[0m [92m$15,035 ✅[0m
+[90m  • [0m[37mR:R Ratio:[0m [92m3.20:1 ✅[0m
+
+[96mℹ️ Placing Charter-compliant SELL OCO order for AUD_USD...[0m
+[91m❌ ❌ CHARTER VIOLATION: Latency 588.3ms > 300ms[0m
+
+[44m[37m OPEN [0m [91m[1mAUD_USD SELL[0m [36m@ 0.64807[0m 📉
+      [90mStop: 0.65007 | Target: 0.64167 | Size: 23,200 units | Notional: $15,035[0m
+
+[92m✅ ✅ OCO order placed! Order ID: 35[0m
+[90m  • [0m[37mLatency:[0m [96m588.3ms[0m
+
+[95m💬 Rick:[0m [3m[37mNew trade opened: selling AUD/USD at 0.64807 with a 3.2:1 risk-reward ratio and a $15k notional value.[0m
+[90m────────────────────────────────────────────────────────────────────────────────[0m
+

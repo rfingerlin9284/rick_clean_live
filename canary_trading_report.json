@@ -1,19 +1,19 @@
 {
   "mode": "CANARY",
-  "session_duration_minutes": 45.23125865,
-  "session_duration_hours": 0.7538543108333333,
-  "total_trades": 6,
-  "completed_trades": 3,
-  "wins": 3,
-  "losses": 0,
-  "win_rate": 100.0,
-  "total_pnl": 344.0305795293957,
-  "avg_pnl_per_trade": 114.67685984313191,
+  "session_duration_minutes": 45.930620350000005,
+  "session_duration_hours": 0.7655103391666668,
+  "total_trades": 2,
+  "completed_trades": 1,
+  "wins": 0,
+  "losses": 1,
+  "win_rate": 0.0,
+  "total_pnl": -35.831948163114355,
+  "avg_pnl_per_trade": -35.831948163114355,
   "starting_capital": 2271.38,
-  "ending_capital": 2615.410579529396,
-  "return_pct": 15.146324240303063,
-  "consecutive_losses": 0,
-  "trades_rejected": 0,
+  "ending_capital": 2235.548051836886,
+  "return_pct": -1.5775408854139,
+  "consecutive_losses": 1,
+  "trades_rejected": 21,
   "charter_violations": 0,
   "charter_compliance": {
     "min_notional_usd": 15000,
@@ -21,6 +21,6 @@
     "max_hold_hours": 6,
     "enforced": true
   },
-  "promotion_eligible": true,
-  "timestamp": "2025-10-14T02:46:09.160826+00:00"
+  "promotion_eligible": false,
+  "timestamp": "2025-10-21T04:31:58.923206+00:00"
 }

@@ -1,0 +1,10 @@
+/usr/bin/make -C /home/ing/RICK/RICK_LIVE_CLEAN --dry-run --always-make --keep-going --print-directory
+make: Entering directory '/home/ing/RICK/RICK_LIVE_CLEAN'
+echo "════════════════════════════════════════════════════════════════"
+echo "🤖 RICK Trading System - Makefile Commands"
+echo "════════════════════════════════════════════════════════════════"
+echo ""
+awk 'BEGIN {FS = ":.*##"; printf ""} /^[a-zA-Z_-]+:.*?##/ { printf "  \033[0;36m%-20s\033[0m  %s\n", $1, $2 } /^##@/ { printf "\n\033[1;33m%s\033[0m \n", substr($0, 5) } ' Makefile
+echo ""
+make: Leaving directory '/home/ing/RICK/RICK_LIVE_CLEAN'
+ 

@@ -14,6 +14,9 @@ from dataclasses import dataclass, asdict
 import os
 from pathlib import Path
 
+# Import Rick's conversational narrator
+from util.rick_narrator import rick_narrate
+
 # Configure logging
 logging.basicConfig(
     level=logging.INFO,
@@ -129,6 +132,17 @@ class GhostTradingEngine:
         exit_price = self.simulate_exit_price(entry_price, side)
         pnl = self.calculate_pnl(entry_price, exit_price, side)
         outcome = "win" if pnl > 0 else "loss"
+        
+        # Generate Rick's conversational narration for the trade
+        trade_details = {
+            "symbol": symbol,
+            "direction": side,
+            "entry_price": entry_price,
+            "exit_price": exit_price,
+            "pnl": pnl,
+            "duration_minutes": duration / 60
+        }
+        rick_narrate("POSITION_CLOSED", trade_details, symbol=symbol, venue="ghost")
         
         # Record ghost trade
         ghost_trade = GhostTradeResult(

@@ -14,7 +14,7 @@ import threading
 from typing import Dict, List, Optional, Any, Tuple
 from dataclasses import dataclass, asdict
 from enum import Enum
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 import websocket
 from urllib.parse import urljoin
 
@@ -194,17 +194,19 @@ class OandaConnector:
             self.logger.info(f"OANDA {self.environment} credentials validated")
     
     def place_oco_order(self, instrument: str, entry_price: float, stop_loss: float, 
-                       take_profit: float, units: int, ttl_hours: float = 6.0) -> Dict[str, Any]:
+                       take_profit: float, units: int, ttl_hours: float = 24.0, 
+                       order_type: str = "LIMIT") -> Dict[str, Any]:
         """
         Place OCO order using OANDA's bracket order functionality - LIVE VERSION
         
         Args:
             instrument: Trading pair (e.g., "EUR_USD")
-            entry_price: Entry price for limit order
+            entry_price: Entry price for limit order (ignored if order_type="MARKET")
             stop_loss: Stop loss price
             take_profit: Take profit price
             units: Position size (positive for buy, negative for sell)
-            ttl_hours: Time to live in hours
+            ttl_hours: Time to live in hours (default 24h for limit orders, prevents early expiry)
+            order_type: "LIMIT" (wait for price) or "MARKET" (immediate execution)
             
         Returns:
             Dict with OCO order result
@@ -248,37 +250,47 @@ class OandaConnector:
             
             if RickCharter:
                 min_notional = RickCharter.MIN_NOTIONAL_USD
-                notional = abs(units) * float(entry_price)
+                
+                # Calculate USD notional based on pair type
+                # For USD-based pairs (USD_XXX), units are already in USD
+                # For other pairs (XXX_USD), need to convert: units × price
+                base_currency = instrument.split("_")[0]
+                if base_currency == "USD":
+                    notional = abs(units)  # Units already in USD
+                else:
+                    notional = abs(units) * float(entry_price)  # Convert to USD
                 
                 if notional < min_notional:
-                    import math
-                    required_units = math.ceil(min_notional / float(entry_price))
-                    
-                    # Preserve sign (positive for buy, negative for sell)
-                    if units < 0:
-                        required_units = -required_units
-                    
-                    self.logger.info(
-                        f"Charter requires minimum notional ${min_notional:,}. "
-                        f"Raising units {units} -> {required_units} to meet notional for {instrument}."
+                    # REJECT order instead of auto-adjusting
+                    # Auto-adjusting could create unexpected large positions
+                    self.logger.error(
+                        f"❌ ORDER REJECTED: Charter requires minimum ${min_notional:,} notional. "
+                        f"Order notional: ${notional:,.2f} for {instrument} ({abs(units)} units @ {entry_price})"
                     )
                     
-                    # Narration log the adjustment
+                    # Narration log the rejection
                     log_narration(
-                        event_type="NOTIONAL_ADJUSTMENT",
+                        event_type="ORDER_REJECTED_MIN_NOTIONAL",
                         details={
-                            "original_units": units,
-                            "adjusted_units": required_units,
-                            "original_notional": notional,
+                            "units": units,
+                            "notional": notional,
                             "min_notional": min_notional,
                             "entry_price": entry_price,
-                            "reason": "charter_minimum"
+                            "reason": "below_charter_minimum",
+                            "charter_pin": 841921
                         },
                         symbol=instrument,
                         venue="oanda"
                     )
                     
-                    units = required_units
+                    return {
+                        "success": False,
+                        "error": f"ORDER_REJECTED: Notional ${notional:,.2f} below Charter minimum ${min_notional:,}",
+                        "notional": notional,
+                        "min_notional": min_notional,
+                        "broker": "OANDA",
+                        "environment": self.environment
+                    }
         except Exception as e:
             # Don't block order placement if enforcement fails
             self.logger.warning(f"Min-notional enforcement check failed: {e}")
@@ -298,24 +310,45 @@ class OandaConnector:
                     }
                 
                 # LIVE ORDER PLACEMENT
-                order_data = {
-                    "order": {
-                        "type": OandaOrderType.LIMIT.value,
-                        "instrument": instrument,
-                        "units": str(units),
-                        "price": str(entry_price),
-                        "timeInForce": OandaTimeInForce.GTD.value,
-                        "gtdTime": (datetime.now(timezone.utc) + timedelta(hours=ttl_hours)).isoformat(),
-                        "stopLossOnFill": {
-                            "price": str(stop_loss),
-                            "timeInForce": OandaTimeInForce.GTC.value
-                        },
-                        "takeProfitOnFill": {
-                            "price": str(take_profit),
-                            "timeInForce": OandaTimeInForce.GTC.value
+                # Support both LIMIT and MARKET order types
+                if order_type.upper() == "MARKET":
+                    # MARKET order - immediate execution with OCO brackets
+                    order_data = {
+                        "order": {
+                            "type": OandaOrderType.MARKET.value,
+                            "instrument": instrument,
+                            "units": str(units),
+                            "timeInForce": OandaTimeInForce.FOK.value,  # Fill or Kill
+                            "stopLossOnFill": {
+                                "price": str(stop_loss),
+                                "timeInForce": OandaTimeInForce.GTC.value
+                            },
+                            "takeProfitOnFill": {
+                                "price": str(take_profit),
+                                "timeInForce": OandaTimeInForce.GTC.value
+                            }
                         }
                     }
-                }
+                else:
+                    # LIMIT order - wait for specific entry price with extended TTL (24h default)
+                    order_data = {
+                        "order": {
+                            "type": OandaOrderType.LIMIT.value,
+                            "instrument": instrument,
+                            "units": str(units),
+                            "price": str(entry_price),
+                            "timeInForce": OandaTimeInForce.GTD.value,
+                            "gtdTime": (datetime.now(timezone.utc) + timedelta(hours=ttl_hours)).isoformat(),
+                            "stopLossOnFill": {
+                                "price": str(stop_loss),
+                                "timeInForce": OandaTimeInForce.GTC.value
+                            },
+                            "takeProfitOnFill": {
+                                "price": str(take_profit),
+                                "timeInForce": OandaTimeInForce.GTC.value
+                            }
+                        }
+                    }
                 
                 # Make LIVE API call
                 response = self._make_request("POST", f"/v3/accounts/{self.account_id}/orders", order_data)
@@ -393,66 +426,89 @@ class OandaConnector:
                     }
             
             else:
-                # PRACTICE/SIMULATION MODE (existing logic)
-                import random
-                placement_latency = random.uniform(50, 250)  # Simulate API latency
-                time.sleep(placement_latency / 1000)  # Convert to seconds
+                # PRACTICE MODE - Place REAL orders on OANDA practice account
+                # (Not simulation - actual API calls to practice endpoint)
+                order_data = {
+                    "order": {
+                        "type": "LIMIT",
+                        "instrument": instrument,
+                        "units": str(units),
+                        "price": str(entry_price),
+                        "timeInForce": "GTD",
+                        "gtdTime": (datetime.now(timezone.utc) + timedelta(hours=ttl_hours)).isoformat(),
+                        "stopLossOnFill": {
+                            "price": str(stop_loss),
+                            "timeInForce": "GTC"
+                        },
+                        "takeProfitOnFill": {
+                            "price": str(take_profit),
+                            "timeInForce": "GTC"
+                        }
+                    }
+                }
                 
+                # Make PRACTICE API call (real order on practice account)
+                response = self._make_request("POST", f"/v3/accounts/{self.account_id}/orders", order_data)
                 execution_time = (time.time() - start_time) * 1000
                 
-                # Generate order ID
-                order_id = f"OANDA_{instrument}_{int(time.time() * 1000)}_{random.randint(1000, 9999)}"
-                
-                # Validate Charter compliance
-                if placement_latency > self.max_placement_latency_ms:
-                    self.logger.warning(f"PRACTICE OCO latency {placement_latency:.1f}ms exceeds Charter limit")
+                if response["success"]:
+                    order_result = response["data"]
+                    order_id = order_result.get("orderCreateTransaction", {}).get("id")
+                    
+                    # Log successful PRACTICE OCO placement
+                    self.logger.info(
+                        f"PRACTICE OANDA OCO placed (REAL API): {instrument} | Entry: {entry_price} | "
+                        f"SL: {stop_loss} | TP: {take_profit} | Latency: {response['latency_ms']:.1f}ms | "
+                        f"Order ID: {order_id}"
+                    )
+                    
+                    # Narration log
+                    log_narration(
+                        event_type="OCO_PLACED",
+                        details={
+                            "order_id": order_id,
+                            "entry_price": entry_price,
+                            "stop_loss": stop_loss,
+                            "take_profit": take_profit,
+                            "units": units,
+                            "latency_ms": response['latency_ms'],
+                            "environment": "PRACTICE",
+                            "simulated": False,  # Real API order
+                            "visible_in_oanda": True
+                        },
+                        symbol=instrument,
+                        venue="oanda"
+                    )
+                    
+                    # Charter compliance check
+                    if response["latency_ms"] > self.max_placement_latency_ms:
+                        self.logger.warning(f"PRACTICE OCO latency {response['latency_ms']:.1f}ms exceeds Charter limit")
+                    
                     return {
-                        "success": False,
-                        "error": f"Placement latency {placement_latency:.1f}ms exceeds Charter requirement",
-                        "latency_ms": placement_latency,
-                        "execution_time_ms": execution_time,
-                        "broker": "OANDA",
-                        "environment": self.environment
-                    }
-                
-                # Log successful practice OCO placement
-                self.logger.info(
-                    f"PRACTICE OANDA OCO simulated: {instrument} | Entry: {entry_price} | "
-                    f"SL: {stop_loss} | TP: {take_profit} | Latency: {placement_latency:.1f}ms"
-                )
-                
-                # Narration log
-                log_narration(
-                    event_type="OCO_PLACED",
-                    details={
+                        "success": True,
                         "order_id": order_id,
+                        "instrument": instrument,
                         "entry_price": entry_price,
                         "stop_loss": stop_loss,
                         "take_profit": take_profit,
                         "units": units,
-                        "latency_ms": placement_latency,
-                        "environment": "PRACTICE",
-                        "simulated": True
-                    },
-                    symbol=instrument,
-                    venue="oanda"
-                )
-                
-                return {
-                    "success": True,
-                    "order_id": order_id,
-                    "instrument": instrument,
-                    "entry_price": entry_price,
-                    "stop_loss": stop_loss,
-                    "take_profit": take_profit,
-                    "units": units,
-                    "latency_ms": placement_latency,
-                    "execution_time_ms": execution_time,
-                    "broker": "OANDA",
-                    "environment": self.environment,
-                    "ttl_hours": ttl_hours,
-                    "simulated": True
-                }
+                        "latency_ms": response["latency_ms"],
+                        "execution_time_ms": execution_time,
+                        "broker": "OANDA",
+                        "environment": self.environment,
+                        "ttl_hours": ttl_hours,
+                        "simulated": False  # Real API order
+                    }
+                else:
+                    self.logger.error(f"PRACTICE OANDA OCO failed: {response['error']}")
+                    return {
+                        "success": False,
+                        "error": f"PRACTICE API error: {response['error']}",
+                        "latency_ms": response.get("latency_ms", execution_time),
+                        "execution_time_ms": execution_time,
+                        "broker": "OANDA",
+                        "environment": self.environment
+                    }
                 
         except Exception as e:
             execution_time = (time.time() - start_time) * 1000
@@ -579,6 +635,60 @@ class OandaConnector:
             "environment": self.environment,
             "account_id": self.account_id[-4:] if self.account_id else "N/A"
         }
+
+    # --- Convenience management API helpers -------------------------------------------------
+    def get_orders(self, state: str = "PENDING") -> List[Dict[str, Any]]:
+        """Return pending orders from OANDA for this account."""
+        try:
+            endpoint = f"/v3/accounts/{self.account_id}/orders?state={state}"
+            resp = self._make_request("GET", endpoint)
+            if resp.get("success"):
+                data = resp.get("data") or {}
+                return data.get("orders", [])
+        except Exception as e:
+            self.logger.warning(f"Failed to fetch orders: {e}")
+        return []
+
+    def get_trades(self) -> List[Dict[str, Any]]:
+        """Return open trades for this account."""
+        try:
+            endpoint = f"/v3/accounts/{self.account_id}/trades"
+            resp = self._make_request("GET", endpoint)
+            if resp.get("success"):
+                data = resp.get("data") or {}
+                return data.get("trades", [])
+        except Exception as e:
+            self.logger.warning(f"Failed to fetch trades: {e}")
+        return []
+
+    def cancel_order(self, order_id: str) -> Dict[str, Any]:
+        """Cancel a pending order by id."""
+        try:
+            endpoint = f"/v3/accounts/{self.account_id}/orders/{order_id}/cancel"
+            resp = self._make_request("PUT", endpoint)
+            return resp
+        except Exception as e:
+            self.logger.error(f"Failed to cancel order {order_id}: {e}")
+            return {"success": False, "error": str(e)}
+
+    def set_trade_stop(self, trade_id: str, stop_price: float) -> Dict[str, Any]:
+        """Set/modify the stop loss price for an existing trade. Uses OANDA trade modification endpoint.
+
+        Note: exact payload is compatible with OANDA v20 update trade orders. If your broker returns
+        a different schema adjust accordingly.
+        """
+        try:
+            payload = {
+                "stopLoss": {
+                    "price": str(stop_price)
+                }
+            }
+            endpoint = f"/v3/accounts/{self.account_id}/trades/{trade_id}/orders"
+            resp = self._make_request("PUT", endpoint, payload)
+            return resp
+        except Exception as e:
+            self.logger.error(f"Failed to set stop for trade {trade_id}: {e}")
+            return {"success": False, "error": str(e)}
 
 # Convenience functions
 def get_oanda_connector(pin: int = None, environment: str = "practice") -> OandaConnector:

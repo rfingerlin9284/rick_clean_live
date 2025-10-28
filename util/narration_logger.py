@@ -13,8 +13,8 @@ import logging
 
 # Project paths
 PROJECT_ROOT = Path("/home/ing/RICK/RICK_LIVE_CLEAN")
-LOGS_DIR = PROJECT_ROOT / "pre_upgrade" / "headless" / "logs"
-NARRATION_FILE = LOGS_DIR / "narration.jsonl"
+LOGS_DIR = PROJECT_ROOT / "logs"
+NARRATION_FILE = PROJECT_ROOT / "narration.jsonl"  # Root level for dashboard access
 PNL_FILE = LOGS_DIR / "pnl.jsonl"
 
 logger = logging.getLogger(__name__)
