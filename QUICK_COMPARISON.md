@@ -94,6 +94,8 @@ set -e  # Fail on errors
 find "$BASE_PATH" -type d -exec chmod 755 {} +
 find "$BASE_PATH" -type f -exec chmod 644 {} +
 # Errors reported, script fails fast
+# Note: Separate commands used because combining -type with -o and 
+# multiple -exec {} + is not valid shell syntax
 ```
 
 **Impact**: Better debugging and error visibility
