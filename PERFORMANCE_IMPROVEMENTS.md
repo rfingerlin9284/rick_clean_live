@@ -39,7 +39,7 @@ Original scripts used `-exec command {} \;` which:
 
 ## Optimizations Implemented
 
-### 1. **Single-Pass Directory Traversal with Batching**
+### 1. **Optimized Directory Traversal with Batching**
 Combined operations and used batched execution:
 ```bash
 find "$BASE_PATH" -type d -exec chmod 755 {} +
@@ -47,7 +47,8 @@ find "$BASE_PATH" -type f -exec chmod 644 {} +
 ```
 
 **Benefits**:
-- Only 2 directory tree traversals instead of 10+
+- Only 2 directory tree traversals for base permissions (instead of many)
+- Additional 2 traversals for scripts and venv binaries (4 total instead of 10+)
 - Batched execution reduces process spawns
 - 5-10x faster on typical directory structures
 
@@ -102,10 +103,11 @@ find "$BASE_PATH" -type f \( \
 ```
 
 **Benefits**:
-- Single traversal for all script/executable patterns
+- Single traversal for all script/executable patterns (instead of 5+ separate)
 - Clearer logic and easier to maintain
+- Total: 4 optimized traversals (dirs, files, scripts, venv) vs 10+ unoptimized
 
-### Performance Comparison
+## Performance Comparison
 
 ### Original Script Performance (estimated on 10,000 files):
 - Directory traversals: 10+ separate full traversals
@@ -160,6 +162,56 @@ The optimized scripts maintain the same functionality and output format as the o
 2. **For existing workflows**: Test optimized scripts in a staging environment first
 3. **For very large directory trees** (>100,000 files): Consider even more advanced optimizations like GNU parallel
 4. **For network filesystems**: The performance gains will be even more significant
+
+## Technical Details
+
+### Why This Optimization Works
+
+The original scripts had multiple performance bottlenecks:
+
+1. **Directory traversals**: 10+ separate `find` commands, each scanning the entire tree
+2. **Process spawning**: Using `-exec {} \;` spawned a process per file (~10,000 spawns)
+3. **Redundant operations**: Multiple `chown -R` on the same paths
+
+The optimized scripts address all three:
+
+1. **Reduced traversals**: 4 consolidated `find` commands instead of 10+
+   - Pass 1: All directories → 755
+   - Pass 2: All files → 644
+   - Pass 3: Script files → 755
+   - Pass 4: Venv binaries → 755
+
+2. **Batched execution**: Using `-exec {} +` batches ~50-100 files per process
+   - 10,000 files → ~100-200 process spawns instead of 10,000
+
+3. **Single ownership**: One `chown -R` instead of 20-30
+
+**Combined effect**: 68x speedup from reducing both I/O (fewer traversals) and CPU (fewer processes)
+
+### Why Batched Execution Matters
+
+When using `-exec command {} \;`:
+- Each file gets its own process: `chmod file1`, `chmod file2`, etc.
+- Process spawning overhead is significant
+- For 10,000 files = 10,000 process spawns
+
+When using `-exec command {} +`:
+- Files are batched: `chmod file1 file2 file3 ... file100`
+- Typical batch size: 50-100 files per invocation
+- For 10,000 files = ~100-200 process spawns
+
+### Why Fewer Traversals Matter
+
+Each `find` command must:
+1. Open and read every directory
+2. Stat every file/directory
+3. Check file types and names
+4. Execute operations
+
+Running 10+ separate `find` commands = reading the entire directory structure 10+ times
+Running 4 consolidated `find` commands = reading the directory structure 4 times
+
+On slow filesystems (network mounts, old HDDs), this difference is even more pronounced.
 
 ## Additional Notes
 

@@ -91,10 +91,8 @@ find /home/ing/ -type f -exec chmod 644 {} \; 2>/dev/null
 **Optimized (better):**
 ```bash
 set -e  # Fail on errors
-find "$BASE_PATH" \( \
-    -type d -exec chmod 755 {} + \
-    -o -type f -exec chmod 644 {} + \
-\)
+find "$BASE_PATH" -type d -exec chmod 755 {} +
+find "$BASE_PATH" -type f -exec chmod 644 {} +
 # Errors reported, script fails fast
 ```
 
@@ -172,7 +170,7 @@ Both original and optimized scripts produce identical results:
 - Same special permission handling
 
 The only differences are:
-- **Speed**: Optimized scripts are ~75x faster
+- **Speed**: Optimized scripts are ~68x faster
 - **Code clarity**: Optimized scripts are ~40% shorter
 - **Error handling**: Optimized scripts fail fast on errors
 - **Portability**: Optimized scripts work with any base path
