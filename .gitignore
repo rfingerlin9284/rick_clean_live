@@ -11,9 +11,3 @@ __pycache__/
 
 # Logs
 logs/
-
-# Do not commit rollback snapshot repos or backups
-ROLLBACK_SNAPSHOTS/
-*.bak
-*.backup
-*.old
