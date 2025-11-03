@@ -37,6 +37,7 @@ from util.terminal_display import TerminalDisplay, Colors
 from util.narration_logger import log_narration, log_pnl
 from util.rick_narrator import RickNarrator
 from util.usd_converter import get_usd_notional
+from systems.momentum_signals import generate_signal
 
 # ML Intelligence imports
 try:
@@ -1346,11 +1347,26 @@ class OandaTradingEngine:
                 
                 # Place new trade if we have less than 3 active positions
                 if len(self.active_positions) < 3:
-                    import random
+                    # Deterministic signal scan across configured pairs
+                    symbol = None
+                    direction = None
+                    for _candidate in self.trading_pairs:
+                        try:
+                            candles = self.oanda.get_candles(_candidate, count=120, granularity="M15")
+                            sig, conf = generate_signal(_candidate, candles)  # returns ("BUY"/"SELL", confidence) or (None, 0)
+                        except Exception as e:
+                            self.display.error(f"Signal error for {_candidate}: {e}")
+                            continue
+                        if sig in ("BUY","SELL"):
+                            symbol = _candidate
+                            direction = sig
+                            self.display.success(f"✓ Signal: {symbol} {direction} (confidence: {conf:.1%})")
+                            break
                     
-                    # Pick random pair and direction
-                    symbol = random.choice(self.trading_pairs)
-                    direction = random.choice(["BUY", "SELL"])
+                    if not symbol or not direction:
+                        self.display.info("No valid signals across pairs - skipping cycle")
+                        await asyncio.sleep(self.min_trade_interval)
+                        continue
                     
                     trade_id = self.place_trade(symbol, direction)
                     
