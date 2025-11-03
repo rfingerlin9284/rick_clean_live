@@ -249,7 +249,7 @@ class OandaConnector:
                     RickCharter = None
             
             if RickCharter:
-                min_notional = RickCharter.MIN_NOTIONAL_USD
+                min_notional = getattr(RickCharter, "MIN_NOTIONAL_USD", 15000)
                 
                 # Calculate USD notional based on pair type
                 # For USD-based pairs (USD_XXX), units are already in USD
@@ -294,6 +294,39 @@ class OandaConnector:
         except Exception as e:
             # Don't block order placement if enforcement fails
             self.logger.warning(f"Min-notional enforcement check failed: {e}")
+
+        # Enforce charter minimum expected PnL (gross) at TP
+        try:
+            if RickCharter and hasattr(RickCharter, "MIN_EXPECTED_PNL_USD"):
+                # Use final units (after any min-notional bump). Magnitude only.
+                expected_pnl_usd = abs((float(take_profit) - float(entry_price)) * float(units))
+                min_expected = float(RickCharter.MIN_EXPECTED_PNL_USD)
+                if expected_pnl_usd < min_expected:
+                    self.logger.warning(
+                        f"Charter min expected PnL ${min_expected:.2f} not met "
+                        f"(got ${expected_pnl_usd:.2f}) for {instrument}. Blocking order."
+                    )
+                    log_narration(
+                        event_type="CHARTER_VIOLATION",
+                        details={
+                            "code": "MIN_EXPECTED_PNL_USD",
+                            "expected_pnl_usd": expected_pnl_usd,
+                            "min_expected_pnl_usd": min_expected,
+                            "entry_price": entry_price,
+                            "take_profit": take_profit,
+                            "units": units
+                        },
+                        symbol=instrument,
+                        venue="oanda"
+                    )
+                    return {
+                        "success": False,
+                        "error": f"EXPECTED_PNL_BELOW_MIN: {expected_pnl_usd:.2f} < {min_expected:.2f}",
+                        "broker": "OANDA",
+                        "environment": self.environment
+                    }
+        except Exception as e:
+            self.logger.warning(f"Min-expected-PnL enforcement failed: {e}")
         
         try:
             # For LIVE environment, validate API credentials first

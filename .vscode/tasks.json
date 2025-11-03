@@ -2,224 +2,68 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "🚀 START RICK + HIVE MIND (Always-Running)",
+      "label": "RLC: List Tasks",
       "type": "shell",
-      "command": "tmux kill-session -t rick_system 2>/dev/null; tmux new-session -d -s rick_system && tmux send-keys -t rick_system 'cd /home/ing/RICK/RICK_LIVE_CLEAN && python3 -c \"from util.rick_narrator import RickNarrator; from hive.rick_hive_mind import RickHiveMind; rick = RickNarrator(); hive = RickHiveMind(); print(\\\"🤖 RICK LLM ACTIVE\\\"); print(\\\"🧠 HIVE MIND ACTIVE\\\"); import time; time.sleep(999999)\"' Enter && echo '✅ RICK + HIVE MIND started in tmux session: rick_system'",
-      "presentation": {
-        "echo": true,
-        "reveal": "always",
-        "panel": "shared"
-      },
-      "group": {
-        "kind": "build",
-        "isDefault": true
-      },
-      "problemMatcher": [],
-      "detail": "Starts Rick LLM + Hive Mind in tmux (always-running background session)"
+      "command": "bash",
+      "args": ["-c", "cd /home/ing/RICK/RICK_LIVE_CLEAN && python3 << 'PYEOF'\nimport json\nj = json.load(open('.vscode/tasks.json'))\nprint('\\n=== STATUS: Task Catalog ===')\nprint('\\nAvailable RLC tasks:\\n')\nfor t in j.get('tasks',[]):\n  lab = t.get('label','')\n  if lab.startswith('RLC: '):\n    det = t.get('detail','')\n    print(f'  • {lab}')\n    print(f'    {det}\\n')\nprint('--- ACTION: Task catalog listed ---')\nPYEOF"],
+      "presentation": { "reveal": "always", "panel": "dedicated" },
+      "detail": "List all available RLC tasks with descriptions."
     },
     {
-      "label": "🛑 STOP RICK + HIVE MIND",
+      "label": "RLC: Ping / Status Audit",
       "type": "shell",
-      "command": "tmux kill-session -t rick_system 2>/dev/null && echo '✅ RICK + HIVE MIND stopped' || echo '⚠️ No rick_system session running'",
-      "presentation": {
-        "echo": true,
-        "reveal": "always",
-        "panel": "shared"
-      },
-      "problemMatcher": [],
-      "detail": "Stops the Rick LLM + Hive Mind tmux session"
+      "command": "bash",
+      "args": ["-c", "cd /home/ing/RICK/RICK_LIVE_CLEAN && set -a && . ./.env && set +a 2>/dev/null; echo '=== STATUS: SYSTEM HEALTH CHECK ===' && echo '' && echo '[🤖 Engine]' && (pgrep -af 'oanda_trading_engine.py' && echo '  ✅ Running' || echo '  ⏸️  Stopped') && echo '' && echo '[🚪 Connector Gates]' && (grep -q 'EXPECTED_PNL_BELOW_MIN' brokers/oanda_connector.py && echo '  ✅ TP-PnL floor active' || echo '  ❌ Missing') && (grep -q 'MIN_NOTIONAL' brokers/oanda_connector.py && echo '  ✅ Notional floor active' || echo '  ❌ Missing') && echo '' && echo '[🚨 Position Police]' && (grep -q '_rbz_force_min_notional_position_police' oanda_trading_engine.py && echo '  ✅ Armed' || echo '  ❌ Missing') && echo '' && echo '[📋 Charter Constants]' && python3 - <<'PYEOF'\ntry:\n  from foundation.rick_charter import RickCharter\n  mn = getattr(RickCharter, 'MIN_NOTIONAL_USD', '?')\n  mp = getattr(RickCharter, 'MIN_EXPECTED_PNL_USD', '?')\n  print(f'  foundation: MIN_NOTIONAL=${mn}, MIN_PNL=${mp}')\nexcept:\n  print('  foundation: unavailable')\ntry:\n  from rick_charter import RickCharter\n  mn = getattr(RickCharter, 'MIN_NOTIONAL_USD', '?')\n  mp = getattr(RickCharter, 'MIN_EXPECTED_PNL_USD', '?')\n  print(f'  root: MIN_NOTIONAL=${mn}, MIN_PNL=${mp}')\nexcept:\n  print('  root: unavailable')\nPYEOF\necho '' && echo '[🔑 OANDA Credentials]' && ([ -n \"$OANDA_PRACTICE_ACCOUNT_ID\" ] && echo \"  ✅ ACCOUNT: $OANDA_PRACTICE_ACCOUNT_ID\" || echo '  ❌ ACCOUNT_ID missing') && ([ -n \"$OANDA_PRACTICE_TOKEN\" ] && echo \"  ✅ TOKEN: ${OANDA_PRACTICE_TOKEN:0:16}...\" || echo '  ❌ TOKEN missing') && echo '' && echo '--- ACTION: Audit complete (all systems checked) ---'"],
+      "presentation": { "reveal": "always", "panel": "dedicated" },
+      "detail": "Full health check: engine, gates, Position Police, charter, OANDA credentials."
     },
     {
-      "label": "🛡️ START GUARDIAN GATES",
+      "label": "RLC: Start STRICT Engine (practice)",
       "type": "shell",
-      "command": "tmux kill-session -t guardian_gates 2>/dev/null; tmux new-session -d -s guardian_gates && tmux send-keys -t guardian_gates 'cd /home/ing/RICK/RICK_LIVE_CLEAN && python3 hive/guardian_gates.py' Enter && echo '✅ GUARDIAN GATES started in tmux session: guardian_gates'",
-      "presentation": {
-        "echo": true,
-        "reveal": "always",
-        "panel": "shared"
-      },
-      "problemMatcher": [],
-      "detail": "Starts Guardian Gates 4-gate validation system"
+      "command": "bash",
+      "args": ["-c", "cd /home/ing/RICK/RICK_LIVE_CLEAN && set -a && . ./.env && set +a 2>/dev/null; echo '=== STATUS: STARTING OANDA PRACTICE ENGINE ===' && if pgrep -af 'oanda_trading_engine.py' >/dev/null 2>&1; then echo 'Engine already running'; echo '--- ACTION: No-op (already running) ---'; exit 0; fi && if [ -z \"$OANDA_PRACTICE_ACCOUNT_ID\" ] || [ -z \"$OANDA_PRACTICE_TOKEN\" ]; then echo '❌ OANDA credentials not loaded'; echo 'Run in terminal: cd /home/ing/RICK/RICK_LIVE_CLEAN && set -a && source .env && set +a'; echo '--- ACTION: Aborted (missing creds) ---'; exit 2; fi && echo \"Starting with ACCOUNT: $OANDA_PRACTICE_ACCOUNT_ID\" && (export OANDA_PRACTICE_ACCOUNT_ID OANDA_PRACTICE_TOKEN && setsid nohup python3 -u oanda_trading_engine.py >/dev/null 2>&1 &) && sleep 2 && (pgrep -af 'oanda_trading_engine.py' >/dev/null 2>&1 && echo '✅ Engine launched (background)' && echo '--- ACTION: Engine started successfully ---' || (echo '❌ Engine failed to start' && echo '--- ACTION: Failed ---' && exit 1))"],
+      "presentation": { "reveal": "always", "panel": "dedicated" },
+      "detail": "Start OANDA practice engine. Safe: no-ops if already running. Requires .env creds."
     },
     {
-      "label": "🛑 STOP GUARDIAN GATES",
+      "label": "RLC: Stop All (safe)",
       "type": "shell",
-      "command": "tmux kill-session -t guardian_gates 2>/dev/null && echo '✅ GUARDIAN GATES stopped' || echo '⚠️ No guardian_gates session running'",
-      "presentation": {
-        "echo": true,
-        "reveal": "always",
-        "panel": "shared"
-      },
-      "problemMatcher": [],
-      "detail": "Stops the Guardian Gates tmux session"
+      "command": "bash",
+      "args": ["-c", "cd /home/ing/RICK/RICK_LIVE_CLEAN && echo '=== STATUS: STOPPING ENGINE ===' && if pgrep -af 'oanda_trading_engine.py' >/dev/null 2>&1; then echo \"Found running engine\"; pkill -f 'oanda_trading_engine.py' || true; sleep 1; (pgrep -af 'oanda_trading_engine.py' >/dev/null && echo '⚠️  Engine still running' || echo '✅ Engine stopped'); echo '--- ACTION: Stop attempted ---'; else echo '⏸️  No engine running'; echo '--- ACTION: No-op (nothing to stop) ---'; fi"],
+      "presentation": { "reveal": "always", "panel": "dedicated" },
+      "detail": "Safe stop. Idempotent: no error if engine already stopped."
     },
     {
-      "label": "📊 START DASHBOARD",
+      "label": "RLC: Sweep — Position Police",
       "type": "shell",
-      "command": "tmux kill-session -t dashboard 2>/dev/null; tmux new-session -d -s dashboard && tmux send-keys -t dashboard 'cd /home/ing/RICK/RICK_LIVE_CLEAN && python3 dashboard/app.py' Enter && echo '✅ DASHBOARD started in tmux session: dashboard (http://localhost:8080)'",
-      "presentation": {
-        "echo": true,
-        "reveal": "always",
-        "panel": "shared"
-      },
-      "problemMatcher": [],
-      "detail": "Starts web dashboard for monitoring (http://localhost:8080)"
+      "command": "bash",
+      "args": ["-c", "cd /home/ing/RICK/RICK_LIVE_CLEAN && set -a && . ./.env && set +a 2>/dev/null; echo '=== STATUS: POSITION POLICE SWEEP (sub-$15k auto-close) ===' && python3 - <<'PYEOF'\ntry:\n  from oanda_trading_engine import _rbz_force_min_notional_position_police as sweep\n  print('Running sweep...')\n  sweep()\n  print('Sweep complete')\nexcept Exception as e:\n  print(f'ERROR: {e}')\nPYEOF\necho '' && echo '--- ACTION: Sweep executed (check for CHARTER_VIOLATION/FORCE_CLOSE above) ---'"],
+      "presentation": { "reveal": "always", "panel": "dedicated" },
+      "detail": "Force-check and close any live position under $15k notional. Requires .env creds."
     },
     {
-      "label": "🛑 STOP DASHBOARD",
+      "label": "RLC: Tail Narration (pretty)",
       "type": "shell",
-      "command": "tmux kill-session -t dashboard 2>/dev/null && echo '✅ DASHBOARD stopped' || echo '⚠️ No dashboard session running'",
-      "presentation": {
-        "echo": true,
-        "reveal": "always",
-        "panel": "shared"
-      },
-      "problemMatcher": [],
-      "detail": "Stops the Dashboard tmux session"
+      "command": "bash",
+      "args": ["-c", "cd /home/ing/RICK/RICK_LIVE_CLEAN && echo '=== STATUS: NARRATION MONITOR ===' && echo 'Press Ctrl+C to stop. Looking for:' && echo '  • CHARTER_VIOLATION' && echo '  • EXPECTED_PNL_BELOW_MIN' && echo '  • ORDER_REJECTED_MIN_NOTIONAL' && echo '  • POSITION_BELOW_MIN_NOTIONAL' && echo '' && (pgrep -af 'oanda_trading_engine.py' >/dev/null && echo '✅ Engine running' || echo '⚠️  Engine not running') && echo '' && echo '--- ACTION: Attaching to narration stream (Ctrl+C to detach) ---' && ([ -f logs/narration.jsonl ] && tail -f logs/narration.jsonl || echo 'No narration log found yet (engine will create it)')"],
+      "presentation": { "reveal": "always", "panel": "shared" },
+      "detail": "Live tail of narration events. Shows violations, adaptive triggers, gate activity."
     },
     {
-      "label": "🎮 OPEN RICK SESSION (tmux)",
+      "label": "RLC: Lock Critical Files",
       "type": "shell",
-      "command": "tmux attach-session -t rick_system",
-      "presentation": {
-        "echo": true,
-        "reveal": "always",
-        "panel": "shared"
-      },
-      "problemMatcher": [],
-      "detail": "Attach to Rick LLM + Hive Mind tmux session"
+      "command": "bash",
+      "args": ["-c", "cd /home/ing/RICK/RICK_LIVE_CLEAN && echo '=== STATUS: LOCKING CRITICAL FILES ===' && chmod a-w brokers/oanda_connector.py rick_charter.py oanda_trading_engine.py .vscode/tasks.json 2>/dev/null || true && echo 'Checking locks:' && ls -la brokers/oanda_connector.py rick_charter.py oanda_trading_engine.py .vscode/tasks.json 2>/dev/null | awk '{print $1, $9}' && echo '--- ACTION: Files locked read-only (idempotent) ---'"],
+      "presentation": { "reveal": "always", "panel": "dedicated" },
+      "detail": "Re-apply read-only locks to enforcement files. Prevents agent tampering."
     },
     {
-      "label": "🎮 OPEN GUARDIAN GATES SESSION (tmux)",
+      "label": "RLC: Show Guardrails",
       "type": "shell",
-      "command": "tmux attach-session -t guardian_gates",
-      "presentation": {
-        "echo": true,
-        "reveal": "always",
-        "panel": "shared"
-      },
-      "problemMatcher": [],
-      "detail": "Attach to Guardian Gates tmux session"
-    },
-    {
-      "label": "🎮 OPEN DASHBOARD SESSION (tmux)",
-      "type": "shell",
-      "command": "tmux attach-session -t dashboard",
-      "presentation": {
-        "echo": true,
-        "reveal": "always",
-        "panel": "shared"
-      },
-      "problemMatcher": [],
-      "detail": "Attach to Dashboard tmux session"
-    },
-    {
-      "label": "📋 SWITCH TO CANARY MODE (Paper Trading)",
-      "type": "shell",
-      "command": "python3 -c \"from util.mode_manager import switch_mode; switch_mode('CANARY')\"",
-      "presentation": {
-        "echo": true,
-        "reveal": "always",
-        "panel": "shared"
-      },
-      "problemMatcher": [],
-      "detail": "Switch system to CANARY mode (paper trading with practice account)"
-    },
-    {
-      "label": "⚡ SWITCH TO LIVE MODE (Real Trading)",
-      "type": "shell",
-      "command": "python3 -c \"from util.mode_manager import switch_mode; switch_mode('LIVE', pin=841921)\"",
-      "presentation": {
-        "echo": true,
-        "reveal": "always",
-        "panel": "shared"
-      },
-      "problemMatcher": [],
-      "detail": "Switch system to LIVE mode (real money trading with PIN 841921)"
-    },
-    {
-      "label": "🛑 STOP RICK SESSION",
-      "type": "shell",
-      "command": "tmux kill-session -t rick_system 2>/dev/null && echo '✅ Rick session stopped' || echo '⚠️ Rick session not running'",
-      "presentation": {
-        "echo": true,
-        "reveal": "always",
-        "panel": "shared"
-      },
-      "problemMatcher": [],
-      "detail": "Stop Rick LLM + Hive Mind session"
-    },
-    {
-      "label": "🛑 STOP GUARDIAN GATES SESSION",
-      "type": "shell",
-      "command": "tmux kill-session -t guardian_gates 2>/dev/null && echo '✅ Guardian Gates session stopped' || echo '⚠️ Guardian Gates session not running'",
-      "presentation": {
-        "echo": true,
-        "reveal": "always",
-        "panel": "shared"
-      },
-      "problemMatcher": [],
-      "detail": "Stop Guardian Gates session"
-    },
-    {
-      "label": "🛑 STOP DASHBOARD SESSION",
-      "type": "shell",
-      "command": "tmux kill-session -t dashboard 2>/dev/null && echo '✅ Dashboard session stopped' || echo '⚠️ Dashboard session not running'",
-      "presentation": {
-        "echo": true,
-        "reveal": "always",
-        "panel": "shared"
-      },
-      "problemMatcher": [],
-      "detail": "Stop Dashboard session"
-    },
-    {
-      "label": "📊 STATUS: Show All Running Sessions",
-      "type": "shell",
-      "command": "echo '🔍 RICK SYSTEM STATUS:' && tmux list-sessions 2>/dev/null || echo 'No tmux sessions running'",
-      "presentation": {
-        "echo": true,
-        "reveal": "always",
-        "panel": "shared"
-      },
-      "problemMatcher": [],
-      "detail": "Show all active tmux sessions"
-    },
-    {
-      "label": "🛑 STOP ALL SYSTEMS",
-      "type": "shell",
-      "command": "echo '🛑 Stopping all RICK systems...' && tmux kill-session -t rick_system 2>/dev/null; tmux kill-session -t guardian_gates 2>/dev/null; tmux kill-session -t dashboard 2>/dev/null; echo '✅ All systems stopped'",
-      "presentation": {
-        "echo": true,
-        "reveal": "always",
-        "panel": "shared"
-      },
-      "problemMatcher": [],
-      "detail": "Stop all RICK tmux sessions at once"
-    },
-    {
-      "label": "🔄 RESTART ALL SYSTEMS",
-      "type": "shell",
-      "command": "tmux kill-server 2>/dev/null; sleep 1; tmux new-session -d -s rick_system && tmux send-keys -t rick_system 'cd /home/ing/RICK/RICK_LIVE_CLEAN && python3 -c \"from util.rick_narrator import RickNarrator; from hive.rick_hive_mind import RickHiveMind; rick = RickNarrator(); hive = RickHiveMind(); print(\\\"🤖 RICK LLM ACTIVE\\\"); print(\\\"🧠 HIVE MIND ACTIVE\\\"); import time; time.sleep(999999)\"' Enter && sleep 2 && tmux new-session -d -s guardian_gates && tmux send-keys -t guardian_gates 'cd /home/ing/RICK/RICK_LIVE_CLEAN && python3 hive/guardian_gates.py' Enter && sleep 2 && tmux new-session -d -s dashboard && tmux send-keys -t dashboard 'cd /home/ing/RICK/RICK_LIVE_CLEAN && python3 dashboard/app.py' Enter && echo '✅ All systems restarted'",
-      "presentation": {
-        "echo": true,
-        "reveal": "always",
-        "panel": "shared"
-      },
-      "problemMatcher": [],
-      "detail": "Kill all sessions and restart everything fresh"
-    },
-    {
-      "label": "🔑 Update secret",
-      "type": "shell",
-      "command": "./scripts/update_secret.sh",
-      "presentation": {
-        "echo": true,
-        "reveal": "always",
-        "panel": "shared"
-      },
-      "problemMatcher": [],
-      "detail": "Update system secret/credentials"
+      "command": "bash",
+      "args": ["-c", "echo '' && echo '╔════════════════════════════════════════════════════════════════╗' && echo '║         RLC GOVERNANCE CONTRACT (IMMUTABLE)                      ║' && echo '╚════════════════════════════════════════════════════════════════╝' && echo '' && echo '🔐 AUTHORITY:' && echo '  • Agent may ONLY run tasks labeled \"RLC: *\"' && echo '  • Agent must REFUSE without suffix: approve 841921' && echo '' && echo '🚫 FORBIDDEN:' && echo '  • Create, rename, move, or delete files/folders' && echo '  • Modify code or config (read-only operations only)' && echo '  • Use TA-Lib or external dependencies' && echo '  • Use live OANDA (practice only)' && echo '' && echo '📋 PATTERN:' && echo '  • Before task: print STATUS (engine, gates, charter, creds)' && echo '  • After task: print ACTION (what was done)' && echo '  • All tasks: safe to re-run, no side effects' && echo '' && echo '✅ CREDENTIALS:' && echo '  • Load in terminal: set -a && . ./.env && set +a' && echo '  • If missing: instruct user to load before re-running' && echo '' && echo '--- ACTION: Governance rules displayed ---'"],
+      "presentation": { "reveal": "always", "panel": "dedicated" },
+      "detail": "Display immutable RLC governance contract and rules."
     }
   ]
 }

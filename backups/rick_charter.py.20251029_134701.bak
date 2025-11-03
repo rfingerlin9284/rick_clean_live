@@ -22,7 +22,6 @@ class RejectedTimeFrame(Enum):
     M5 = "M5"
 
 class RickCharter:
-    MIN_PROFIT_USD = 100  # Hard minimum profit target in USD
     """
     RICK Charter Core Enforcement - INSTITUTIONAL GRADE
     All values aligned with docs/CHARTER.md - immutable constants.
@@ -45,11 +44,11 @@ class RickCharter:
     
     # PRIMARY CONSTRAINTS (docs/CHARTER.md Section 1)
     MIN_NOTIONAL_USD = 15000         # $15,000 minimum notional per trade
-    MIN_RISK_REWARD_RATIO = 3.2
+    MIN_RISK_REWARD_RATIO = 3.2      # 3.2:1 minimum risk-reward ratio
     MAX_HOLD_DURATION_HOURS = 6      # 6 hours maximum hold duration
     MAX_MARGIN_UTILIZATION_PCT = 0.35  # 35% maximum margin utilization
-    MAX_CONCURRENT_POSITIONS = 3
-    DAILY_LOSS_BREAKER_PCT = 0.05
+    MAX_CONCURRENT_POSITIONS = 3     # 3 maximum concurrent positions
+    DAILY_LOSS_BREAKER_PCT = 0.05    # 5% daily loss breaker (-5% NAV)
     
     # EXECUTION REQUIREMENTS
     MAX_PLACEMENT_LATENCY_MS = 300   # 300ms maximum placement latency
@@ -58,8 +57,8 @@ class RickCharter:
     # CALCULATED UNIT FLOORS (for $15k notional minimum)
     # Major pairs: ~150,000 units for $15k (assuming ~1.0 price)
     # Other FX: ~75,000 units for $15k (assuming ~2.0 price)
-    MAJOR_PAIRS_MIN_UNITS = 15000
-    OTHER_FX_MIN_UNITS = 15000
+    MAJOR_PAIRS_MIN_UNITS = 150000   # EUR/USD, GBP/USD, USD/JPY, USD/CHF, USD/CAD, AUD/USD, NZD/USD
+    OTHER_FX_MIN_UNITS = 75000       # All other FX pairs
     MIN_MARGIN_USD = 500             # Minimum $500 margin per trade
     
     # Major pairs list
@@ -102,8 +101,9 @@ class RickCharter:
     # ========================================================================
     # OCO HARD REQUIREMENT (docs/CHARTER.md Section 6)
     # ========================================================================
-    OCO_MANDATORY = True
-    ALLOW_NAKED_POSITIONS = False
+    
+    OCO_MANDATORY = True                 # Every entry MUST have SL+TP as OCO
+    ALLOW_NAKED_POSITIONS = False        # No positions without stop loss + take profit
     
     # ========================================================================
     # BROKER STOP-DISTANCE & INSTITUTIONAL COMPLIANCE
@@ -117,23 +117,6 @@ class RickCharter:
     # JPY pair pip adjustment
     JPY_PIP_VALUE = 0.01                 # JPY pairs use 0.01 as pip
     STANDARD_PIP_VALUE = 0.0001          # Standard pairs use 0.0001 as pip
-
-    @classmethod
-    def validate_position_size(
-        cls,
-        symbol: str,
-        units: int,
-        notional_usd: float = 0.0,
-        margin_usd: float = 0.0,
-    ) -> tuple[bool, str]:
-        """
-        Validate size against the hard unit floors.
-        Returns (ok, reason). Unit floor: 15,000 for majors and other FX (institutional).
-        """
-        min_units = cls.MAJOR_PAIRS_MIN_UNITS if symbol in cls.MAJOR_PAIRS else cls.OTHER_FX_MIN_UNITS
-        if units >= min_units:
-            return True, f"OK — {units:,} ≥ {min_units:,} units"
-        return False, f"Below Charter unit floor — {units:,} < {min_units:,} units"
 
     @classmethod
     def validate_pin(cls, pin: int) -> bool:

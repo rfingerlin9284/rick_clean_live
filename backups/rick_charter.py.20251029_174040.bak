@@ -22,7 +22,6 @@ class RejectedTimeFrame(Enum):
     M5 = "M5"
 
 class RickCharter:
-    MIN_PROFIT_USD = 100  # Hard minimum profit target in USD
     """
     RICK Charter Core Enforcement - INSTITUTIONAL GRADE
     All values aligned with docs/CHARTER.md - immutable constants.

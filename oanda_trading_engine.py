@@ -1386,3 +1386,83 @@ async def main():
 
 if __name__ == "__main__":
     asyncio.run(main())
+
+# ===== RBOTZILLA: POSITION POLICE (immutable min-notional) =====
+try:
+    from rick_charter import RickCharter
+except Exception:
+    class RickCharter: MIN_NOTIONAL_USD = 15000
+
+def _rbz_usd_notional(instrument: str, units: float, price: float) -> float:
+    try:
+        base, quote = instrument.split("_",1)
+        u = abs(float(units))
+        p = float(price)
+        if quote == "USD":      # e.g., GBP_USD
+            return u * p
+        if base == "USD":       # e.g., USD_JPY
+            return u * 1.0
+        return 0.0              # non-USD crosses (ignored by charter)
+    except Exception:
+        return 0.0
+
+def _rbz_fetch_price(sess, acct: str, inst: str, tok: str):
+    import requests
+    try:
+        r = sess.get(
+            f"https://api-fxpractice.oanda.com/v3/accounts/{acct}/pricing",
+            headers={"Authorization": f"Bearer {tok}"},
+            params={"instruments": inst}, timeout=5,
+        )
+        return float(r.json()["prices"][0]["closeoutAsk"])
+    except Exception:
+        return None
+
+def _rbz_force_min_notional_position_police():
+    import os, json, requests
+    MIN_NOTIONAL = getattr(RickCharter, "MIN_NOTIONAL_USD", 15000)
+    acct = os.environ.get("OANDA_PRACTICE_ACCOUNT_ID") or os.environ.get("OANDA_ACCOUNT_ID")
+    tok  = os.environ.get("OANDA_PRACTICE_TOKEN") or os.environ.get("OANDA_TOKEN")
+    if not acct or not tok:
+        print('[RBZ_POLICE] skipped (no creds)'); return
+
+    s = requests.Session()
+    # 1) fetch open positions
+    r = s.get(
+        f"https://api-fxpractice.oanda.com/v3/accounts/{acct}/openPositions",
+        headers={"Authorization": f"Bearer {tok}"}, timeout=7,
+    )
+    for pos in r.json().get("positions", []):
+        inst = pos.get("instrument")
+        long_u  = float(pos.get("long",{}).get("units","0"))
+        short_u = float(pos.get("short",{}).get("units","0"))  # negative when short
+        net = long_u + short_u
+        if net == 0:
+            continue
+
+        avg = pos.get("long",{}).get("averagePrice") or pos.get("short",{}).get("averagePrice")
+        price = float(avg) if avg else (_rbz_fetch_price(s, acct, inst, tok) or 0.0)
+        notional = _rbz_usd_notional(inst, net, price)
+
+        if 0 < notional < MIN_NOTIONAL:
+            print(json.dumps({
+                "CHARTER_VIOLATION":"POSITION_BELOW_MIN_NOTIONAL",
+                "instrument": inst, "net_units": net,
+                "est_notional_usd": round(notional,2),
+                "action":"FORCE_CLOSE"
+            }))
+            # Close entire side
+            side = "long" if net > 0 else "short"
+            payload = {"longUnits":"ALL"} if side=="long" else {"shortUnits":"ALL"}
+            s.put(
+                f"https://api-fxpractice.oanda.com/v3/accounts/{acct}/positions/{inst}/close",
+                headers={"Authorization": f"Bearer {tok}", "Content-Type":"application/json"},
+                data=json.dumps(payload), timeout=7,
+            )
+# ===== /POSITION POLICE =====
+
+# RBZ guard at import time
+try:
+    _rbz_force_min_notional_position_police()
+except Exception as _e:
+    print('[RBZ_POLICE] error', _e)

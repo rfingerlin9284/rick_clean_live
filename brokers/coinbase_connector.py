@@ -335,6 +335,39 @@ class CoinbaseConnector:
                 except Exception:
                     # Don't block order placement if enforcement fails
                     pass
+
+                # Enforce charter minimum expected PnL (gross) at TP
+                try:
+                    if RickCharter and hasattr(RickCharter, "MIN_EXPECTED_PNL_USD"):
+                        # Coinbase size is in base units; price is USD-quoted on *-USD markets.
+                        expected_pnl_usd = abs((float(take_profit) - float(entry_price)) * float(size))
+                        min_expected = float(RickCharter.MIN_EXPECTED_PNL_USD)
+                        if expected_pnl_usd < min_expected:
+                            self.logger.warning(
+                                f"Charter min expected PnL ${min_expected:.2f} not met "
+                                f"(got ${expected_pnl_usd:.2f}) for {product_id}. Blocking order."
+                            )
+                            log_narration(
+                                event_type="CHARTER_VIOLATION",
+                                details={
+                                    "code": "MIN_EXPECTED_PNL_USD",
+                                    "expected_pnl_usd": expected_pnl_usd,
+                                    "min_expected_pnl_usd": min_expected,
+                                    "entry_price": entry_price,
+                                    "take_profit": take_profit,
+                                    "size": size
+                                },
+                                symbol=product_id,
+                                venue="coinbase"
+                            )
+                            return {
+                                "success": False,
+                                "error": f"EXPECTED_PNL_BELOW_MIN: {expected_pnl_usd:.2f} < {min_expected:.2f}",
+                                "broker": "COINBASE",
+                                "environment": self.environment
+                            }
+                except Exception as e:
+                    self.logger.warning(f"Min-expected-PnL enforcement failed: {e}")
                 
                 # Charter compliance check
                 if avg_latency > self.max_placement_latency_ms:

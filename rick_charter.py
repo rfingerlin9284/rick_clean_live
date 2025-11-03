@@ -41,6 +41,7 @@ class RickCharter:
     # RISK MANAGEMENT
     DAILY_LOSS_BREAKER_PCT = -5.0  # -5% daily loss halt
     MIN_NOTIONAL_USD = 15000
+    MIN_EXPECTED_PNL_USD = 100.0  # Gross PnL at TP must be >= $100
 
     # Minimum risk-reward ratio (guide compliance: 3.2)
     MIN_RISK_REWARD_RATIO = 3.2
@@ -117,6 +118,7 @@ class RickCharter:
             assert cls.DAILY_LOSS_BREAKER_PCT == -5.0, "Loss breaker error"
             assert cls.MIN_NOTIONAL_USD == 15000, "Notional minimum error"
             assert cls.MIN_RISK_REWARD_RATIO == 3.2, "Risk reward error"
+            assert cls.MIN_EXPECTED_PNL_USD == 100.0, "Expected PnL minimum error"
 
             # Test timeframe enforcement
             assert cls.validate_timeframe("M15") == True, "M15 should be allowed"
@@ -155,6 +157,7 @@ class RickCharter:
             "daily_loss_breaker": cls.DAILY_LOSS_BREAKER_PCT,
             "min_notional_usd": cls.MIN_NOTIONAL_USD,
             "min_risk_reward": cls.MIN_RISK_REWARD_RATIO,
+            "min_expected_pnl_usd": cls.MIN_EXPECTED_PNL_USD,
             "allowed_timeframes": [tf.value for tf in cls.ALLOWED_TIMEFRAMES],
             "rejected_timeframes": [tf.value for tf in cls.REJECTED_TIMEFRAMES],
             "max_concurrent": cls.MAX_CONCURRENT_POSITIONS,
