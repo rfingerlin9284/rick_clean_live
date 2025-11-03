@@ -36,6 +36,7 @@ from brokers.oanda_connector import OandaConnector
 from util.terminal_display import TerminalDisplay, Colors
 from util.narration_logger import log_narration, log_pnl
 from util.rick_narrator import RickNarrator
+from util.usd_converter import get_usd_notional
 
 # ML Intelligence imports
 try:
@@ -687,8 +688,11 @@ class OandaTradingEngine:
             # Calculate Charter-compliant position size
             position_size = self.calculate_position_size(symbol, entry_price)
             
-            # Calculate notional value
-            notional_value = abs(position_size) * entry_price
+            # Calculate notional value in TRUE USD (handles cross pairs correctly)
+            notional_value = get_usd_notional(position_size, symbol, entry_price, self.oanda)
+            if notional_value is None:
+                self.display.error(f"❌ Cannot calculate USD notional for {symbol}")
+                return None
             
             # ========================================================================
             # 🛡️ PRE-TRADE GUARDIAN GATE CHECK (NEW)
@@ -737,16 +741,23 @@ class OandaTradingEngine:
                 )
                 return None
             
-            # CHARTER ENFORCEMENT: Verify minimum notional
+            # CHARTER ENFORCEMENT: Verify minimum notional (GATED PRE-ORDER VALIDATION)
             if notional_value < self.min_notional_usd:
                 self.display.error(f"❌ CHARTER VIOLATION: Notional ${notional_value:,.0f} < ${self.min_notional_usd:,}")
+                self.display.error(f"   GATED LOGIC: Order blocked before submission")
                 log_narration(
                     event_type="CHARTER_VIOLATION",
                     details={
-                        "violation": "MIN_NOTIONAL",
-                        "notional": notional_value,
-                        "min_required": self.min_notional_usd,
-                        "symbol": symbol
+                        "action": "PRE_ORDER_BLOCK",
+                        "violation": "MIN_NOTIONAL_PRE_ORDER",
+                        "notional_usd": round(notional_value, 2),
+                        "min_required_usd": self.min_notional_usd,
+                        "symbol": symbol,
+                        "direction": direction,
+                        "position_size": position_size,
+                        "entry_price": entry_price,
+                        "enforcement": "GATED_LOGIC_AUTOMATIC",
+                        "status": "BLOCKED_BEFORE_SUBMISSION"
                     },
                     symbol=symbol,
                     venue="oanda"
@@ -1311,11 +1322,25 @@ class OandaTradingEngine:
         print()
         
         trade_count = 0
+        last_police_sweep = time.time()  # Track last Position Police sweep
+        police_sweep_interval = 900  # 15 minutes (M15 charter compliance)
+        
         # Start TradeManager background task
         trade_manager_task = asyncio.create_task(self.trade_manager_loop())
         
         while self.is_running:
             try:
+                # AUTOMATED POSITION POLICE SWEEP (every 15 minutes)
+                current_time = time.time()
+                if current_time - last_police_sweep >= police_sweep_interval:
+                    try:
+                        self.display.info("🚓 Position Police sweep starting...")
+                        _rbz_force_min_notional_position_police()
+                        last_police_sweep = current_time
+                        self.display.success("✅ Position Police sweep complete")
+                    except Exception as e:
+                        self.display.error(f"❌ Position Police error: {e}")
+                
                 # Check existing positions
                 self.check_positions()
                 
@@ -1419,7 +1444,15 @@ def _rbz_fetch_price(sess, acct: str, inst: str, tok: str):
         return None
 
 def _rbz_force_min_notional_position_police():
+    """
+    AUTOMATED POSITION POLICE - GATED CHARTER ENFORCEMENT
+    Closes any position < MIN_NOTIONAL_USD ($15,000)
+    Runs: (1) On engine startup, (2) Every 15 minutes during trading loop
+    PIN: 841921 | IMMUTABLE
+    """
     import os, json, requests
+    from datetime import datetime, timezone
+    
     MIN_NOTIONAL = getattr(RickCharter, "MIN_NOTIONAL_USD", 15000)
     acct = os.environ.get("OANDA_PRACTICE_ACCOUNT_ID") or os.environ.get("OANDA_ACCOUNT_ID")
     tok  = os.environ.get("OANDA_PRACTICE_TOKEN") or os.environ.get("OANDA_TOKEN")
@@ -1427,12 +1460,19 @@ def _rbz_force_min_notional_position_police():
         print('[RBZ_POLICE] skipped (no creds)'); return
 
     s = requests.Session()
+    violations_found = 0
+    violations_closed = 0
+    
     # 1) fetch open positions
     r = s.get(
         f"https://api-fxpractice.oanda.com/v3/accounts/{acct}/openPositions",
         headers={"Authorization": f"Bearer {tok}"}, timeout=7,
     )
-    for pos in r.json().get("positions", []):
+    
+    positions = r.json().get("positions", [])
+    timestamp = datetime.now(timezone.utc).isoformat()
+    
+    for pos in positions:
         inst = pos.get("instrument")
         long_u  = float(pos.get("long",{}).get("units","0"))
         short_u = float(pos.get("short",{}).get("units","0"))  # negative when short
@@ -1445,20 +1485,80 @@ def _rbz_force_min_notional_position_police():
         notional = _rbz_usd_notional(inst, net, price)
 
         if 0 < notional < MIN_NOTIONAL:
-            print(json.dumps({
-                "CHARTER_VIOLATION":"POSITION_BELOW_MIN_NOTIONAL",
-                "instrument": inst, "net_units": net,
-                "est_notional_usd": round(notional,2),
-                "action":"FORCE_CLOSE"
-            }))
+            violations_found += 1
+            violation_data = {
+                "timestamp": timestamp,
+                "event_type": "CHARTER_VIOLATION",
+                "action": "POSITION_POLICE_AUTO_CLOSE",
+                "details": {
+                    "violation": "POSITION_BELOW_MIN_NOTIONAL",
+                    "instrument": inst,
+                    "net_units": net,
+                    "side": "long" if net > 0 else "short",
+                    "avg_price": price,
+                    "notional_usd": round(notional, 2),
+                    "min_required_usd": MIN_NOTIONAL,
+                    "account": acct,
+                    "enforcement": "GATED_LOGIC_AUTOMATIC"
+                },
+                "symbol": inst,
+                "venue": "oanda"
+            }
+            
+            # Log violation BEFORE closing
+            print(json.dumps(violation_data))
+            try:
+                log_narration(**violation_data)
+            except:
+                pass  # Narration logger may not be available
+            
             # Close entire side
             side = "long" if net > 0 else "short"
             payload = {"longUnits":"ALL"} if side=="long" else {"shortUnits":"ALL"}
-            s.put(
+            close_response = s.put(
                 f"https://api-fxpractice.oanda.com/v3/accounts/{acct}/positions/{inst}/close",
                 headers={"Authorization": f"Bearer {tok}", "Content-Type":"application/json"},
                 data=json.dumps(payload), timeout=7,
             )
+            
+            if close_response.status_code == 200:
+                violations_closed += 1
+                close_data = {
+                    "timestamp": timestamp,
+                    "event_type": "POSITION_CLOSED",
+                    "action": "CHARTER_ENFORCEMENT_SUCCESS",
+                    "details": {
+                        "instrument": inst,
+                        "reason": "BELOW_MIN_NOTIONAL",
+                        "status": "CLOSED_BY_POSITION_POLICE"
+                    },
+                    "symbol": inst,
+                    "venue": "oanda"
+                }
+                print(json.dumps(close_data))
+                try:
+                    log_narration(**close_data)
+                except:
+                    pass
+    
+    # Summary logging
+    if violations_found > 0:
+        summary = {
+            "timestamp": timestamp,
+            "event_type": "POSITION_POLICE_SUMMARY",
+            "details": {
+                "violations_found": violations_found,
+                "violations_closed": violations_closed,
+                "enforcement": "GATED_LOGIC_AUTOMATIC",
+                "min_notional_usd": MIN_NOTIONAL
+            }
+        }
+        print(json.dumps(summary))
+        try:
+            log_narration(**summary)
+        except:
+            pass
+            
 # ===== /POSITION POLICE =====
 
 # RBZ guard at import time
