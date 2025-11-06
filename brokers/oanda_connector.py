@@ -249,7 +249,7 @@ class OandaConnector:
                     RickCharter = None
             
             if RickCharter:
-                min_notional = getattr(RickCharter, "MIN_NOTIONAL_USD", 15000)
+                min_notional = RickCharter.MIN_NOTIONAL_USD
                 
                 # Calculate USD notional based on pair type
                 # For USD-based pairs (USD_XXX), units are already in USD
@@ -693,6 +693,39 @@ class OandaConnector:
         except Exception as e:
             self.logger.warning(f"Failed to fetch trades: {e}")
         return []
+
+
+    def get_historical_data(self, instrument: str, count: int = 120, granularity: str = "M15") -> List[Dict[str, Any]]:
+        """Fetch historical candle data from OANDA for signal generation
+        
+        Args:
+            instrument: Trading pair (e.g., "EUR_USD")
+            count: Number of candles to fetch (default: 120)
+            granularity: Candle period (default: "M15" for 15 minutes)
+            
+        Returns:
+            List of candle dicts with format:
+            [{'time': 'ISO8601', 'volume': int, 'mid': {'o': str, 'h': str, 'l': str, 'c': str}}, ...]
+        """
+        try:
+            endpoint = f"/v3/instruments/{instrument}/candles"
+            params = {
+                "count": count,
+                "granularity": granularity,
+                "price": "M"  # Mid prices
+            }
+            
+            resp = self._make_request("GET", endpoint, params=params)
+            
+            if "candles" in resp:
+                return resp["candles"]
+            
+            self.logger.warning(f"No candles in response for {instrument}")
+            return []
+            
+        except Exception as e:
+            self.logger.error(f"Failed to fetch candles for {instrument}: {e}")
+            return []
 
     def cancel_order(self, order_id: str) -> Dict[str, Any]:
         """Cancel a pending order by id."""

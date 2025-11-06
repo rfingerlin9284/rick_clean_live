@@ -1352,7 +1352,7 @@ class OandaTradingEngine:
                     direction = None
                     for _candidate in self.trading_pairs:
                         try:
-                            candles = self.oanda.get_candles(_candidate, count=120, granularity="M15")
+                            candles = self.oanda.get_historical_data(_candidate, count=120, granularity="M15")
                             sig, conf = generate_signal(_candidate, candles)  # returns ("BUY"/"SELL", confidence) or (None, 0)
                         except Exception as e:
                             self.display.error(f"Signal error for {_candidate}: {e}")
@@ -1364,7 +1364,7 @@ class OandaTradingEngine:
                             break
                     
                     if not symbol or not direction:
-                        self.display.info("No valid signals across pairs - skipping cycle")
+                        self.display.warning("No valid signals across pairs - skipping cycle")
                         await asyncio.sleep(self.min_trade_interval)
                         continue
                     
