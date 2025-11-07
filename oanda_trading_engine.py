@@ -18,7 +18,7 @@ import requests
 from datetime import datetime, timezone
 from typing import Dict, List, Optional, Tuple
 
-sys.path.insert(0, str(Path(__file__).parent.resolve())))
+sys.path.insert(0, str(Path(__file__).parent.resolve()))
 
 # Load environment variables manually
 env_file = str(Path(__file__).parent / 'master.env')
