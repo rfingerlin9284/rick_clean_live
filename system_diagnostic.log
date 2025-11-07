@@ -1,0 +1,104 @@
+[2025-10-13 15:20:08.311] [INFO] System Mapper initialized at 2025-10-13 15:20:08.311070
+[2025-10-13 15:20:08.314] [INFO] Root directory: /home/ing/RICK/RICK_LIVE_CLEAN
+[2025-10-13 15:20:08.314] [INFO] Added node: Dashboard_UI (endpoint in frontend layer)
+[2025-10-13 15:20:08.314] [INFO] Added node: API_Status (endpoint in frontend layer)
+[2025-10-13 15:20:08.314] [INFO] Added node: API_Narration (endpoint in frontend layer)
+[2025-10-13 15:20:08.314] [INFO] Added node: Companion_Overlay (endpoint in frontend layer)
+[2025-10-13 15:20:08.314] [INFO] Added node: Mode_Manager (service in api layer)
+[2025-10-13 15:20:08.314] [INFO] Added node: Narration_Logger (service in api layer)
+[2025-10-13 15:20:08.314] [INFO] Added node: Capital_Manager (service in api layer)
+[2025-10-13 15:20:08.314] [INFO] Added node: Ghost_Engine (engine in business layer)
+[2025-10-13 15:20:08.314] [INFO] Added node: Canary_Engine (engine in business layer)
+[2025-10-13 15:20:08.314] [INFO] Added node: Smart_Logic (service in business layer)
+[2025-10-13 15:20:08.314] [INFO] Added node: Regime_Detector (service in business layer)
+[2025-10-13 15:20:08.314] [INFO] Added node: Risk_Control (service in business layer)
+[2025-10-13 15:20:08.314] [INFO] Added node: Session_Breaker (service in business layer)
+[2025-10-13 15:20:08.314] [INFO] Added node: Narration_File (logger in data layer)
+[2025-10-13 15:20:08.314] [INFO] Added node: PnL_File (logger in data layer)
+[2025-10-13 15:20:08.314] [INFO] Added node: Progress_File (logger in data layer)
+[2025-10-13 15:20:08.314] [INFO] Added node: Capital_Tracking (logger in data layer)
+[2025-10-13 15:20:08.314] [INFO] Added node: OANDA_Connector (connector in external layer)
+[2025-10-13 15:20:08.314] [INFO] Added node: Coinbase_Connector (connector in external layer)
+[2025-10-13 15:20:08.314] [INFO] Connection added: Dashboard_UI → API_Status (request)
+[2025-10-13 15:20:08.314] [INFO] Connection added: Dashboard_UI → API_Narration (request)
+[2025-10-13 15:20:08.314] [INFO] Connection added: Companion_Overlay → API_Narration (request)
+[2025-10-13 15:20:08.314] [INFO] Connection added: API_Status → Mode_Manager (query)
+[2025-10-13 15:20:08.314] [INFO] Connection added: API_Status → Narration_Logger (query)
+[2025-10-13 15:20:08.314] [INFO] Connection added: API_Narration → Narration_Logger (query)
+[2025-10-13 15:20:08.314] [INFO] Connection added: Narration_Logger → Narration_File (write)
+[2025-10-13 15:20:08.314] [INFO] Connection added: Narration_Logger → PnL_File (write)
+[2025-10-13 15:20:08.314] [INFO] Connection added: Capital_Manager → Capital_Tracking (write)
+[2025-10-13 15:20:08.314] [INFO] Connection added: Ghost_Engine → Narration_Logger (log_event)
+[2025-10-13 15:20:08.315] [INFO] Connection added: Ghost_Engine → Capital_Manager (query)
+[2025-10-13 15:20:08.315] [INFO] Connection added: Ghost_Engine → Smart_Logic (signal_processing)
+[2025-10-13 15:20:08.315] [INFO] Connection added: Ghost_Engine → Risk_Control (compliance_check)
+[2025-10-13 15:20:08.315] [INFO] Connection added: Ghost_Engine → Session_Breaker (stop_check)
+[2025-10-13 15:20:08.315] [INFO] Connection added: Canary_Engine → Narration_Logger (log_event)
+[2025-10-13 15:20:08.315] [INFO] Connection added: Canary_Engine → Capital_Manager (query)
+[2025-10-13 15:20:08.315] [INFO] Connection added: Canary_Engine → Smart_Logic (signal_processing)
+[2025-10-13 15:20:08.315] [INFO] Connection added: Canary_Engine → Risk_Control (compliance_check)
+[2025-10-13 15:20:08.315] [INFO] Connection added: Ghost_Engine → OANDA_Connector (place_trade)
+[2025-10-13 15:20:08.315] [INFO] Connection added: Ghost_Engine → Coinbase_Connector (get_price)
+[2025-10-13 15:20:08.315] [INFO] Connection added: Canary_Engine → OANDA_Connector (place_trade)
+[2025-10-13 15:20:08.315] [INFO] Connection added: Canary_Engine → Coinbase_Connector (get_price)
+[2025-10-13 15:20:08.315] [INFO] Connection added: Smart_Logic → Ghost_Engine (signal)
+[2025-10-13 15:20:08.315] [INFO] Connection added: Regime_Detector → Ghost_Engine (regime_info)
+[2025-10-13 15:20:08.315] [INFO] Connection added: Risk_Control → Ghost_Engine (risk_limits)
+[2025-10-13 15:20:08.315] [INFO] Connection added: Session_Breaker → Ghost_Engine (stop_signal)
+[2025-10-13 15:20:08.315] [INFO] ================================================================================
+[2025-10-13 15:20:08.315] [INFO] STARTING SYSTEM-WIDE VALIDATION
+[2025-10-13 15:20:08.315] [INFO] ================================================================================
+[2025-10-13 15:20:08.315] [INFO] Validating node: Dashboard_UI
+[2025-10-13 15:20:08.315] [DEBUG] Checking Flask route: /
+[2025-10-13 15:20:08.315] [INFO] Node Dashboard_UI status: operational
+[2025-10-13 15:20:08.315] [INFO] Validating node: API_Status
+[2025-10-13 15:20:08.315] [DEBUG] Checking Flask route: /api/status
+[2025-10-13 15:20:08.315] [INFO] Node API_Status status: operational
+[2025-10-13 15:20:08.315] [INFO] Validating node: API_Narration
+[2025-10-13 15:20:08.315] [DEBUG] Checking Flask route: /api/narration
+[2025-10-13 15:20:08.315] [INFO] Node API_Narration status: operational
+[2025-10-13 15:20:08.315] [INFO] Validating node: Companion_Overlay
+[2025-10-13 15:20:08.315] [INFO] Node Companion_Overlay status: operational
+[2025-10-13 15:20:08.315] [INFO] Validating node: Mode_Manager
+[2025-10-13 15:20:08.315] [DEBUG] Checking module: util/mode_manager.py
+[2025-10-13 15:20:08.316] [INFO] Node Mode_Manager status: operational
+[2025-10-13 15:20:08.316] [INFO] Validating node: Narration_Logger
+[2025-10-13 15:20:08.316] [DEBUG] Checking module: util/narration_logger.py
+[2025-10-13 15:20:08.316] [INFO] Node Narration_Logger status: operational
+[2025-10-13 15:20:08.316] [INFO] Validating node: Capital_Manager
+[2025-10-13 15:20:08.316] [DEBUG] Checking module: capital_manager.py
+[2025-10-13 15:20:08.316] [INFO] Node Capital_Manager status: operational
+[2025-10-13 15:20:08.316] [INFO] Validating node: Ghost_Engine
+[2025-10-13 15:20:08.316] [INFO] Node Ghost_Engine status: operational
+[2025-10-13 15:20:08.316] [INFO] Validating node: Canary_Engine
+[2025-10-13 15:20:08.316] [INFO] Node Canary_Engine status: operational
+[2025-10-13 15:20:08.316] [INFO] Validating node: Smart_Logic
+[2025-10-13 15:20:08.316] [DEBUG] Checking module: logic/smart_logic.py
+[2025-10-13 15:20:08.316] [INFO] Node Smart_Logic status: operational
+[2025-10-13 15:20:08.316] [INFO] Validating node: Regime_Detector
+[2025-10-13 15:20:08.316] [DEBUG] Checking module: logic/regime_detector.py
+[2025-10-13 15:20:08.316] [INFO] Node Regime_Detector status: operational
+[2025-10-13 15:20:08.316] [INFO] Validating node: Risk_Control
+[2025-10-13 15:20:08.317] [DEBUG] Checking module: risk/risk_control_center.py
+[2025-10-13 15:20:08.317] [INFO] Node Risk_Control status: operational
+[2025-10-13 15:20:08.317] [INFO] Validating node: Session_Breaker
+[2025-10-13 15:20:08.317] [DEBUG] Checking module: risk/session_breaker.py
+[2025-10-13 15:20:08.317] [INFO] Node Session_Breaker status: operational
+[2025-10-13 15:20:08.317] [INFO] Validating node: Narration_File
+[2025-10-13 15:20:08.317] [INFO] Node Narration_File status: operational
+[2025-10-13 15:20:08.317] [INFO] Validating node: PnL_File
+[2025-10-13 15:20:08.317] [INFO] Node PnL_File status: operational
+[2025-10-13 15:20:08.317] [INFO] Validating node: Progress_File
+[2025-10-13 15:20:08.317] [INFO] Node Progress_File status: operational
+[2025-10-13 15:20:08.317] [INFO] Validating node: Capital_Tracking
+[2025-10-13 15:20:08.317] [INFO] Node Capital_Tracking status: operational
+[2025-10-13 15:20:08.317] [INFO] Validating node: OANDA_Connector
+[2025-10-13 15:20:08.317] [INFO] Node OANDA_Connector status: operational
+[2025-10-13 15:20:08.317] [INFO] Validating node: Coinbase_Connector
+[2025-10-13 15:20:08.317] [INFO] Node Coinbase_Connector status: operational
+[2025-10-13 15:20:08.317] [INFO] ================================================================================
+[2025-10-13 15:20:08.317] [INFO] VALIDATION COMPLETE: 19/19 operational
+[2025-10-13 15:20:08.318] [INFO] ================================================================================
+[2025-10-13 15:20:08.318] [INFO] System map saved to: /home/ing/RICK/RICK_LIVE_CLEAN/SYSTEM_MAP.json
+[2025-10-13 15:20:08.318] [INFO] Generating system diagram...
+[2025-10-13 15:20:08.318] [INFO] System diagram saved to: /home/ing/RICK/RICK_LIVE_CLEAN/SYSTEM_DIAGRAM.md
