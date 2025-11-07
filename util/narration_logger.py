@@ -11,8 +11,8 @@ from pathlib import Path
 from typing import Dict, Any, Optional
 import logging
 
-# Project paths
-PROJECT_ROOT = Path("/home/ing/RICK/RICK_LIVE_CLEAN")
+# Project paths - use current file location to determine project root
+PROJECT_ROOT = Path(__file__).parent.parent.resolve()
 LOGS_DIR = PROJECT_ROOT / "logs"
 NARRATION_FILE = PROJECT_ROOT / "narration.jsonl"  # Root level for dashboard access
 PNL_FILE = LOGS_DIR / "pnl.jsonl"

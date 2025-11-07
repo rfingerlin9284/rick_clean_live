@@ -4,7 +4,8 @@ Visual Endpoint Status Dashboard
 Shows exactly which endpoints work and why warnings are OK
 """
 import sys
-sys.path.insert(0, '/home/ing/RICK/RICK_LIVE_CLEAN')
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).parent.resolve())))
 
 import requests
 import time
@@ -12,7 +13,7 @@ from datetime import datetime
 
 def load_env():
     import os
-    with open('/home/ing/RICK/RICK_LIVE_CLEAN/master.env', 'r') as f:
+    with open(str(Path(__file__).parent / 'master.env'), 'r') as f:
         for line in f:
             line = line.strip()
             if line and not line.startswith('#') and '=' in line:

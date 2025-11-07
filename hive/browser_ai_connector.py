@@ -43,7 +43,7 @@ except ImportError:
 # CONFIGURATION
 # ============================================================================
 
-PROJECT_ROOT = Path("/home/ing/RICK/R_H_UNI")
+PROJECT_ROOT = Path(__file__).parent.resolve())
 LOGS_DIR = PROJECT_ROOT / "pre_upgrade" / "headless" / "logs"
 BROWSER_CACHE_DIR = PROJECT_ROOT / ".browser_cache"
 

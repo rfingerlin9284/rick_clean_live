@@ -10,6 +10,7 @@ PIN: 841921 | Generated: 2025-10-15
 """
 
 import sys
+from pathlib import Path
 import os
 import time
 import asyncio
@@ -17,10 +18,10 @@ import requests
 from datetime import datetime, timezone
 from typing import Dict, List, Optional, Tuple
 
-sys.path.insert(0, '/home/ing/RICK/RICK_LIVE_CLEAN')
+sys.path.insert(0, str(Path(__file__).parent.resolve())))
 
 # Load environment variables manually
-env_file = '/home/ing/RICK/RICK_LIVE_CLEAN/master.env'
+env_file = str(Path(__file__).parent / 'master.env')
 if os.path.exists(env_file):
     with open(env_file) as f:
         for line in f:

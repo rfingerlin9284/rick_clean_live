@@ -72,7 +72,7 @@ def get_pnl_summary():
 
 def monitor_session():
     """Monitor ghost session with live updates"""
-    log_file = Path('/home/ing/RICK/RICK_LIVE_CLEAN/logs/ghost_session.log')
+    log_file = Path(str(Path(__file__).parent / 'logs' / ghost_session.log')
     
     print("🚀 Starting Ghost Session Monitor...")
     print("Press Ctrl+C to stop monitoring\n")

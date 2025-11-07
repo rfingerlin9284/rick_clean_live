@@ -5,7 +5,8 @@ Tests all OANDA Practice, Coinbase Sandbox, and Yahoo Finance endpoints
 Verifies every URL is working and accessible
 """
 import sys
-sys.path.insert(0, '/home/ing/RICK/RICK_LIVE_CLEAN')
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).parent.resolve())))
 
 import requests
 import json
@@ -15,7 +16,7 @@ import os
 
 def load_master_env():
     """Load master.env file"""
-    env_file = '/home/ing/RICK/RICK_LIVE_CLEAN/master.env'
+    env_file = str(Path(__file__).parent / 'master.env')
     env_vars = {}
     
     with open(env_file, 'r') as f:

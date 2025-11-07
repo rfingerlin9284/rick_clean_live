@@ -41,7 +41,7 @@ logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s | %(name)s | %(levelname)s | %(message)s',
     handlers=[
-        logging.FileHandler('/home/ing/RICK/RICK_LIVE_CLEAN/logs/rick_institutional_audit.log'),
+        logging.FileHandler(str(Path(__file__).parent / 'logs' / rick_institutional_audit.log'),
         logging.StreamHandler()
     ]
 )
@@ -518,7 +518,7 @@ def main():
     agent = RickInstitutionalTradingAgent(pin=841921)
     
     # Load default task if available
-    tasks_dir = Path("/home/ing/RICK/RICK_LIVE_CLEAN/tasks")
+    tasks_dir = Path(str(Path(__file__).parent / 'tasks'))
     default_task = tasks_dir / "ric_live_institutional.json"
     if default_task.exists():
         with open(default_task) as f:

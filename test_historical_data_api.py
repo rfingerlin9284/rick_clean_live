@@ -5,7 +5,8 @@ Demonstrates getting historical candles from Coinbase Sandbox
 NO CSV FILES NEEDED - All data via API!
 """
 import sys
-sys.path.insert(0, '/home/ing/RICK/RICK_LIVE_CLEAN')
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).parent.resolve())))
 
 import requests
 import json
@@ -15,7 +16,7 @@ import time
 def load_master_env():
     """Load master.env"""
     import os
-    with open('/home/ing/RICK/RICK_LIVE_CLEAN/master.env', 'r') as f:
+    with open(str(Path(__file__).parent / 'master.env'), 'r') as f:
         for line in f:
             line = line.strip()
             if line and not line.startswith('#') and '=' in line:

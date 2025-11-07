@@ -4,7 +4,8 @@ IB Gateway Market Data Diagnostic
 Helps identify what market data subscriptions are needed
 """
 import sys
-sys.path.insert(0, '/home/ing/RICK/RICK_LIVE_CLEAN')
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).parent.resolve())))
 
 from brokers.ib_connector import IBConnector
 import time
