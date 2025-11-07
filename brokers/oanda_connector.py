@@ -718,8 +718,12 @@ class OandaConnector:
             
             resp = self._make_request("GET", endpoint, params=params)
             
-            if "candles" in resp:
-                return resp["candles"]
+            # _make_request wraps response in {"success": True, "data": {...}, ...}
+            # Extract the actual OANDA API response
+            if resp.get("success"):
+                data = resp.get("data", {})
+                if "candles" in data:
+                    return data["candles"]
             
             self.logger.warning(f"No candles in response for {instrument}")
             return []
