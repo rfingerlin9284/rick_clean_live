@@ -555,7 +555,7 @@ class OandaConnector:
                 "environment": self.environment
             }
     
-    def _make_request(self, method: str, endpoint: str, data: Dict = None) -> Dict[str, Any]:
+    def _make_request(self, method: str, endpoint: str, data: Dict = None, params: Dict = None) -> Dict[str, Any]:
         """
         Make authenticated API request with performance tracking - LIVE VERSION
         
@@ -563,6 +563,7 @@ class OandaConnector:
             method: HTTP method (GET, POST, PUT, DELETE)
             endpoint: API endpoint path
             data: Request payload for POST/PUT
+            params: Query parameters for GET requests (e.g., {"count": 120, "granularity": "M15"})
             
         Returns:
             Dict with API response
@@ -573,7 +574,7 @@ class OandaConnector:
         try:
             # Prepare request
             if method.upper() == "GET":
-                response = requests.get(url, headers=self.headers, timeout=self.default_timeout)
+                response = requests.get(url, headers=self.headers, params=params, timeout=self.default_timeout)
             elif method.upper() == "POST":
                 response = requests.post(url, headers=self.headers, json=data, timeout=self.default_timeout)
             elif method.upper() == "PUT":
