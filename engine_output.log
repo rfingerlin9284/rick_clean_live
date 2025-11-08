@@ -1,0 +1,231 @@
+nohup: ignoring input
+[H[2J[3JWARNING:brokers.oanda_connector:PRACTICE OCO latency 1223.6ms exceeds Charter limit
+ERROR:util.rick_narrator:Ollama query error: HTTPConnectionPool(host='127.0.0.1', port=11434): Read timed out. (read timeout=10)
+WARNING:brokers.oanda_connector:PRACTICE OCO latency 367.1ms exceeds Charter limit
+ERROR:util.rick_narrator:Ollama query error: HTTPConnectionPool(host='127.0.0.1', port=11434): Read timed out. (read timeout=10)
+WARNING:brokers.oanda_connector:PRACTICE OCO latency 349.8ms exceeds Charter limit
+⚠️  ML modules not available - running in basic mode
+[92m✅ ✅ PRACTICE API connected[0m
+   Account: 101-001-31210531-002
+   Endpoint: https://api-fxpractice.oanda.com
+[92m✅ ✅ Hive Mind connected[0m
+[92m✅ ✅ Momentum/Trailing system loaded[0m
+⚠️  trap_reversal strategy not available
+⚠️  fib_confluence strategy not available
+⚠️  price_action_holy_grail strategy not available
+⚠️  liquidity_sweep strategy not available
+⚠️  ema_scalper strategy not available
+[92m✅ ✅ Strategy Aggregator loaded (5 prototype strategies)[0m
+[92m✅ ✅ Quantitative Hedge Engine loaded[0m
+
+================================================================================
+[1m[96m                     🤖 RBOTzilla TRADING ENGINE (PRACTICE)                      [0m
+[90m            Charter-Compliant OANDA | PIN: 841921 | 2025-10-17 19:12            [0m
+================================================================================
+
+
+[1m[93m▶ CHARTER COMPLIANCE STATUS[0m
+[90m──────────────────────────────────────────────────────────────────────────────[0m
+[90m  • [0m[37mPIN Validated:[0m [92m841921 ✅[0m
+[90m  • [0m[37mCharter Version:[0m [96mRBOTzilla UNI Phase 9[0m
+[90m  • [0m[37mImmutable OCO:[0m [92mENFORCED (All orders)[0m
+[90m  • [0m[37mMin R:R Ratio:[0m [92m3.2:1 (Charter Immutable)[0m
+[90m  • [0m[37mMin Notional:[0m [92m$15,000 (Charter Immutable)[0m
+[90m  • [0m[37mMax Daily Loss:[0m [92m5.0% (Charter Breaker)[0m
+[90m  • [0m[37mMax Latency:[0m [92m300ms (Charter 2.1)[0m
+
+[1m[93m▶ ENVIRONMENT CONFIGURATION[0m
+[90m──────────────────────────────────────────────────────────────────────────────[0m
+[90m  • [0m[37mEnvironment:[0m [93mPRACTICE[0m
+[90m  • [0m[37mAPI Endpoint:[0m [96mhttps://api-fxpractice.oanda.com[0m
+[90m  • [0m[37mAccount ID:[0m [96m101-001-31210531-002[0m
+[90m  • [0m[37mMarket Data:[0m [92mReal-time OANDA API[0m
+[90m  • [0m[37mOrder Execution:[0m [93mOANDA PRACTICE API[0m
+
+[1m[93m▶ SYSTEM COMPONENTS[0m
+[90m──────────────────────────────────────────────────────────────────────────────[0m
+[90m  • [0m[37mNarration Logging:[0m [92mACTIVE → narration.jsonl[0m
+[90m  • [0m[37mML Intelligence:[0m [90mDISABLED[0m
+[90m  • [0m[37mHive Mind:[0m [92mCONNECTED[0m
+[90m  • [0m[37mMomentum System:[0m [92mACTIVE (rbotzilla_golden_age)[0m
+
+[1m[93m▶ RISK PARAMETERS[0m
+[90m──────────────────────────────────────────────────────────────────────────────[0m
+[90m  • [0m[37mPosition Size:[0m [96m~14,000 units (dynamic per pair)[0m
+[90m  • [0m[37mStop Loss:[0m [96m20 pips[0m
+[90m  • [0m[37mTake Profit:[0m [96m64 pips (3.2:1 R:R)[0m
+[90m  • [0m[37mMax Positions:[0m [96m3 concurrent[0m
+
+[93m⚠️  ⚠️  Charter requires $15k min notional - positions sized accordingly[0m
+
+[1m[93m▶ OANDA CONNECTION[0m
+[90m──────────────────────────────────────────────────────────────────────────────[0m
+  🔴 [37mOANDA PRACTICE API  [0m [91mREADY[0m
+
+
+[92m✅ ✅ RBOTzilla Engine Ready - PRACTICE Environment[0m
+[90m────────────────────────────────────────────────────────────────────────────────[0m
+
+
+[92m✅ Starting trading engine with PRACTICE API...[0m
+
+[96mℹ️ 📊 Market Data: PRACTICE OANDA API (real-time)[0m
+
+[96mℹ️ 💰 Orders: PRACTICE OANDA API[0m
+
+
+[1m[93m▶ MARKET SCAN[0m
+[90m──────────────────────────────────────────────────────────────────────────────[0m
+[92m✅ ✅ Real-time OANDA API data[0m
+  [96m📊 GBP_USD[0m [32mBID: 1.34328[0m | [31mASK: 1.34348[0m | [33mSpread: 20000.0 pips[0m
+[90m  • [0m[37mPosition Size:[0m [96m11,200 units (dynamic)[0m
+[90m  • [0m[37mNotional Value:[0m [92m$15,045 ✅[0m
+[90m  • [0m[37mR:R Ratio:[0m [92m3.20:1 ✅[0m
+
+[96mℹ️ Placing Charter-compliant SELL OCO order for GBP_USD...[0m
+[91m❌ ❌ CHARTER VIOLATION: Latency 1223.6ms > 300ms[0m
+
+[44m[37m OPEN [0m [91m[1mGBP_USD SELL[0m [36m@ 1.34328[0m 📉
+      [90mStop: 1.34528 | Target: 1.33688 | Size: 11,200 units | Notional: $15,045[0m
+
+[92m✅ ✅ OCO order placed! Order ID: 83[0m
+[90m  • [0m[37mLatency:[0m [96m1223.6ms[0m
+
+[95m💬 Rick:[0m [3m[37m📌 TRADE_OPENED: Event logged[0m
+[90m────────────────────────────────────────────────────────────────────────────────[0m
+
+
+[96mℹ️ Waiting 15 minutes before next trade (M15 Charter)...[0m
+[93m⚠️  ⚠️  API error for GBP_USD: HTTPSConnectionPool(host='api-fxpractice.oanda.com', port=443): Read timed out. (read timeout=5), using fallback[0m
+
+[1m[93m▶ MARKET SCAN[0m
+[90m──────────────────────────────────────────────────────────────────────────────[0m
+[92m✅ ✅ Real-time OANDA API data[0m
+  [96m📊 USD_CAD[0m [32mBID: 1.40132[0m | [31mASK: 1.40151[0m | [33mSpread: 19000.0 pips[0m
+[90m  • [0m[37mPosition Size:[0m [96m10,800 units (dynamic)[0m
+[90m  • [0m[37mNotional Value:[0m [92m$15,136 ✅[0m
+[90m  • [0m[37mR:R Ratio:[0m [92m3.20:1 ✅[0m
+
+[96mℹ️ Placing Charter-compliant BUY OCO order for USD_CAD...[0m
+[91m❌ ❌ CHARTER VIOLATION: Latency 367.1ms > 300ms[0m
+
+[44m[37m OPEN [0m [92m[1mUSD_CAD BUY[0m [36m@ 1.40151[0m 📈
+      [90mStop: 1.39951 | Target: 1.40791 | Size: 10,800 units | Notional: $15,136[0m
+
+[92m✅ ✅ OCO order placed! Order ID: 87[0m
+[90m  • [0m[37mLatency:[0m [96m367.1ms[0m
+
+[95m💬 Rick:[0m [3m[37m📌 TRADE_OPENED: Event logged[0m
+[90m────────────────────────────────────────────────────────────────────────────────[0m
+
+
+[96mℹ️ Waiting 15 minutes before next trade (M15 Charter)...[0m
+
+[1m[93m▶ MARKET SCAN[0m
+[90m──────────────────────────────────────────────────────────────────────────────[0m
+[92m✅ ✅ Real-time OANDA API data[0m
+  [96m📊 GBP_USD[0m [32mBID: 1.34298[0m | [31mASK: 1.34317[0m | [33mSpread: 19000.0 pips[0m
+[90m  • [0m[37mPosition Size:[0m [96m11,200 units (dynamic)[0m
+[90m  • [0m[37mNotional Value:[0m [92m$15,044 ✅[0m
+[90m  • [0m[37mR:R Ratio:[0m [92m3.20:1 ✅[0m
+
+[96mℹ️ Placing Charter-compliant BUY OCO order for GBP_USD...[0m
+[91m❌ ❌ CHARTER VIOLATION: Latency 349.8ms > 300ms[0m
+
+[44m[37m OPEN [0m [92m[1mGBP_USD BUY[0m [36m@ 1.34317[0m 📈
+ERROR:util.rick_narrator:Ollama query error: HTTPConnectionPool(host='127.0.0.1', port=11434): Read timed out. (read timeout=10)
+      [90mStop: 1.34117 | Target: 1.34957 | Size: 11,200 units | Notional: $15,044[0m
+
+[92m✅ ✅ OCO order placed! Order ID: 91[0m
+[90m  • [0m[37mLatency:[0m [96m349.8ms[0m
+
+[95m💬 Rick:[0m [3m[37m📌 TRADE_OPENED: Event logged[0m
+[90m────────────────────────────────────────────────────────────────────────────────[0m
+
+
+[96mℹ️ Waiting 15 minutes before next trade (M15 Charter)...[0m
+
+[96mℹ️ Waiting 15 minutes before next trade (M15 Charter)...[0m
+[93m⚠️  ⚠️  API error for GBP_USD: HTTPSConnectionPool(host='api-fxpractice.oanda.com', port=443): Read timed out. (read timeout=5), using fallback[0m
+
+[96mℹ️ Waiting 15 minutes before next trade (M15 Charter)...[0m
+[93m⚠️  ⚠️  API error for GBP_USD: HTTPSConnectionPool(host='api-fxpractice.oanda.com', port=443): Read timed out. (read timeout=5), using fallback[0m
+
+[96mℹ️ Waiting 15 minutes before next trade (M15 Charter)...[0m
+
+[96mℹ️ Waiting 15 minutes before next trade (M15 Charter)...[0m
+[93m⚠️  ⚠️  API error for GBP_USD: HTTPSConnectionPool(host='api-fxpractice.oanda.com', port=443): Max retries exceeded with url: /v3/accounts/101-001-31210531-002/pricing?instruments=GBP_USD (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7f70864a2720>: Failed to resolve 'api-fxpractice.oanda.com' ([Errno -3] Temporary failure in name resolution)")), using fallback[0m
+[93m⚠️  ⚠️  API error for USD_CAD: HTTPSConnectionPool(host='api-fxpractice.oanda.com', port=443): Max retries exceeded with url: /v3/accounts/101-001-31210531-002/pricing?instruments=USD_CAD (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7f70857373e0>: Failed to resolve 'api-fxpractice.oanda.com' ([Errno -3] Temporary failure in name resolution)")), using fallback[0m
+[93m⚠️  ⚠️  API error for GBP_USD: HTTPSConnectionPool(host='api-fxpractice.oanda.com', port=443): Max retries exceeded with url: /v3/accounts/101-001-31210531-002/pricing?instruments=GBP_USD (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7f7085735280>: Failed to resolve 'api-fxpractice.oanda.com' ([Errno -3] Temporary failure in name resolution)")), using fallback[0m
+[93m⚠️  ⚠️  API error for GBP_USD: HTTPSConnectionPool(host='api-fxpractice.oanda.com', port=443): Max retries exceeded with url: /v3/accounts/101-001-31210531-002/pricing?instruments=GBP_USD (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7f7085736630>: Failed to resolve 'api-fxpractice.oanda.com' ([Errno -3] Temporary failure in name resolution)")), using fallback[0m
+[93m⚠️  ⚠️  API error for USD_CAD: HTTPSConnectionPool(host='api-fxpractice.oanda.com', port=443): Max retries exceeded with url: /v3/accounts/101-001-31210531-002/pricing?instruments=USD_CAD (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7f70857366c0>: Failed to resolve 'api-fxpractice.oanda.com' ([Errno -3] Temporary failure in name resolution)")), using fallback[0m
+[93m⚠️  ⚠️  API error for GBP_USD: HTTPSConnectionPool(host='api-fxpractice.oanda.com', port=443): Max retries exceeded with url: /v3/accounts/101-001-31210531-002/pricing?instruments=GBP_USD (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7f7085735100>: Failed to resolve 'api-fxpractice.oanda.com' ([Errno -3] Temporary failure in name resolution)")), using fallback[0m
+[93m⚠️  ⚠️  API error for GBP_USD: HTTPSConnectionPool(host='api-fxpractice.oanda.com', port=443): Max retries exceeded with url: /v3/accounts/101-001-31210531-002/pricing?instruments=GBP_USD (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7f708b773080>: Failed to resolve 'api-fxpractice.oanda.com' ([Errno -3] Temporary failure in name resolution)")), using fallback[0m
+[93m⚠️  ⚠️  API error for USD_CAD: HTTPSConnectionPool(host='api-fxpractice.oanda.com', port=443): Max retries exceeded with url: /v3/accounts/101-001-31210531-002/pricing?instruments=USD_CAD (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7f7085be9040>: Failed to resolve 'api-fxpractice.oanda.com' ([Errno -3] Temporary failure in name resolution)")), using fallback[0m
+[93m⚠️  ⚠️  API error for GBP_USD: HTTPSConnectionPool(host='api-fxpractice.oanda.com', port=443): Max retries exceeded with url: /v3/accounts/101-001-31210531-002/pricing?instruments=GBP_USD (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7f7085736ae0>: Failed to resolve 'api-fxpractice.oanda.com' ([Errno -3] Temporary failure in name resolution)")), using fallback[0m
+[93m⚠️  ⚠️  API error for GBP_USD: HTTPSConnectionPool(host='api-fxpractice.oanda.com', port=443): Max retries exceeded with url: /v3/accounts/101-001-31210531-002/pricing?instruments=GBP_USD (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7f7085737dd0>: Failed to resolve 'api-fxpractice.oanda.com' ([Errno -3] Temporary failure in name resolution)")), using fallback[0m
+[93m⚠️  ⚠️  API error for USD_CAD: HTTPSConnectionPool(host='api-fxpractice.oanda.com', port=443): Max retries exceeded with url: /v3/accounts/101-001-31210531-002/pricing?instruments=USD_CAD (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7f7085735550>: Failed to resolve 'api-fxpractice.oanda.com' ([Errno -3] Temporary failure in name resolution)")), using fallback[0m
+[93m⚠️  ⚠️  API error for GBP_USD: HTTPSConnectionPool(host='api-fxpractice.oanda.com', port=443): Max retries exceeded with url: /v3/accounts/101-001-31210531-002/pricing?instruments=GBP_USD (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7f7085736d20>: Failed to resolve 'api-fxpractice.oanda.com' ([Errno -3] Temporary failure in name resolution)")), using fallback[0m
+[93m⚠️  ⚠️  API error for GBP_USD: HTTPSConnectionPool(host='api-fxpractice.oanda.com', port=443): Max retries exceeded with url: /v3/accounts/101-001-31210531-002/pricing?instruments=GBP_USD (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7f708c61e930>: Failed to resolve 'api-fxpractice.oanda.com' ([Errno -3] Temporary failure in name resolution)")), using fallback[0m
+[93m⚠️  ⚠️  API error for USD_CAD: HTTPSConnectionPool(host='api-fxpractice.oanda.com', port=443): Max retries exceeded with url: /v3/accounts/101-001-31210531-002/pricing?instruments=USD_CAD (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7f7085735b20>: Failed to resolve 'api-fxpractice.oanda.com' ([Errno -3] Temporary failure in name resolution)")), using fallback[0m
+[93m⚠️  ⚠️  API error for GBP_USD: HTTPSConnectionPool(host='api-fxpractice.oanda.com', port=443): Max retries exceeded with url: /v3/accounts/101-001-31210531-002/pricing?instruments=GBP_USD (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7f7085736990>: Failed to resolve 'api-fxpractice.oanda.com' ([Errno -3] Temporary failure in name resolution)")), using fallback[0m
+[93m⚠️  ⚠️  API error for GBP_USD: HTTPSConnectionPool(host='api-fxpractice.oanda.com', port=443): Max retries exceeded with url: /v3/accounts/101-001-31210531-002/pricing?instruments=GBP_USD (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7f7085736bd0>: Failed to resolve 'api-fxpractice.oanda.com' ([Errno -3] Temporary failure in name resolution)")), using fallback[0m
+[93m⚠️  ⚠️  API error for USD_CAD: HTTPSConnectionPool(host='api-fxpractice.oanda.com', port=443): Max retries exceeded with url: /v3/accounts/101-001-31210531-002/pricing?instruments=USD_CAD (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7f7085736720>: Failed to resolve 'api-fxpractice.oanda.com' ([Errno -3] Temporary failure in name resolution)")), using fallback[0m
+[93m⚠️  ⚠️  API error for GBP_USD: HTTPSConnectionPool(host='api-fxpractice.oanda.com', port=443): Max retries exceeded with url: /v3/accounts/101-001-31210531-002/pricing?instruments=GBP_USD (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7f7085735820>: Failed to resolve 'api-fxpractice.oanda.com' ([Errno -3] Temporary failure in name resolution)")), using fallback[0m
+[93m⚠️  ⚠️  API error for GBP_USD: HTTPSConnectionPool(host='api-fxpractice.oanda.com', port=443): Max retries exceeded with url: /v3/accounts/101-001-31210531-002/pricing?instruments=GBP_USD (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7f7085dc3500>: Failed to resolve 'api-fxpractice.oanda.com' ([Errno -3] Temporary failure in name resolution)")), using fallback[0m
+[93m⚠️  ⚠️  API error for USD_CAD: HTTPSConnectionPool(host='api-fxpractice.oanda.com', port=443): Max retries exceeded with url: /v3/accounts/101-001-31210531-002/pricing?instruments=USD_CAD (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7f70861061b0>: Failed to resolve 'api-fxpractice.oanda.com' ([Errno -3] Temporary failure in name resolution)")), using fallback[0m
+[93m⚠️  ⚠️  API error for GBP_USD: HTTPSConnectionPool(host='api-fxpractice.oanda.com', port=443): Max retries exceeded with url: /v3/accounts/101-001-31210531-002/pricing?instruments=GBP_USD (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7f7085736ba0>: Failed to resolve 'api-fxpractice.oanda.com' ([Errno -3] Temporary failure in name resolution)")), using fallback[0m
+[93m⚠️  ⚠️  API error for GBP_USD: HTTPSConnectionPool(host='api-fxpractice.oanda.com', port=443): Max retries exceeded with url: /v3/accounts/101-001-31210531-002/pricing?instruments=GBP_USD (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7f7085737ad0>: Failed to resolve 'api-fxpractice.oanda.com' ([Errno -3] Temporary failure in name resolution)")), using fallback[0m
+[93m⚠️  ⚠️  API error for USD_CAD: HTTPSConnectionPool(host='api-fxpractice.oanda.com', port=443): Max retries exceeded with url: /v3/accounts/101-001-31210531-002/pricing?instruments=USD_CAD (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7f7085735850>: Failed to resolve 'api-fxpractice.oanda.com' ([Errno -3] Temporary failure in name resolution)")), using fallback[0m
+[93m⚠️  ⚠️  API error for GBP_USD: HTTPSConnectionPool(host='api-fxpractice.oanda.com', port=443): Max retries exceeded with url: /v3/accounts/101-001-31210531-002/pricing?instruments=GBP_USD (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7f7085735e20>: Failed to resolve 'api-fxpractice.oanda.com' ([Errno -3] Temporary failure in name resolution)")), using fallback[0m
+[93m⚠️  ⚠️  API error for GBP_USD: HTTPSConnectionPool(host='api-fxpractice.oanda.com', port=443): Max retries exceeded with url: /v3/accounts/101-001-31210531-002/pricing?instruments=GBP_USD (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7f70857368a0>: Failed to resolve 'api-fxpractice.oanda.com' ([Errno -3] Temporary failure in name resolution)")), using fallback[0m
+[93m⚠️  ⚠️  API error for USD_CAD: HTTPSConnectionPool(host='api-fxpractice.oanda.com', port=443): Max retries exceeded with url: /v3/accounts/101-001-31210531-002/pricing?instruments=USD_CAD (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7f70862af0b0>: Failed to resolve 'api-fxpractice.oanda.com' ([Errno -3] Temporary failure in name resolution)")), using fallback[0m
+[93m⚠️  ⚠️  API error for GBP_USD: HTTPSConnectionPool(host='api-fxpractice.oanda.com', port=443): Max retries exceeded with url: /v3/accounts/101-001-31210531-002/pricing?instruments=GBP_USD (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7f7085735dc0>: Failed to resolve 'api-fxpractice.oanda.com' ([Errno -3] Temporary failure in name resolution)")), using fallback[0m
+[93m⚠️  ⚠️  API error for GBP_USD: HTTPSConnectionPool(host='api-fxpractice.oanda.com', port=443): Max retries exceeded with url: /v3/accounts/101-001-31210531-002/pricing?instruments=GBP_USD (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7f7085736e70>: Failed to resolve 'api-fxpractice.oanda.com' ([Errno -3] Temporary failure in name resolution)")), using fallback[0m
+[93m⚠️  ⚠️  API error for USD_CAD: HTTPSConnectionPool(host='api-fxpractice.oanda.com', port=443): Max retries exceeded with url: /v3/accounts/101-001-31210531-002/pricing?instruments=USD_CAD (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7f70857377a0>: Failed to resolve 'api-fxpractice.oanda.com' ([Errno -3] Temporary failure in name resolution)")), using fallback[0m
+[93m⚠️  ⚠️  API error for GBP_USD: HTTPSConnectionPool(host='api-fxpractice.oanda.com', port=443): Max retries exceeded with url: /v3/accounts/101-001-31210531-002/pricing?instruments=GBP_USD (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7f7085735460>: Failed to resolve 'api-fxpractice.oanda.com' ([Errno -3] Temporary failure in name resolution)")), using fallback[0m
+[93m⚠️  ⚠️  API error for GBP_USD: HTTPSConnectionPool(host='api-fxpractice.oanda.com', port=443): Max retries exceeded with url: /v3/accounts/101-001-31210531-002/pricing?instruments=GBP_USD (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7f70856b08f0>: Failed to resolve 'api-fxpractice.oanda.com' ([Errno -3] Temporary failure in name resolution)")), using fallback[0m
+[93m⚠️  ⚠️  API error for USD_CAD: HTTPSConnectionPool(host='api-fxpractice.oanda.com', port=443): Max retries exceeded with url: /v3/accounts/101-001-31210531-002/pricing?instruments=USD_CAD (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7f708b709af0>: Failed to resolve 'api-fxpractice.oanda.com' ([Errno -3] Temporary failure in name resolution)")), using fallback[0m
+[93m⚠️  ⚠️  API error for GBP_USD: HTTPSConnectionPool(host='api-fxpractice.oanda.com', port=443): Max retries exceeded with url: /v3/accounts/101-001-31210531-002/pricing?instruments=GBP_USD (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7f7085735e50>: Failed to resolve 'api-fxpractice.oanda.com' ([Errno -3] Temporary failure in name resolution)")), using fallback[0m
+[93m⚠️  ⚠️  API error for GBP_USD: HTTPSConnectionPool(host='api-fxpractice.oanda.com', port=443): Max retries exceeded with url: /v3/accounts/101-001-31210531-002/pricing?instruments=GBP_USD (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7f70857364e0>: Failed to resolve 'api-fxpractice.oanda.com' ([Errno -3] Temporary failure in name resolution)")), using fallback[0m
+[93m⚠️  ⚠️  API error for USD_CAD: HTTPSConnectionPool(host='api-fxpractice.oanda.com', port=443): Max retries exceeded with url: /v3/accounts/101-001-31210531-002/pricing?instruments=USD_CAD (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7f7085737ef0>: Failed to resolve 'api-fxpractice.oanda.com' ([Errno -3] Temporary failure in name resolution)")), using fallback[0m
+[93m⚠️  ⚠️  API error for GBP_USD: HTTPSConnectionPool(host='api-fxpractice.oanda.com', port=443): Max retries exceeded with url: /v3/accounts/101-001-31210531-002/pricing?instruments=GBP_USD (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7f7085735220>: Failed to resolve 'api-fxpractice.oanda.com' ([Errno -3] Temporary failure in name resolution)")), using fallback[0m
+[93m⚠️  ⚠️  API error for GBP_USD: HTTPSConnectionPool(host='api-fxpractice.oanda.com', port=443): Max retries exceeded with url: /v3/accounts/101-001-31210531-002/pricing?instruments=GBP_USD (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7f70857376b0>: Failed to resolve 'api-fxpractice.oanda.com' ([Errno -3] Temporary failure in name resolution)")), using fallback[0m
+[93m⚠️  ⚠️  API error for USD_CAD: HTTPSConnectionPool(host='api-fxpractice.oanda.com', port=443): Max retries exceeded with url: /v3/accounts/101-001-31210531-002/pricing?instruments=USD_CAD (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7f70862af0b0>: Failed to resolve 'api-fxpractice.oanda.com' ([Errno -3] Temporary failure in name resolution)")), using fallback[0m
+[93m⚠️  ⚠️  API error for GBP_USD: HTTPSConnectionPool(host='api-fxpractice.oanda.com', port=443): Max retries exceeded with url: /v3/accounts/101-001-31210531-002/pricing?instruments=GBP_USD (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7f7086286240>: Failed to resolve 'api-fxpractice.oanda.com' ([Errno -3] Temporary failure in name resolution)")), using fallback[0m
+[93m⚠️  ⚠️  API error for GBP_USD: HTTPSConnectionPool(host='api-fxpractice.oanda.com', port=443): Max retries exceeded with url: /v3/accounts/101-001-31210531-002/pricing?instruments=GBP_USD (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7f7085736270>: Failed to resolve 'api-fxpractice.oanda.com' ([Errno -3] Temporary failure in name resolution)")), using fallback[0m
+[93m⚠️  ⚠️  API error for USD_CAD: HTTPSConnectionPool(host='api-fxpractice.oanda.com', port=443): Max retries exceeded with url: /v3/accounts/101-001-31210531-002/pricing?instruments=USD_CAD (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7f7085737650>: Failed to resolve 'api-fxpractice.oanda.com' ([Errno -3] Temporary failure in name resolution)")), using fallback[0m
+[93m⚠️  ⚠️  API error for GBP_USD: HTTPSConnectionPool(host='api-fxpractice.oanda.com', port=443): Max retries exceeded with url: /v3/accounts/101-001-31210531-002/pricing?instruments=GBP_USD (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7f7085737470>: Failed to resolve 'api-fxpractice.oanda.com' ([Errno -3] Temporary failure in name resolution)")), using fallback[0m
+
+[96mℹ️ Waiting 15 minutes before next trade (M15 Charter)...[0m
+[93m⚠️  ⚠️  API error for GBP_USD: HTTPSConnectionPool(host='api-fxpractice.oanda.com', port=443): Max retries exceeded with url: /v3/accounts/101-001-31210531-002/pricing?instruments=GBP_USD (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7f7085737e30>: Failed to resolve 'api-fxpractice.oanda.com' ([Errno -3] Temporary failure in name resolution)")), using fallback[0m
+[93m⚠️  ⚠️  API error for USD_CAD: HTTPSConnectionPool(host='api-fxpractice.oanda.com', port=443): Max retries exceeded with url: /v3/accounts/101-001-31210531-002/pricing?instruments=USD_CAD (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7f708bd8f8f0>: Failed to resolve 'api-fxpractice.oanda.com' ([Errno -3] Temporary failure in name resolution)")), using fallback[0m
+[93m⚠️  ⚠️  API error for GBP_USD: HTTPSConnectionPool(host='api-fxpractice.oanda.com', port=443): Max retries exceeded with url: /v3/accounts/101-001-31210531-002/pricing?instruments=GBP_USD (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7f708576c200>: Failed to resolve 'api-fxpractice.oanda.com' ([Errno -3] Temporary failure in name resolution)")), using fallback[0m
+[93m⚠️  ⚠️  API error for GBP_USD: HTTPSConnectionPool(host='api-fxpractice.oanda.com', port=443): Max retries exceeded with url: /v3/accounts/101-001-31210531-002/pricing?instruments=GBP_USD (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7f70857352e0>: Failed to resolve 'api-fxpractice.oanda.com' ([Errno -3] Temporary failure in name resolution)")), using fallback[0m
+[93m⚠️  ⚠️  API error for USD_CAD: HTTPSConnectionPool(host='api-fxpractice.oanda.com', port=443): Max retries exceeded with url: /v3/accounts/101-001-31210531-002/pricing?instruments=USD_CAD (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7f7085736ab0>: Failed to resolve 'api-fxpractice.oanda.com' ([Errno -3] Temporary failure in name resolution)")), using fallback[0m
+[93m⚠️  ⚠️  API error for GBP_USD: HTTPSConnectionPool(host='api-fxpractice.oanda.com', port=443): Max retries exceeded with url: /v3/accounts/101-001-31210531-002/pricing?instruments=GBP_USD (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7f7085735a60>: Failed to resolve 'api-fxpractice.oanda.com' ([Errno -3] Temporary failure in name resolution)")), using fallback[0m
+[93m⚠️  ⚠️  API error for GBP_USD: HTTPSConnectionPool(host='api-fxpractice.oanda.com', port=443): Max retries exceeded with url: /v3/accounts/101-001-31210531-002/pricing?instruments=GBP_USD (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7f70857378c0>: Failed to resolve 'api-fxpractice.oanda.com' ([Errno -3] Temporary failure in name resolution)")), using fallback[0m
+[93m⚠️  ⚠️  API error for USD_CAD: HTTPSConnectionPool(host='api-fxpractice.oanda.com', port=443): Max retries exceeded with url: /v3/accounts/101-001-31210531-002/pricing?instruments=USD_CAD (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7f7085735fa0>: Failed to resolve 'api-fxpractice.oanda.com' ([Errno -3] Temporary failure in name resolution)")), using fallback[0m
+[93m⚠️  ⚠️  API error for GBP_USD: HTTPSConnectionPool(host='api-fxpractice.oanda.com', port=443): Max retries exceeded with url: /v3/accounts/101-001-31210531-002/pricing?instruments=GBP_USD (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7f708576c290>: Failed to resolve 'api-fxpractice.oanda.com' ([Errno -3] Temporary failure in name resolution)")), using fallback[0m
+[93m⚠️  ⚠️  API error for GBP_USD: HTTPSConnectionPool(host='api-fxpractice.oanda.com', port=443): Max retries exceeded with url: /v3/accounts/101-001-31210531-002/pricing?instruments=GBP_USD (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7f708b71dca0>: Failed to resolve 'api-fxpractice.oanda.com' ([Errno -3] Temporary failure in name resolution)")), using fallback[0m
+[93m⚠️  ⚠️  API error for USD_CAD: HTTPSConnectionPool(host='api-fxpractice.oanda.com', port=443): Max retries exceeded with url: /v3/accounts/101-001-31210531-002/pricing?instruments=USD_CAD (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7f70857362d0>: Failed to resolve 'api-fxpractice.oanda.com' ([Errno -3] Temporary failure in name resolution)")), using fallback[0m
+[93m⚠️  ⚠️  API error for GBP_USD: HTTPSConnectionPool(host='api-fxpractice.oanda.com', port=443): Max retries exceeded with url: /v3/accounts/101-001-31210531-002/pricing?instruments=GBP_USD (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7f7085737350>: Failed to resolve 'api-fxpractice.oanda.com' ([Errno -3] Temporary failure in name resolution)")), using fallback[0m
+[93m⚠️  ⚠️  API error for GBP_USD: HTTPSConnectionPool(host='api-fxpractice.oanda.com', port=443): Max retries exceeded with url: /v3/accounts/101-001-31210531-002/pricing?instruments=GBP_USD (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7f7085737560>: Failed to resolve 'api-fxpractice.oanda.com' ([Errno -3] Temporary failure in name resolution)")), using fallback[0m
+[93m⚠️  ⚠️  API error for USD_CAD: HTTPSConnectionPool(host='api-fxpractice.oanda.com', port=443): Max retries exceeded with url: /v3/accounts/101-001-31210531-002/pricing?instruments=USD_CAD (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7f7085737dd0>: Failed to resolve 'api-fxpractice.oanda.com' ([Errno -3] Temporary failure in name resolution)")), using fallback[0m
+[93m⚠️  ⚠️  API error for GBP_USD: HTTPSConnectionPool(host='api-fxpractice.oanda.com', port=443): Max retries exceeded with url: /v3/accounts/101-001-31210531-002/pricing?instruments=GBP_USD (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7f70857367e0>: Failed to resolve 'api-fxpractice.oanda.com' ([Errno -3] Temporary failure in name resolution)")), using fallback[0m
+[93m⚠️  ⚠️  API error for GBP_USD: HTTPSConnectionPool(host='api-fxpractice.oanda.com', port=443): Max retries exceeded with url: /v3/accounts/101-001-31210531-002/pricing?instruments=GBP_USD (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7f708bd8f8f0>: Failed to resolve 'api-fxpractice.oanda.com' ([Errno -3] Temporary failure in name resolution)")), using fallback[0m
+[93m⚠️  ⚠️  API error for USD_CAD: HTTPSConnectionPool(host='api-fxpractice.oanda.com', port=443): Max retries exceeded with url: /v3/accounts/101-001-31210531-002/pricing?instruments=USD_CAD (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7f7085736390>: Failed to resolve 'api-fxpractice.oanda.com' ([Errno -3] Temporary failure in name resolution)")), using fallback[0m
+[93m⚠️  ⚠️  API error for GBP_USD: HTTPSConnectionPool(host='api-fxpractice.oanda.com', port=443): Max retries exceeded with url: /v3/accounts/101-001-31210531-002/pricing?instruments=GBP_USD (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7f7085737fe0>: Failed to resolve 'api-fxpractice.oanda.com' ([Errno -3] Temporary failure in name resolution)")), using fallback[0m
+[93m⚠️  ⚠️  API error for GBP_USD: HTTPSConnectionPool(host='api-fxpractice.oanda.com', port=443): Max retries exceeded with url: /v3/accounts/101-001-31210531-002/pricing?instruments=GBP_USD (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7f7085736f00>: Failed to resolve 'api-fxpractice.oanda.com' ([Errno -3] Temporary failure in name resolution)")), using fallback[0m
+[93m⚠️  ⚠️  API error for USD_CAD: HTTPSConnectionPool(host='api-fxpractice.oanda.com', port=443): Max retries exceeded with url: /v3/accounts/101-001-31210531-002/pricing?instruments=USD_CAD (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7f7085737380>: Failed to resolve 'api-fxpractice.oanda.com' ([Errno -3] Temporary failure in name resolution)")), using fallback[0m
+[93m⚠️  ⚠️  API error for GBP_USD: HTTPSConnectionPool(host='api-fxpractice.oanda.com', port=443): Max retries exceeded with url: /v3/accounts/101-001-31210531-002/pricing?instruments=GBP_USD (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7f7086774770>: Failed to resolve 'api-fxpractice.oanda.com' ([Errno -3] Temporary failure in name resolution)")), using fallback[0m
+[93m⚠️  ⚠️  API error for GBP_USD: HTTPSConnectionPool(host='api-fxpractice.oanda.com', port=443): Max retries exceeded with url: /v3/accounts/101-001-31210531-002/pricing?instruments=GBP_USD (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7f708576d0d0>: Failed to resolve 'api-fxpractice.oanda.com' ([Errno -3] Temporary failure in name resolution)")), using fallback[0m
+[93m⚠️  ⚠️  API error for USD_CAD: HTTPSConnectionPool(host='api-fxpractice.oanda.com', port=443): Max retries exceeded with url: /v3/accounts/101-001-31210531-002/pricing?instruments=USD_CAD (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7f708bd6f620>: Failed to resolve 'api-fxpractice.oanda.com' ([Errno -3] Temporary failure in name resolution)")), using fallback[0m
+[93m⚠️  ⚠️  API error for GBP_USD: HTTPSConnectionPool(host='api-fxpractice.oanda.com', port=443): Max retries exceeded with url: /v3/accounts/101-001-31210531-002/pricing?instruments=GBP_USD (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7f7085736d50>: Failed to resolve 'api-fxpractice.oanda.com' ([Errno -3] Temporary failure in name resolution)")), using fallback[0m
+[93m⚠️  ⚠️  API error for GBP_USD: HTTPSConnectionPool(host='api-fxpractice.oanda.com', port=443): Max retries exceeded with url: /v3/accounts/101-001-31210531-002/pricing?instruments=GBP_USD (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7f7085736990>: Failed to resolve 'api-fxpractice.oanda.com' ([Errno -3] Temporary failure in name resolution)")), using fallback[0m
+[93m⚠️  ⚠️  API error for USD_CAD: HTTPSConnectionPool(host='api-fxpractice.oanda.com', port=443): Max retries exceeded with url: /v3/accounts/101-001-31210531-002/pricing?instruments=USD_CAD (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7f70857369f0>: Failed to resolve 'api-fxpractice.oanda.com' ([Errno -3] Temporary failure in name resolution)")), using fallback[0m
+[93m⚠️  ⚠️  API error for GBP_USD: HTTPSConnectionPool(host='api-fxpractice.oanda.com', port=443): Max retries exceeded with url: /v3/accounts/101-001-31210531-002/pricing?instruments=GBP_USD (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7f7085735370>: Failed to resolve 'api-fxpractice.oanda.com' ([Errno -3] Temporary failure in name resolution)")), using fallback[0m
+[93m⚠️  ⚠️  API error for GBP_USD: HTTPSConnectionPool(host='api-fxpractice.oanda.com', port=443): Max retries exceeded with url: /v3/accounts/101-001-31210531-002/pricing?instruments=GBP_USD (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7f70857352e0>: Failed to resolve 'api-fxpractice.oanda.com' ([Errno -3] Temporary failure in name resolution)")), using fallback[0m
+[93m⚠️  ⚠️  API error for USD_CAD: HTTPSConnectionPool(host='api-fxpractice.oanda.com', port=443): Max retries exceeded with url: /v3/accounts/101-001-31210531-002/pricing?instruments=USD_CAD (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7f708b1582f0>: Failed to resolve 'api-fxpractice.oanda.com' ([Errno -3] Temporary failure in name resolution)")), using fallback[0m
+[93m⚠️  ⚠️  API error for GBP_USD: HTTPSConnectionPool(host='api-fxpractice.oanda.com', port=443): Max retries exceeded with url: /v3/accounts/101-001-31210531-002/pricing?instruments=GBP_USD (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7f7085736480>: Failed to resolve 'api-fxpractice.oanda.com' ([Errno -3] Temporary failure in name resolution)")), using fallback[0m
+[93m⚠️  ⚠️  API error for GBP_USD: HTTPSConnectionPool(host='api-fxpractice.oanda.com', port=443): Max retries exceeded with url: /v3/accounts/101-001-31210531-002/pricing?instruments=GBP_USD (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7f70857366c0>: Failed to resolve 'api-fxpractice.oanda.com' ([Errno -3] Temporary failure in name resolution)")), using fallback[0m

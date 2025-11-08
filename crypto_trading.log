@@ -1,0 +1,17 @@
+nohup: ignoring input
+📋 Loading environment from: env_new2.env
+✅ Loaded environment variables
+⚠️  trap_reversal strategy not available
+⚠️  fib_confluence strategy not available
+⚠️  price_action_holy_grail strategy not available
+⚠️  liquidity_sweep strategy not available
+⚠️  ema_scalper strategy not available
+⚠️  Import error: No module named 'ml_learning.regime_detector'
+Traceback (most recent call last):
+  File "/home/ing/RICK/RICK_LIVE_CLEAN/multi_broker_engine.py", line 388, in <module>
+    engine = MultiBrokerEngine(pin=args.pin)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ing/RICK/RICK_LIVE_CLEAN/multi_broker_engine.py", line 70, in __init__
+    self.charter = RickCharter(pin=pin)
+                   ^^^^^^^^^^^^^^^^^^^^
+TypeError: RickCharter() takes no arguments
