@@ -1,7 +1,8 @@
 🚀 RICK Trading System - Complete Activation Package
 
-**Status:** Implementation Specifications Ready  
+**Status:** Implementation Specifications Ready + Frankenstein Assembly Guide
 **Charter PIN:** 841921  
+**NO TA-LIB:** Pure Python implementations provided
 
 ## 📦 What This Repository Provides
 
@@ -14,9 +15,44 @@ This repository contains **COMPLETE SPECIFICATIONS AND TOOLS** to implement the 
 - Risk management
 - Broker integration (OANDA)
 
+**NEW:** Frankenstein Assembly guide to combine your existing code from multiple repos - **NO TA-LIB required!**
+
 ## 🚀 Quick Start
 
-### ⚡ FASTEST: Import Your Existing Files (5 minutes)
+### ⚡ FASTEST: Frankenstein Assembly from Your Existing Code (2-3 hours)
+
+**If you have RICK code scattered across multiple repos:**
+
+```bash
+# 1. Find all your existing RICK code
+bash scripts/inventory_existing_code.sh
+
+# 2. Review what was found
+cat code_inventory.txt
+
+# 3. Read the Frankenstein assembly guide
+cat VSCODE_AGENT_FRANKENSTEIN_ASSEMBLY.md
+
+# 4. Give your VSCode agent the complete instructions
+# Agent will combine files, remove TA-Lib, use pure Python
+
+# 5. Verify (should show 100%)
+bash scripts/verify_and_activate_all_systems.sh
+
+# 6. Activate!
+python3 canary_trading_engine.py --continuous --duration 45
+```
+
+**Key Benefits:**
+- ✅ NO TA-LIB - Pure Python replacements provided
+- ✅ Searches all your local repos
+- ✅ Searches your GitHub repos
+- ✅ Combines best versions
+- ✅ Takes 2-3 hours (not weeks!)
+
+---
+
+### Alternative: Import Complete Files (5 minutes)
 
 **If you already have the RICK files:**
 
