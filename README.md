@@ -16,6 +16,27 @@ This repository contains **COMPLETE SPECIFICATIONS AND TOOLS** to implement the 
 
 ## 🚀 Quick Start
 
+### ⚡ FASTEST: Import Your Existing Files (5 minutes)
+
+**If you already have the RICK files:**
+
+```bash
+# Use the import script
+bash scripts/import_existing_files.sh /path/to/RICK_LIVE_CLEAN /path/to/R_H_UNI
+
+# Verify (should show 100%)
+bash scripts/verify_and_activate_all_systems.sh
+
+# Activate!
+python3 canary_trading_engine.py --continuous --duration 45
+```
+
+**That's it! Minutes, not weeks.**
+
+---
+
+### Alternative: Build from Specifications
+
 ### 1. Read the Activation Package
 ```bash
 cat README_ACTIVATION_PACKAGE.md

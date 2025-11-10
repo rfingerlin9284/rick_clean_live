@@ -16,25 +16,48 @@
 
 ---
 
-## ⚡ 3-STEP QUICK START
+## ⚡ QUICK START (YOU HAVE THE FILES!)
 
-### Step 1: Verify Current State (30 seconds)
+### 🚀 FAST PATH: Import Your Existing Files (5 minutes)
+
+**If you already have the RICK files on your local machine:**
+
+```bash
+# Run the import script (adjust paths to match your setup)
+bash scripts/import_existing_files.sh /path/to/RICK_LIVE_CLEAN /path/to/R_H_UNI
+
+# Verify everything imported correctly (should show 100%)
+bash scripts/verify_and_activate_all_systems.sh
+
+# Activate!
+python3 canary_trading_engine.py --continuous --duration 45
+```
+
+**Default paths the script will try:**
+- `/home/ing/RICK/RICK_LIVE_CLEAN` (main RICK files)
+- `/home/ing/RICK/R_H_UNI` (Wolf Pack strategies)
+
+**That's it! Minutes, not weeks.**
+
+---
+
+## 📋 ALTERNATIVE PATHS (If you don't have files)
+
+### Step 1: Verify Current State
 ```bash
 bash scripts/verify_and_activate_all_systems.sh
 ```
-**What it does:** Shows what components exist vs what's needed  
-**Current expected result:** 0% (no Python files yet)
 
-### Step 2: Implement the System (options below)
+### Step 2: Choose Implementation Path
 
-**Option A - You Have External Files:**
+**Option A - Manual Copy (if import script doesn't work):**
 ```bash
-# Copy from external location
-cp -r /home/ing/RICK/RICK_LIVE_CLEAN/foundation/ ./
-cp -r /home/ing/RICK/RICK_LIVE_CLEAN/hive/ ./
-cp -r /home/ing/RICK/RICK_LIVE_CLEAN/logic/ ./
-cp /home/ing/RICK/R_H_UNI/strategies/*.py ./strategies/
-# ... (see QUICK_COMMAND_REFERENCE.md for complete copy commands)
+# Copy from your local RICK installation
+cp -r /path/to/RICK_LIVE_CLEAN/foundation/ ./
+cp -r /path/to/RICK_LIVE_CLEAN/hive/ ./
+cp -r /path/to/RICK_LIVE_CLEAN/logic/ ./
+cp /path/to/R_H_UNI/strategies/*.py ./strategies/
+# ... (see QUICK_COMMAND_REFERENCE.md for complete commands)
 ```
 
 **Option B - Build from Specifications:**

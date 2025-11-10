@@ -57,9 +57,35 @@ python3 -c "from strategies.bullish_wolf import BullishWolfPack; print('✅ Bull
 
 ## 📥 IMPLEMENTATION COMMANDS
 
-### Option A: Copy from External Source
+### 🚀 FASTEST: Use Import Script (5 minutes)
+
+**If you already have the RICK files:**
+
 ```bash
-# If files exist at /home/ing/RICK/
+# Quick import with default paths
+bash scripts/import_existing_files.sh
+
+# OR specify custom paths
+bash scripts/import_existing_files.sh /path/to/RICK_LIVE_CLEAN /path/to/R_H_UNI
+
+# Verify (should show 100%)
+bash scripts/verify_and_activate_all_systems.sh
+```
+
+**What the import script does:**
+- Creates all required directories
+- Copies foundation, hive, logic, risk, brokers
+- Copies trading engines (ghost, canary, capital_manager)
+- Copies Wolf Pack strategies from R_H_UNI
+- Shows summary of imported files
+
+**Done in minutes!**
+
+---
+
+### Option A: Manual Copy from External Source (if script doesn't work)
+```bash
+# If files exist at /home/ing/RICK/ or custom location
 
 # Copy foundation
 mkdir -p foundation
