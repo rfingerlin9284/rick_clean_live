@@ -1,20 +1,85 @@
-Wolfpack trading prototype
+🚀 RICK Trading System - Complete Activation Package
 
-This repository contains the canonical wolfpack strategy prototype (regime-aware strategy packs and orchestrator).
+**Status:** Implementation Specifications Ready  
+**Charter PIN:** 841921  
 
+## 📦 What This Repository Provides
+
+This repository contains **COMPLETE SPECIFICATIONS AND TOOLS** to implement the RICK trading system with:
+- Foundation layer (Charter with PIN 841921)
+- Hive gatekeeping system (4 validation gates)
+- Logic layer (5-regime detection)
+- Wolf Pack strategies (Bullish/Bearish/Sideways)
+- Trading engines (Ghost/Canary)
+- Risk management
+- Broker integration (OANDA)
+
+## 🚀 Quick Start
+
+### 1. Read the Activation Package
+```bash
+cat README_ACTIVATION_PACKAGE.md
+```
+
+### 2. Read the Mega Prompt (Complete Specifications)
+```bash
+cat VSCODE_AGENT_MEGA_PROMPT_RICK_ACTIVATION.md
+```
+
+### 3. Run System Verification
+```bash
+bash scripts/verify_and_activate_all_systems.sh
+```
+
+### 4. Implement Components
+Follow the specifications in the mega prompt to implement each component, OR copy from external source if available.
+
+### 5. Activate System
+Once verification passes (100%), activate paper trading:
+```bash
+python3 canary_trading_engine.py --continuous --duration 45
+```
+
+## 📚 Documentation
+
+| Document | Purpose |
+|----------|---------|
+| **README_ACTIVATION_PACKAGE.md** | Executive summary - start here |
+| **VSCODE_AGENT_MEGA_PROMPT_RICK_ACTIVATION.md** | Complete implementation specs |
+| **SYSTEM_STATUS_AND_ACTIVATION_GUIDE.md** | Status tracking & checklists |
+| **scripts/verify_and_activate_all_systems.sh** | Automated verification |
+
+## 🔒 Charter Compliance (Non-Negotiable)
+
+- ✅ Charter PIN: 841921
+- ✅ Max Hold Time: 6 hours
+- ✅ Min Risk/Reward: 3.2:1
+- ✅ Timeframes: M15, M30, H1 only
+- ✅ 4 Guardian Gates validate ALL trades
+
+---
+
+## Legacy Information
 
 Legacy code and duplicate artifacts have been archived to `legacy_leftovers/` and `archives/` and are excluded from this git repo.
 
-To run locally:
 
-```bash
-python3 -m venv wolfpack_venv
-source wolfpack_venv/bin/activate
-pip install -r requirements.txt
-python3 strategies/wolfpack_orchestrator.py
-```
+## 🎓 For Developers & Agents
 
-## Developer Quickstart
+### If you are a VSCode agent implementing this system:
+
+1. **READ** `VSCODE_AGENT_MEGA_PROMPT_RICK_ACTIVATION.md` (complete specs)
+2. **RUN** `bash scripts/verify_and_activate_all_systems.sh` (see what's needed)
+3. **IMPLEMENT** components using specifications provided
+4. **VERIFY** after each component (re-run verification script)
+5. **INTEGRATE** following integration instructions in mega prompt
+6. **ACTIVATE** only after 100% verification pass
+
+**DO NOT SKIP STEPS. DO NOT BYPASS CHARTER VALIDATION.**
+
+---
+
+## Developer Quickstart (Original Instructions)
 
 1. Create a python virtualenv and install deps:
 
