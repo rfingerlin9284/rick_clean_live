@@ -1,8 +1,11 @@
 #!/usr/bin/env python3
 """
-RICK Charter Enforcement Module - INSTITUTIONAL GRADE
-Immutable trading constants aligned with docs/CHARTER.md
-PIN: 841921 | Generated: 2025-09-26 | Institutional Upgrade: 2025-10-29
+RICK Charter Enforcement Module - RBOTzilla UNI Phase 2
+Immutable trading constants and enforcement logic.
+PIN: 841921 | Generated: 2025-09-26
+
+EXTRACTED FROM: WSL Ubuntu /home/ing/RICK/RICK_LIVE_CLEAN
+READ ONLY ACCESS - No modifications to source
 """
 
 import logging
@@ -22,216 +25,155 @@ class RejectedTimeFrame(Enum):
     M5 = "M5"
 
 class RickCharter:
-    MIN_PROFIT_USD = 100  # Hard minimum profit target in USD
     """
-    RICK Charter Core Enforcement - INSTITUTIONAL GRADE
-    All values aligned with docs/CHARTER.md - immutable constants.
-    
-    INSTITUTIONAL UPGRADE 2025-10-29:
-    - Min notional: $15,000 (institutional grade)
-    - Min RR ratio: 3.2:1 (Charter compliance)
-    - Max margin: 35% NAV (risk management)
-    - Max positions: 3 concurrent (concentration limits)
-    - Daily loss breaker: -5% NAV (drawdown halt)
+    RICK Charter Core Enforcement - Immutable Constants
+    All values are hardcoded for safety and cannot be overridden.
     """
 
     # CORE AUTHENTICATION
     PIN = 841921
-    CHARTER_VERSION = "3.0_INSTITUTIONAL_2025_10_29"
+    CHARTER_VERSION = "2.0_IMMUTABLE"
 
-    # ========================================================================
-    # INSTITUTIONAL CHARTER FLOORS - docs/CHARTER.md COMPLIANCE
-    # ========================================================================
-    
-    # PRIMARY CONSTRAINTS (docs/CHARTER.md Section 1)
-    MIN_NOTIONAL_USD = 15000         # $15,000 minimum notional per trade
-    MIN_RISK_REWARD_RATIO = 3.2
-    MAX_HOLD_DURATION_HOURS = 6      # 6 hours maximum hold duration
-    MAX_MARGIN_UTILIZATION_PCT = 0.35  # 35% maximum margin utilization
-    MAX_CONCURRENT_POSITIONS = 3
-    DAILY_LOSS_BREAKER_PCT = 0.05
-    
-    # EXECUTION REQUIREMENTS
-    MAX_PLACEMENT_LATENCY_MS = 300   # 300ms maximum placement latency
+    # TRADING CONSTRAINTS
+    MAX_HOLD_DURATION_HOURS = 6
     MAX_HOLD_DURATION = timedelta(hours=MAX_HOLD_DURATION_HOURS)
-    
-    # CALCULATED UNIT FLOORS (for $15k notional minimum)
-    # Major pairs: ~150,000 units for $15k (assuming ~1.0 price)
-    # Other FX: ~75,000 units for $15k (assuming ~2.0 price)
-    MAJOR_PAIRS_MIN_UNITS = 15000
-    OTHER_FX_MIN_UNITS = 15000
-    MIN_MARGIN_USD = 500             # Minimum $500 margin per trade
-    
-    # Major pairs list
-    MAJOR_PAIRS = {
-        'EUR_USD', 'GBP_USD', 'USD_JPY', 'USD_CHF', 
-        'USD_CAD', 'AUD_USD', 'NZD_USD'
-    }
-    
-    # ========================================================================
-    # CORRELATION AND EXPOSURE LIMITS (docs/CHARTER.md Section 2)
-    # ========================================================================
-    
-    MAX_PORTFOLIO_EXPOSURE_PCT = 0.80   # 80% NAV max portfolio exposure
-    CORRELATION_CAP_PCT = 0.70           # 70% correlation cap (hedge above)
-    
-    # ========================================================================
-    # CRYPTO-SPECIFIC INSTITUTIONAL RULES (docs/CHARTER.md Section 3)
-    # ========================================================================
-    
-    CRYPTO_HIVE_CONSENSUS_MIN = 0.90     # 90% minimum hive consensus for crypto
-    CRYPTO_CONFLUENCE_MIN = 4            # 4 of 5 crypto filters required
-    CRYPTO_TRADING_START_HOUR = 8        # 8am ET start
-    CRYPTO_TRADING_END_HOUR = 16         # 4pm ET end
-    CRYPTO_TRADING_WEEKDAYS_ONLY = True  # Monday-Friday only
-    
-    # Crypto volatility scaling
-    CRYPTO_VOLATILITY_SCALE_LOW = 0.5    # Low volatility regime
-    CRYPTO_VOLATILITY_SCALE_MID = 1.0    # Normal volatility regime  
-    CRYPTO_VOLATILITY_SCALE_HIGH = 1.5   # High volatility regime
-    
-    # ========================================================================
-    # GATED LOGIC INSTITUTIONAL REQUIREMENTS (docs/GATED_LOGIC_MASTER.md)
-    # ========================================================================
-    
-    # Approval chain minimums
-    HIVE_CONSENSUS_MIN_FX = 0.65         # 65% minimum for FX
-    ML_WEIGHTED_TALLY_MIN = 0.75         # 0.75 minimum ML confidence
-    SMART_LOGIC_FILTERS_REQUIRED = 5     # All 5 filters must pass
-    
-    # ========================================================================
-    # OCO HARD REQUIREMENT (docs/CHARTER.md Section 6)
-    # ========================================================================
-    OCO_MANDATORY = True
-    ALLOW_NAKED_POSITIONS = False
-    
-    # ========================================================================
-    # BROKER STOP-DISTANCE & INSTITUTIONAL COMPLIANCE
-    # ========================================================================
-    
-    # Broker distance rules (enhanced for institutional grade)
-    DEFAULT_MIN_STOP_PIPS = 5            # Increased from 3 to 5 for institutional
-    STOP_BUFFER_MULTIPLIER = 2.0         # Increased from 1.5 to 2.0 for safety
-    MIN_STOP_BUFFER_PIPS = 3             # Increased from 2 to 3 pips minimum
-    
-    # JPY pair pip adjustment
-    JPY_PIP_VALUE = 0.01                 # JPY pairs use 0.01 as pip
-    STANDARD_PIP_VALUE = 0.0001          # Standard pairs use 0.0001 as pip
 
-    @classmethod
-    def validate_position_size(
-        cls,
-        symbol: str,
-        units: int,
-        notional_usd: float = 0.0,
-        margin_usd: float = 0.0,
-    ) -> tuple[bool, str]:
-        """
-        Validate size against the hard unit floors.
-        Returns (ok, reason). Unit floor: 15,000 for majors and other FX (institutional).
-        """
-        min_units = cls.MAJOR_PAIRS_MIN_UNITS if symbol in cls.MAJOR_PAIRS else cls.OTHER_FX_MIN_UNITS
-        if units >= min_units:
-            return True, f"OK — {units:,} ≥ {min_units:,} units"
-        return False, f"Below Charter unit floor — {units:,} < {min_units:,} units"
+    # RISK MANAGEMENT
+    DAILY_LOSS_BREAKER_PCT = -5.0  # -5% daily loss halt
+    MIN_NOTIONAL_USD = 15000
+    MIN_EXPECTED_PNL_USD = 100.0  # Gross PnL at TP must be >= $100
+
+    # Minimum risk-reward ratio (guide compliance: 3.2)
+    MIN_RISK_REWARD_RATIO = 3.2
+
+    # TIMEFRAME ENFORCEMENT
+    ALLOWED_TIMEFRAMES = [TimeFrame.M15, TimeFrame.M30, TimeFrame.H1]
+    REJECTED_TIMEFRAMES = [RejectedTimeFrame.M1, RejectedTimeFrame.M5]
+
+    # EXECUTION LIMITS
+    MAX_CONCURRENT_POSITIONS = 3
+    MAX_DAILY_TRADES = 12
+    MAX_PLACEMENT_LATENCY_MS = 300  # Maximum 300ms for order placement
+
+    # SPREAD & SLIPPAGE GATES
+    FX_MAX_SPREAD_ATR_MULTIPLIER = 0.15    # 0.15x ATR14
+    CRYPTO_MAX_SPREAD_ATR_MULTIPLIER = 0.10 # 0.10x ATR14
+
+    # STOP LOSS REQUIREMENTS
+    FX_STOP_LOSS_ATR_MULTIPLIER = 1.2      # 1.2x ATR
+    CRYPTO_STOP_LOSS_ATR_MULTIPLIER = 1.5  # 1.5x ATR
 
     @classmethod
     def validate_pin(cls, pin: int) -> bool:
         """Validate PIN for charter access"""
         return pin == cls.PIN
-    
+
     @classmethod
-    def validate_institutional_compliance(cls, trade_request: Dict) -> tuple[bool, str]:
-        """
-        INSTITUTIONAL CHARTER: Validate trade against full Charter requirements
-        Returns (is_compliant, reason)
-        """
-        symbol = trade_request.get('symbol', '')
-        units = abs(trade_request.get('units', 0))
-        notional_usd = trade_request.get('notional_usd', 0)
-        margin_usd = trade_request.get('margin_usd', 0)
-        risk_reward = trade_request.get('risk_reward_ratio', 0)
-        
-        # 1. NOTIONAL FLOOR CHECK
-        if notional_usd < cls.MIN_NOTIONAL_USD:
-            return False, f"🚫 Blocked {symbol} — Notional ${notional_usd:,.0f} below Charter minimum ${cls.MIN_NOTIONAL_USD:,} → CANCELLED"
-        
-        # 2. MARGIN FLOOR CHECK  
-        if margin_usd < cls.MIN_MARGIN_USD:
-            return False, f"🚫 Blocked {symbol} — Margin ${margin_usd:.0f} below Charter minimum ${cls.MIN_MARGIN_USD} → CANCELLED"
-        
-        # 3. UNIT FLOOR CHECK
-        min_units = cls.MAJOR_PAIRS_MIN_UNITS if symbol in cls.MAJOR_PAIRS else cls.OTHER_FX_MIN_UNITS
-        if units < min_units:
-            return False, f"🚫 Blocked {symbol} — Units {units:,} below Charter minimum {min_units:,} → CANCELLED"
-        
-        # 4. RISK-REWARD CHECK
-        if risk_reward < cls.MIN_RISK_REWARD_RATIO:
-            return False, f"🚫 Blocked {symbol} — Risk-reward {risk_reward:.1f} below Charter minimum {cls.MIN_RISK_REWARD_RATIO} → CANCELLED"
-        
-        return True, "✅ Institutional Charter compliance verified"
-    
+    def validate_timeframe(cls, timeframe: str) -> bool:
+        """Validate if timeframe is allowed"""
+        # Check if it's in allowed timeframes
+        allowed_values = [tf.value for tf in cls.ALLOWED_TIMEFRAMES]
+        if timeframe in allowed_values:
+            return True
+
+        # Explicitly reject forbidden timeframes
+        rejected_values = [tf.value for tf in cls.REJECTED_TIMEFRAMES]
+        if timeframe in rejected_values:
+            return False
+
+        # Unknown timeframe - reject by default
+        return False
+
     @classmethod
-    def calculate_institutional_stop_distance(cls, symbol: str, entry_price: float, broker_min_distance: Optional[float] = None) -> dict:
+    def validate_hold_duration(cls, hours: float) -> bool:
+        """Validate position hold duration"""
+        return 0 < hours <= cls.MAX_HOLD_DURATION_HOURS
+
+    @classmethod
+    def validate_risk_reward(cls, risk_reward_ratio: float) -> bool:
+        """Validate risk-reward ratio meets minimum"""
+        return risk_reward_ratio >= cls.MIN_RISK_REWARD_RATIO
+
+    @classmethod
+    def validate_notional(cls, notional_usd: float) -> bool:
+        """Validate minimum notional size"""
+        return notional_usd >= cls.MIN_NOTIONAL_USD
+
+    @classmethod
+    def validate_daily_pnl(cls, daily_pnl_pct: float) -> bool:
+        """Validate daily PnL hasn't hit breaker"""
+        return daily_pnl_pct > cls.DAILY_LOSS_BREAKER_PCT
+
+    @classmethod
+    def validate(cls, test_key: Optional[str] = None) -> bool:
         """
-        INSTITUTIONAL CHARTER: Calculate broker-compliant stop distance with enhanced buffer
+        Charter validation test
+        Returns True if all charter constants are properly set
         """
-        # Determine pip value
-        is_jpy = 'JPY' in symbol
-        pip_value = cls.JPY_PIP_VALUE if is_jpy else cls.STANDARD_PIP_VALUE
-        
-        # Use broker minimum or enhanced default
-        broker_min_pips = broker_min_distance or cls.DEFAULT_MIN_STOP_PIPS
-        
-        # Calculate enhanced institutional buffer
-        buffer_pips = max(cls.STOP_BUFFER_MULTIPLIER * broker_min_pips, cls.MIN_STOP_BUFFER_PIPS)
-        
-        # Final required distance
-        required_distance_pips = broker_min_pips + buffer_pips
-        required_distance_price = required_distance_pips * pip_value
-        
+        try:
+            # Test all core constants exist and are correct type
+            assert cls.PIN == 841921, "PIN mismatch"
+            assert isinstance(cls.MAX_HOLD_DURATION_HOURS, int), "Hold duration type error"
+            assert cls.MAX_HOLD_DURATION_HOURS == 6, "Hold duration value error"
+            assert cls.DAILY_LOSS_BREAKER_PCT == -5.0, "Loss breaker error"
+            assert cls.MIN_NOTIONAL_USD == 15000, "Notional minimum error"
+            assert cls.MIN_RISK_REWARD_RATIO == 3.2, "Risk reward error"
+            assert cls.MIN_EXPECTED_PNL_USD == 100.0, "Expected PnL minimum error"
+
+            # Test timeframe enforcement
+            assert cls.validate_timeframe("M15") == True, "M15 should be allowed"
+            assert cls.validate_timeframe("M30") == True, "M30 should be allowed"
+            assert cls.validate_timeframe("H1") == True, "H1 should be allowed"
+            assert cls.validate_timeframe("M1") == False, "M1 should be rejected"
+            assert cls.validate_timeframe("M5") == False, "M5 should be rejected"
+
+            # Test validation functions
+            assert cls.validate_hold_duration(6) == True, "6h should be valid"
+            assert cls.validate_hold_duration(7) == False, "7h should be invalid"
+            assert cls.validate_risk_reward(3.2) == True, "3.2 RR should be valid"
+            assert cls.validate_risk_reward(3.1) == False, "3.1 RR should be invalid"
+            assert cls.validate_notional(15000) == True, "15k should be valid"
+            assert cls.validate_notional(14999) == False, "14999 should be invalid"
+            assert cls.validate_daily_pnl(-4.9) == True, "-4.9% should be valid"
+            assert cls.validate_daily_pnl(-5.1) == False, "-5.1% should hit breaker"
+
+            logging.info("RICK Charter validation PASSED ✅")
+            return True
+
+        except AssertionError as e:
+            logging.error(f"RICK Charter validation FAILED: {e}")
+            return False
+        except Exception as e:
+            logging.error(f"RICK Charter validation ERROR: {e}")
+            return False
+
+    @classmethod
+    def get_charter_summary(cls) -> Dict[str, Union[int, float, str, List[str]]]:
+        """Return complete charter summary for logging"""
         return {
-            'broker_min_pips': broker_min_pips,
-            'buffer_pips': buffer_pips,
-            'required_distance_pips': required_distance_pips,
-            'required_distance_price': required_distance_price,
-            'pip_value': pip_value,
-            'is_jpy': is_jpy,
-            'institutional_grade': True
-        }
-    
-    @classmethod
-    def calculate_institutional_oco_levels(cls, symbol: str, direction: str, entry_price: float, broker_min_distance: Optional[float] = None) -> dict:
-        """
-        INSTITUTIONAL CHARTER: Calculate OCO levels with 3.2:1 minimum RR
-        """
-        stop_info = cls.calculate_institutional_stop_distance(symbol, entry_price, broker_min_distance)
-        required_distance = stop_info['required_distance_price']
-        
-        if direction.upper() == 'BUY' or direction.upper() == 'LONG':
-            # LONG: SL below entry, TP above entry
-            stop_loss = entry_price - required_distance
-            take_profit = entry_price + (cls.MIN_RISK_REWARD_RATIO * required_distance)
-        else:
-            # SHORT: SL above entry, TP below entry
-            stop_loss = entry_price + required_distance
-            take_profit = entry_price - (cls.MIN_RISK_REWARD_RATIO * required_distance)
-        
-        return {
-            'stop_loss': stop_loss,
-            'take_profit': take_profit,
-            'risk_reward_ratio': cls.MIN_RISK_REWARD_RATIO,
-            'stop_distance_info': stop_info,
-            'institutional_compliance': True
+            "pin": cls.PIN,
+            "version": cls.CHARTER_VERSION,
+            "max_hold_hours": cls.MAX_HOLD_DURATION_HOURS,
+            "daily_loss_breaker": cls.DAILY_LOSS_BREAKER_PCT,
+            "min_notional_usd": cls.MIN_NOTIONAL_USD,
+            "min_risk_reward": cls.MIN_RISK_REWARD_RATIO,
+            "min_expected_pnl_usd": cls.MIN_EXPECTED_PNL_USD,
+            "allowed_timeframes": [tf.value for tf in cls.ALLOWED_TIMEFRAMES],
+            "rejected_timeframes": [tf.value for tf in cls.REJECTED_TIMEFRAMES],
+            "max_concurrent": cls.MAX_CONCURRENT_POSITIONS,
+            "max_daily_trades": cls.MAX_DAILY_TRADES
         }
 
-    # INCOME TARGETS (from original charter - kept for compatibility)
-    DAILY_INCOME_TARGET_USD = 600.00
-    MONTHLY_INCOME_TARGET_USD = 12600.00
-    ANNUAL_INCOME_TARGET_USD = 151200.00
-    DAILY_RISK_PER_TRADE = 0.02
-
-    # ADDITIONAL INSTITUTIONAL CONSTRAINTS
-    MAX_DAILY_TRADES = 20
-    ALLOWED_TIMEFRAMES = [TimeFrame.M15, TimeFrame.M30, TimeFrame.H1]
-
+# Charter enforcement on module import
+if __name__ == "__main__":
+    # Self-test on direct execution
+    result = RickCharter.validate("test")
+    print(f"Charter Validation: {'PASS' if result else 'FAIL'}")
+    if result:
+        summary = RickCharter.get_charter_summary()
+        print("Charter Summary:", summary)
+else:
+    # Validate on import
+    _validation_result = RickCharter.validate()
+    if not _validation_result:
+        raise ImportError("RICK Charter validation failed - module import blocked")

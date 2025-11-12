@@ -1,12 +1,15 @@
 # Ignore local environment files containing secrets
 .env
 env_new.env
+.env.*
+.state/
 
 # Ignore Python virtualenv
 .venv/
 venv/
 */venv/
 **/venv/
+venv_coinbase/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -14,3 +17,14 @@ __pycache__/
 
 # Logs
 logs/
+
+# Local status/exports/backups
+status/
+export/
+archives/
+_CONSOLIDATION_BACKUP_*/
+
+# Misc large or local files
+*.zip
+rick_clean_live/
+sent_to_windows_files_and_folders/
