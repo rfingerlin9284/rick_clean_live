@@ -39,7 +39,8 @@ else:
 
 # Import main trading engine
 try:
-    from oanda_trading_engine import OandaTradingEngine
+    import asyncio
+    from oanda_trading_engine import main
     
     print("=" * 80)
     print("🚀 RICK PAPER TRADING SYSTEM")
@@ -50,8 +51,7 @@ try:
     print()
     
     # Launch the trading engine
-    engine = OandaTradingEngine()
-    engine.run()
+    asyncio.run(main())
     
 except ImportError as e:
     print(f"❌ Import Error: {e}")

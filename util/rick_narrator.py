@@ -16,9 +16,9 @@ from pathlib import Path
 OLLAMA_URL = "http://127.0.0.1:11434/api/generate"
 NARRATION_MODEL = "llama3.1:8b"  # Fast, conversational model
 
-# Narration log file
-PROJECT_ROOT = Path("/home/ing/RICK/RICK_LIVE_CLEAN")
-LOGS_DIR = PROJECT_ROOT / "pre_upgrade" / "headless" / "logs"
+# Narration log file - use dynamic path detection
+PROJECT_ROOT = Path(__file__).parent.parent.resolve()
+LOGS_DIR = PROJECT_ROOT / "logs"
 RICK_NARRATION_FILE = LOGS_DIR / "rick_narration.jsonl"
 
 logger = logging.getLogger(__name__)
