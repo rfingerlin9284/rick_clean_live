@@ -264,6 +264,9 @@ class OandaTradingEngine:
         self.display.info("Trade Manager", "Will activate on start", Colors.BRIGHT_YELLOW)
         self.display.info("Smart Trailing", "Enabled (Momentum-based)", Colors.BRIGHT_GREEN)
         self.display.info("TP/SL Enforcement", "MANDATORY (OCO Required)", Colors.BRIGHT_GREEN)
+        self.display.info("TP/SL for LONG (BUY)", f"SL: -{self.stop_loss_pips} pips, TP: +{self.take_profit_pips} pips", Colors.BRIGHT_CYAN)
+        self.display.info("TP/SL for SHORT (SELL)", f"SL: +{self.stop_loss_pips} pips, TP: -{self.take_profit_pips} pips", Colors.BRIGHT_CYAN)
+        self.display.info("Manual Close Detection", "Enabled (logs all manual closures)", Colors.BRIGHT_GREEN)
         self.display.info("Market Data", "Real-time OANDA API", Colors.BRIGHT_GREEN)
         self.display.info("Order Execution", f"OANDA {env_label} API", env_color)
         
@@ -1184,9 +1187,41 @@ class OandaTradingEngine:
             return None
     
     def check_positions(self):
-        """Check status of open positions via OANDA API"""
-        # Positions managed by TradeManager background loop
-        # This method can be extended to sync state with OANDA API if needed
+        """
+        Check status of open positions via OANDA API
+        Detects manually closed positions and logs them for audit trail
+        """
+        try:
+            # Get current open trades from OANDA
+            open_trades = self.oanda.get_trades()
+            open_trade_ids = {t.get('id') or t.get('tradeID') for t in open_trades if t.get('id') or t.get('tradeID')}
+            
+            # Check if any tracked positions have been manually closed
+            for order_id, position in list(self.active_positions.items()):
+                # If position not found in open trades, it was likely manually closed
+                # (Note: This is a simplified check - in production you'd track trade IDs more carefully)
+                if not any(t.get('instrument', '').replace('.', '_').upper() == position['symbol'] for t in open_trades):
+                    # Position appears to be closed
+                    self.display.warning(f"⚠️  Position {position['symbol']} may have been manually closed")
+                    
+                    log_narration(
+                        event_type="POSITION_MANUALLY_CLOSED_DETECTED",
+                        details={
+                            "order_id": order_id,
+                            "symbol": position['symbol'],
+                            "direction": position['direction'],
+                            "entry": position.get('entry'),
+                            "stop_loss": position.get('stop_loss'),
+                            "take_profit": position.get('take_profit'),
+                            "timestamp": position.get('timestamp').isoformat() if position.get('timestamp') else None,
+                            "note": "Position closed outside of automated TP/SL system"
+                        },
+                        symbol=position['symbol'],
+                        venue="oanda"
+                    )
+        except Exception as e:
+            self.display.warning(f"Could not check positions: {e}")
+        
         return
 
     async def trade_manager_loop(self):
@@ -1211,13 +1246,23 @@ class OandaTradingEngine:
         self.trade_manager_last_heartbeat = datetime.now(timezone.utc)
         
         self.display.success("✅ TRADE MANAGER ACTIVATED AND CONNECTED")
+        self.display.info("Trade Manager Status", "ACTIVE", Colors.BRIGHT_GREEN)
+        self.display.info("Last Heartbeat", self.trade_manager_last_heartbeat.isoformat(), Colors.BRIGHT_CYAN)
+        self.display.info("Min Position Age", f"{self.min_position_age_seconds}s before TP->Trailing conversion", Colors.BRIGHT_CYAN)
+        self.display.info("Hive Trigger Confidence", f"{self.hive_trigger_confidence:.0%}", Colors.BRIGHT_CYAN)
+        
         log_narration(
             event_type="TRADE_MANAGER_ACTIVATED",
             details={
                 "status": "ACTIVE",
                 "timestamp": self.trade_manager_last_heartbeat.isoformat(),
                 "min_position_age_seconds": self.min_position_age_seconds,
-                "hive_trigger_confidence": self.hive_trigger_confidence
+                "hive_trigger_confidence": self.hive_trigger_confidence,
+                "tp_sl_enforcement": "MANDATORY",
+                "long_tp_pips": self.take_profit_pips,
+                "long_sl_pips": -self.stop_loss_pips,
+                "short_tp_pips": -self.take_profit_pips,
+                "short_sl_pips": self.stop_loss_pips
             },
             symbol="SYSTEM",
             venue="trade_manager"
@@ -1445,6 +1490,63 @@ class OandaTradingEngine:
             venue="trade_manager"
         )
     
+    def get_trade_manager_status(self) -> Dict[str, Any]:
+        """
+        Get current trade manager status
+        Returns status information for monitoring and verification
+        """
+        if not hasattr(self, 'trade_manager_active'):
+            return {
+                "active": False,
+                "status": "NOT_INITIALIZED",
+                "message": "Trade manager not yet initialized"
+            }
+        
+        age_seconds = None
+        if self.trade_manager_last_heartbeat:
+            age_seconds = (datetime.now(timezone.utc) - self.trade_manager_last_heartbeat).total_seconds()
+        
+        return {
+            "active": self.trade_manager_active,
+            "status": "ACTIVE" if self.trade_manager_active else "INACTIVE",
+            "last_heartbeat": self.trade_manager_last_heartbeat.isoformat() if self.trade_manager_last_heartbeat else None,
+            "heartbeat_age_seconds": age_seconds,
+            "min_position_age_seconds": self.min_position_age_seconds,
+            "hive_trigger_confidence": self.hive_trigger_confidence,
+            "active_positions_count": len(self.active_positions),
+            "tp_sl_config": {
+                "long_buy": {
+                    "stop_loss_pips": -self.stop_loss_pips,
+                    "take_profit_pips": self.take_profit_pips,
+                    "description": "For BUY orders: SL below entry, TP above entry"
+                },
+                "short_sell": {
+                    "stop_loss_pips": self.stop_loss_pips,
+                    "take_profit_pips": -self.take_profit_pips,
+                    "description": "For SELL orders: SL above entry, TP below entry"
+                }
+            }
+        }
+    
+    def verify_trade_manager_connected(self) -> bool:
+        """
+        Verify that trade manager is active and connected
+        Returns True if trade manager is active and heartbeat is recent
+        """
+        status = self.get_trade_manager_status()
+        
+        if not status['active']:
+            self.display.error("❌ TRADE MANAGER NOT ACTIVE")
+            return False
+        
+        # Check if heartbeat is recent (within last 60 seconds)
+        if status['heartbeat_age_seconds'] is not None and status['heartbeat_age_seconds'] > 60:
+            self.display.warning(f"⚠️  TRADE MANAGER HEARTBEAT STALE ({status['heartbeat_age_seconds']:.1f}s ago)")
+            return False
+        
+        self.display.success("✅ TRADE MANAGER VERIFIED: Active and Connected")
+        return True
+    
     def _handle_position_closed(self, trade_id: str):
         """Handle a closed position"""
         if trade_id not in self.active_positions:
@@ -1526,6 +1628,21 @@ class OandaTradingEngine:
         
         # Start TradeManager background task
         trade_manager_task = asyncio.create_task(self.trade_manager_loop())
+        
+        # Give trade manager a moment to start up
+        await asyncio.sleep(2)
+        
+        # ========================================================================
+        # 🛡️ VERIFY TRADE MANAGER ACTIVATION (NEW - Per User Requirement)
+        # ========================================================================
+        self.verify_trade_manager_connected()
+        status = self.get_trade_manager_status()
+        self.display.section("TRADE MANAGER STATUS")
+        self.display.info("Status", status['status'], Colors.BRIGHT_GREEN if status['active'] else Colors.BRIGHT_RED)
+        self.display.info("Last Heartbeat", status['last_heartbeat'] or "N/A", Colors.BRIGHT_CYAN)
+        self.display.info("TP/SL for LONG", f"SL: {status['tp_sl_config']['long_buy']['stop_loss_pips']} pips, TP: +{status['tp_sl_config']['long_buy']['take_profit_pips']} pips", Colors.BRIGHT_CYAN)
+        self.display.info("TP/SL for SHORT", f"SL: +{status['tp_sl_config']['short_sell']['stop_loss_pips']} pips, TP: {status['tp_sl_config']['short_sell']['take_profit_pips']} pips", Colors.BRIGHT_CYAN)
+        print()
         
         while self.is_running:
             try:

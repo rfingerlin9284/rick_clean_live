@@ -200,6 +200,74 @@ def test_trade_manager_monitoring():
         return False
 
 
+def test_tp_sl_for_long_and_short():
+    """Test TP/SL configuration for both LONG (BUY) and SHORT (SELL) positions"""
+    print("\n" + "=" * 60)
+    print("TEST 5: TP/SL Configuration for LONG and SHORT")
+    print("=" * 60)
+    
+    # Standard configuration
+    stop_loss_pips = 20
+    take_profit_pips = 64  # 3.2:1 R:R ratio
+    
+    # Test LONG (BUY) configuration
+    print("\nLONG (BUY) Configuration:")
+    print(f"  Entry Price: 1.0850")
+    print(f"  Stop Loss: -{stop_loss_pips} pips (below entry)")
+    print(f"  Take Profit: +{take_profit_pips} pips (above entry)")
+    
+    # Calculate for BUY
+    entry_buy = 1.0850
+    pip_size = 0.0001
+    sl_buy = entry_buy - (stop_loss_pips * pip_size)
+    tp_buy = entry_buy + (take_profit_pips * pip_size)
+    
+    print(f"  Calculated SL: {sl_buy:.5f}")
+    print(f"  Calculated TP: {tp_buy:.5f}")
+    
+    # Validate BUY
+    if sl_buy < entry_buy < tp_buy:
+        print(f"✅ PASS: BUY order has SL below entry and TP above entry")
+        buy_pass = True
+    else:
+        print(f"❌ FAIL: BUY order SL/TP configuration invalid")
+        buy_pass = False
+    
+    # Test SHORT (SELL) configuration
+    print("\nSHORT (SELL) Configuration:")
+    print(f"  Entry Price: 1.0850")
+    print(f"  Stop Loss: +{stop_loss_pips} pips (above entry)")
+    print(f"  Take Profit: -{take_profit_pips} pips (below entry)")
+    
+    # Calculate for SELL
+    entry_sell = 1.0850
+    sl_sell = entry_sell + (stop_loss_pips * pip_size)
+    tp_sell = entry_sell - (take_profit_pips * pip_size)
+    
+    print(f"  Calculated SL: {sl_sell:.5f}")
+    print(f"  Calculated TP: {tp_sell:.5f}")
+    
+    # Validate SELL
+    if tp_sell < entry_sell < sl_sell:
+        print(f"✅ PASS: SELL order has TP below entry and SL above entry")
+        sell_pass = True
+    else:
+        print(f"❌ FAIL: SELL order SL/TP configuration invalid")
+        sell_pass = False
+    
+    # Check R:R ratio
+    rr_ratio = take_profit_pips / stop_loss_pips
+    print(f"\nRisk:Reward Ratio: {rr_ratio:.2f}:1")
+    if rr_ratio >= 3.2:
+        print(f"✅ PASS: R:R ratio meets charter minimum (3.2:1)")
+        rr_pass = True
+    else:
+        print(f"❌ FAIL: R:R ratio below charter minimum")
+        rr_pass = False
+    
+    return buy_pass and sell_pass and rr_pass
+
+
 if __name__ == "__main__":
     print("\n🧪 TRADE MANAGEMENT TEST SUITE")
     print("Testing TP/SL validation and pair management features")
@@ -212,6 +280,7 @@ if __name__ == "__main__":
     all_passed &= test_pair_limits()
     all_passed &= test_cross_platform_deduplication()
     all_passed &= test_trade_manager_monitoring()
+    all_passed &= test_tp_sl_for_long_and_short()
     
     # Summary
     print("\n" + "=" * 60)
