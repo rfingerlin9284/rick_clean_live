@@ -560,8 +560,110 @@ class OandaTradingEngine:
             self.display.warning(f"Hive amplification error for {symbol}: {str(e)}")
             return signal_data
     
-    def calculate_position_size(self, symbol: str, entry_price: float) -> int:
-        """Calculate Charter-compliant position size to meet $15k minimum notional"""
+    def calculate_dynamic_leverage_multiplier(
+        self, 
+        hive_confidence: Optional[float] = None,
+        ml_signal_strength: Optional[float] = None,
+        symbol: str = ""
+    ) -> Tuple[float, str]:
+        """
+        Calculate dynamic leverage multiplier based on confidence and signal strength.
+        
+        Args:
+            hive_confidence: Hive Mind consensus confidence (0.0 to 1.0)
+            ml_signal_strength: ML signal strength/confidence (0.0 to 1.0)
+            symbol: Trading pair symbol
+        
+        Returns:
+            Tuple of (multiplier, reason)
+            - Base: 1.0x (meets Charter $15k minimum)
+            - High confidence: 1.5x (Hive >= 0.80 or ML >= 0.75)
+            - Very high confidence: 2.0x (Hive >= 0.90 AND ML >= 0.85)
+            - Max leverage cap: 2.5x (emergency override only)
+        """
+        multiplier = 1.0  # Base multiplier (Charter minimum)
+        reasons = []
+        
+        # Validate inputs
+        if hive_confidence is not None and (hive_confidence < 0 or hive_confidence > 1):
+            self.display.warning(f"Invalid hive_confidence: {hive_confidence}, using base multiplier")
+            hive_confidence = None
+        
+        if ml_signal_strength is not None and (ml_signal_strength < 0 or ml_signal_strength > 1):
+            self.display.warning(f"Invalid ml_signal_strength: {ml_signal_strength}, using base multiplier")
+            ml_signal_strength = None
+        
+        # Level 1: High Hive confidence (0.80 - 0.89)
+        if hive_confidence is not None and hive_confidence >= 0.80:
+            if hive_confidence >= 0.90:
+                reasons.append(f"Very high Hive confidence ({hive_confidence:.2f})")
+            else:
+                multiplier = max(multiplier, 1.5)
+                reasons.append(f"High Hive confidence ({hive_confidence:.2f})")
+        
+        # Level 2: High ML signal strength (0.75 - 0.84)
+        if ml_signal_strength is not None and ml_signal_strength >= 0.75:
+            if ml_signal_strength >= 0.85:
+                reasons.append(f"Very high ML strength ({ml_signal_strength:.2f})")
+            else:
+                multiplier = max(multiplier, 1.5)
+                reasons.append(f"High ML signal strength ({ml_signal_strength:.2f})")
+        
+        # Level 3: Combined very high confidence (Hive >= 0.90 AND ML >= 0.85)
+        if (hive_confidence is not None and hive_confidence >= 0.90 and 
+            ml_signal_strength is not None and ml_signal_strength >= 0.85):
+            multiplier = 2.0
+            reasons = [f"Combined very high confidence (Hive: {hive_confidence:.2f}, ML: {ml_signal_strength:.2f})"]
+        
+        # Safety cap: Never exceed 2.5x leverage
+        max_leverage = 2.5
+        if multiplier > max_leverage:
+            self.display.warning(f"Leverage capped at {max_leverage}x (requested: {multiplier}x)")
+            multiplier = max_leverage
+            reasons.append("Safety cap applied")
+        
+        # Default reason if no enhancement
+        if not reasons:
+            reasons.append("Base position (no confidence boost)")
+        
+        # Convert all reasons to strings and join (safety for non-string values)
+        reason_str = "; ".join(str(reason) for reason in reasons)
+        
+        # Log the leverage decision
+        log_narration(
+            event_type="DYNAMIC_LEVERAGE_CALCULATED",
+            details={
+                "symbol": symbol,
+                "multiplier": multiplier,
+                "hive_confidence": hive_confidence,
+                "ml_signal_strength": ml_signal_strength,
+                "reason": reason_str
+            },
+            symbol=symbol,
+            venue="oanda"
+        )
+        
+        return multiplier, reason_str
+    
+    def calculate_position_size(
+        self, 
+        symbol: str, 
+        entry_price: float,
+        hive_confidence: Optional[float] = None,
+        ml_signal_strength: Optional[float] = None
+    ) -> int:
+        """
+        Calculate Charter-compliant position size with dynamic leverage.
+        
+        Args:
+            symbol: Trading pair
+            entry_price: Entry price for the trade
+            hive_confidence: Optional Hive Mind confidence for dynamic scaling
+            ml_signal_strength: Optional ML signal strength for dynamic scaling
+        
+        Returns:
+            Position size in units
+        """
         import math
         
         # CRITICAL FIX: JPY pairs have special pip value (0.01 vs 0.0001)
@@ -588,6 +690,33 @@ class OandaTradingEngine:
             # Add extra units for JPY pairs
             add_units = 100 if 'JPY' not in symbol else 1000
             position_size += add_units
+        
+        # ========================================================================
+        # 🚀 DYNAMIC LEVERAGE SCALING (NEW)
+        # ========================================================================
+        # Apply dynamic leverage multiplier based on confidence levels
+        leverage_multiplier, leverage_reason = self.calculate_dynamic_leverage_multiplier(
+            hive_confidence=hive_confidence,
+            ml_signal_strength=ml_signal_strength,
+            symbol=symbol
+        )
+        
+        # Apply multiplier if above base (1.0)
+        if leverage_multiplier > 1.0:
+            original_size = position_size
+            # Use round() for more accurate position sizing
+            position_size = round(position_size * leverage_multiplier)
+            
+            # Round to nearest 100 for clean sizing
+            POSITION_SIZE_ROUNDING = 100
+            position_size = math.ceil(position_size / POSITION_SIZE_ROUNDING) * POSITION_SIZE_ROUNDING
+            
+            self.display.info(
+                "Dynamic Leverage Applied",
+                f"{leverage_multiplier}x → {original_size:,} units → {position_size:,} units",
+                Colors.BRIGHT_MAGENTA
+            )
+            self.display.info("Leverage Reason", leverage_reason, Colors.BRIGHT_CYAN)
         
         return position_size
     
@@ -779,8 +908,22 @@ class OandaTradingEngine:
             'reason': f'Low risk profile (margin: {margin_utilization:.1%}, notional: ${notional:,.0f})'
         }
     
-    def place_trade(self, symbol: str, direction: str):
-        """Place Charter-compliant OCO order with full logging (environment-agnostic)"""
+    def place_trade(
+        self, 
+        symbol: str, 
+        direction: str,
+        signal_confidence: Optional[float] = None,
+        hive_confidence: Optional[float] = None
+    ):
+        """
+        Place Charter-compliant OCO order with full logging (environment-agnostic).
+        
+        Args:
+            symbol: Trading pair
+            direction: "BUY" or "SELL"
+            signal_confidence: ML/Signal confidence (0.0 to 1.0)
+            hive_confidence: Hive Mind consensus confidence (0.0 to 1.0)
+        """
         try:
             # ========================================================================
             # 🛡️ PAIR LIMIT CHECK (NEW - Per User Requirement)
@@ -816,8 +959,16 @@ class OandaTradingEngine:
             # Use bid for SELL, ask for BUY
             entry_price = price_data['ask'] if direction == "BUY" else price_data['bid']
             
-            # Calculate Charter-compliant position size
-            position_size = self.calculate_position_size(symbol, entry_price)
+            # ========================================================================
+            # 🚀 DYNAMIC POSITION SIZING WITH CONFIDENCE-BASED LEVERAGE
+            # ========================================================================
+            # Calculate Charter-compliant position size with dynamic leverage
+            position_size = self.calculate_position_size(
+                symbol=symbol,
+                entry_price=entry_price,
+                hive_confidence=hive_confidence,
+                ml_signal_strength=signal_confidence
+            )
             
             # Calculate notional value in TRUE USD (handles cross pairs correctly)
             notional_value = get_usd_notional(position_size, symbol, entry_price, self.oanda)
@@ -897,6 +1048,18 @@ class OandaTradingEngine:
             
             # Display market data
             self.display.section("MARKET SCAN")
+            
+            # ========================================================================
+            # 🚀 DISPLAY CONFIDENCE LEVELS (NEW)
+            # ========================================================================
+            if signal_confidence is not None or hive_confidence is not None:
+                self.display.info("─" * 60, "", Colors.DIM)
+                if signal_confidence is not None:
+                    self.display.info("Signal Confidence", f"{signal_confidence:.1%}", Colors.BRIGHT_CYAN)
+                if hive_confidence is not None:
+                    hive_color = Colors.BRIGHT_GREEN if hive_confidence >= 0.80 else Colors.BRIGHT_YELLOW
+                    self.display.info("Hive Mind Confidence", f"{hive_confidence:.1%}", hive_color)
+                self.display.info("─" * 60, "", Colors.DIM)
             
             # Show if using real API or fallback data
             if price_data.get('real_api'):
@@ -1566,7 +1729,38 @@ class OandaTradingEngine:
                         await asyncio.sleep(self.min_trade_interval)
                         continue
                     
-                    trade_id = self.place_trade(symbol, direction)
+                    # ========================================================================
+                    # 🐝 CHECK FOR HIVE MIND AMPLIFICATION
+                    # ========================================================================
+                    hive_conf = None
+                    if self.hive_mind:
+                        try:
+                            # Query Hive Mind for consensus on this symbol
+                            market_data = {
+                                "symbol": symbol.replace('_', ''),
+                                "action": direction.lower(),
+                                "entry_price": 0,  # Will be determined in place_trade
+                                "timeframe": "M15"
+                            }
+                            
+                            hive_analysis = self.hive_mind.delegate_analysis(market_data)
+                            if hive_analysis:
+                                hive_conf = hive_analysis.consensus_confidence
+                                self.display.info(
+                                    f"Hive Confidence for {symbol}",
+                                    f"{hive_conf:.2%}",
+                                    Colors.BRIGHT_CYAN
+                                )
+                        except Exception as e:
+                            self.display.warning(f"Hive analysis error for {symbol}: {e}")
+                    
+                    # Place trade with confidence values for dynamic leverage
+                    trade_id = self.place_trade(
+                        symbol=symbol,
+                        direction=direction,
+                        signal_confidence=conf,
+                        hive_confidence=hive_conf
+                    )
                     
                     if trade_id:
                         trade_count += 1
