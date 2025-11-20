@@ -15,6 +15,7 @@ import os
 import time
 import asyncio
 import requests
+import json
 from datetime import datetime, timezone
 from typing import Dict, List, Optional, Tuple
 
@@ -200,12 +201,20 @@ class OandaTradingEngine:
         self.total_pnl = 0.0
         self.is_running = False
         self.session_start = datetime.now(timezone.utc)
-
+        
+        # Platform-specific pair management (per user requirement)
+        # Max 3-4 pairs per platform, no duplicates across platforms
+        self.max_pairs_per_platform = 4
+        self.active_pairs = set()  # Track active pairs on this platform
+        self.global_active_pairs_file = '/tmp/rick_trading_global_pairs.json'  # Cross-platform tracking
+        
         # TradeManager settings
         # Only consider converting TP -> trailing SL after 60 seconds
         self.min_position_age_seconds = 60
         # Hive consensus threshold to trigger TP cancellation
         self.hive_trigger_confidence = 0.80
+        self.trade_manager_active = False  # Track if trade manager is running
+        self.trade_manager_last_heartbeat = None  # Last time trade manager was active
         
         # Narration logging
         log_narration(
@@ -248,6 +257,13 @@ class OandaTradingEngine:
         self.display.info("Environment", env_label, env_color)
         self.display.info("API Endpoint", self.oanda.api_base, Colors.BRIGHT_CYAN)
         self.display.info("Account ID", self.oanda.account_id, Colors.BRIGHT_CYAN)
+        
+        self.display.section("TRADE MANAGEMENT")
+        self.display.info("Max Pairs Per Platform", f"{self.max_pairs_per_platform} pairs", Colors.BRIGHT_GREEN)
+        self.display.info("Active Pairs", f"{len(self.active_pairs)}/{self.max_pairs_per_platform}", Colors.BRIGHT_CYAN)
+        self.display.info("Trade Manager", "Will activate on start", Colors.BRIGHT_YELLOW)
+        self.display.info("Smart Trailing", "Enabled (Momentum-based)", Colors.BRIGHT_GREEN)
+        self.display.info("TP/SL Enforcement", "MANDATORY (OCO Required)", Colors.BRIGHT_GREEN)
         self.display.info("Market Data", "Real-time OANDA API", Colors.BRIGHT_GREEN)
         self.display.info("Order Execution", f"OANDA {env_label} API", env_color)
         
@@ -575,8 +591,98 @@ class OandaTradingEngine:
         
         return position_size
     
+    def _load_global_active_pairs(self) -> set:
+        """Load active pairs from all platforms to prevent duplicates"""
+        try:
+            if os.path.exists(self.global_active_pairs_file):
+                with open(self.global_active_pairs_file, 'r') as f:
+                    data = json.load(f)
+                    return set(data.get('pairs', []))
+        except Exception as e:
+            self.display.warning(f"Could not load global active pairs: {e}")
+        return set()
+    
+    def _save_global_active_pairs(self, pairs: set):
+        """Save active pairs to global tracker"""
+        try:
+            with open(self.global_active_pairs_file, 'w') as f:
+                json.dump({
+                    'pairs': list(pairs),
+                    'platform': 'oanda',
+                    'timestamp': datetime.now(timezone.utc).isoformat()
+                }, f)
+        except Exception as e:
+            self.display.warning(f"Could not save global active pairs: {e}")
+    
+    def _can_trade_pair(self, symbol: str) -> Tuple[bool, str]:
+        """
+        Check if we can trade this pair based on platform limits
+        
+        Returns:
+            Tuple of (can_trade: bool, reason: str)
+        """
+        # Check platform-specific limit (3-4 pairs max)
+        if len(self.active_pairs) >= self.max_pairs_per_platform:
+            if symbol not in self.active_pairs:
+                return False, f"Platform limit reached ({self.max_pairs_per_platform} pairs max)"
+        
+        # Check cross-platform duplicates
+        global_pairs = self._load_global_active_pairs()
+        if symbol in global_pairs and symbol not in self.active_pairs:
+            return False, f"Pair {symbol} already active on another platform"
+        
+        return True, "OK"
+    
+    def _validate_tp_sl_set(self, symbol: str, stop_loss: float, take_profit: float, direction: str) -> bool:
+        """
+        Validate that TP and SL are properly set and meet requirements
+        
+        Args:
+            symbol: Trading pair
+            stop_loss: Stop loss price
+            take_profit: Take profit price
+            direction: BUY or SELL
+            
+        Returns:
+            True if valid, raises ValueError otherwise
+        """
+        if stop_loss is None:
+            raise ValueError(f"CRITICAL: Stop Loss not set for {symbol} {direction}")
+        
+        if take_profit is None:
+            raise ValueError(f"CRITICAL: Take Profit not set for {symbol} {direction}")
+        
+        # Validate that SL and TP are in the correct direction
+        if direction == "BUY":
+            if stop_loss >= take_profit:
+                raise ValueError(f"CRITICAL: For BUY, SL ({stop_loss}) must be < TP ({take_profit})")
+        else:  # SELL
+            if stop_loss <= take_profit:
+                raise ValueError(f"CRITICAL: For SELL, SL ({stop_loss}) must be > TP ({take_profit})")
+        
+        # Log successful validation
+        log_narration(
+            event_type="TP_SL_VALIDATED",
+            details={
+                "symbol": symbol,
+                "direction": direction,
+                "stop_loss": stop_loss,
+                "take_profit": take_profit,
+                "validation": "PASSED"
+            },
+            symbol=symbol,
+            venue="oanda"
+        )
+        
+        return True
+    
     def calculate_stop_take_levels(self, symbol: str, direction: str, entry_price: float):
-        """Calculate stop loss and take profit levels"""
+        """
+        Calculate stop loss and take profit levels
+        
+        IMPORTANT: Both SL and TP are ALWAYS calculated and returned.
+        This ensures OCO order compliance for all trades.
+        """
         pip_size = 0.0001  # Standard for most pairs
         if 'JPY' in symbol:
             pip_size = 0.01
@@ -587,6 +693,10 @@ class OandaTradingEngine:
         else:  # SELL
             stop_loss = entry_price + (self.stop_loss_pips * pip_size)
             take_profit = entry_price - (self.take_profit_pips * pip_size)
+        
+        # Validate that both values are set
+        if stop_loss is None or take_profit is None:
+            raise ValueError(f"CRITICAL: Failed to calculate TP/SL for {symbol} {direction}")
         
         return round(stop_loss, 5), round(take_profit, 5)
     
@@ -672,6 +782,25 @@ class OandaTradingEngine:
     def place_trade(self, symbol: str, direction: str):
         """Place Charter-compliant OCO order with full logging (environment-agnostic)"""
         try:
+            # ========================================================================
+            # 🛡️ PAIR LIMIT CHECK (NEW - Per User Requirement)
+            # ========================================================================
+            can_trade, reason = self._can_trade_pair(symbol)
+            if not can_trade:
+                self.display.error(f"❌ PAIR LIMIT BLOCKED: {reason}")
+                log_narration(
+                    event_type="PAIR_LIMIT_REJECTION",
+                    details={
+                        "symbol": symbol,
+                        "reason": reason,
+                        "active_pairs": list(self.active_pairs),
+                        "max_pairs": self.max_pairs_per_platform
+                    },
+                    symbol=symbol,
+                    venue="oanda"
+                )
+                return None
+            
             # Get current price
             price_data = self.get_current_price(symbol)
             if not price_data:
@@ -785,6 +914,12 @@ class OandaTradingEngine:
             # Calculate stops
             stop_loss, take_profit = self.calculate_stop_take_levels(symbol, direction, entry_price)
             
+            # ========================================================================
+            # 🛡️ VALIDATE TP/SL ARE SET (NEW - Per User Requirement)
+            # ========================================================================
+            self._validate_tp_sl_set(symbol, stop_loss, take_profit, direction)
+            self.display.success(f"✅ TP/SL validated for {symbol} {direction}: SL={stop_loss:.5f}, TP={take_profit:.5f}")
+            
             # CHARTER ENFORCEMENT: Verify R:R ratio
             risk = abs(entry_price - stop_loss)
             reward = abs(take_profit - entry_price)
@@ -885,6 +1020,17 @@ class OandaTradingEngine:
                     'rr_ratio': rr_ratio,
                     'timestamp': datetime.now(timezone.utc)
                 }
+                
+                # ========================================================================
+                # 🛡️ UPDATE ACTIVE PAIRS (NEW - Per User Requirement)
+                # ========================================================================
+                self.active_pairs.add(symbol)
+                # Update global tracker to prevent duplicates across platforms
+                global_pairs = self._load_global_active_pairs()
+                global_pairs.add(symbol)
+                self._save_global_active_pairs(global_pairs)
+                
+                self.display.success(f"✅ Pair {symbol} added to active pairs ({len(self.active_pairs)}/{self.max_pairs_per_platform})")
                 
                 # ========================================================================
                 # 🛡️ TRACK POSITION FOR GUARDIAN GATE ONGOING MONITORING
@@ -1058,6 +1204,25 @@ class OandaTradingEngine:
         /home/ing/RICK/RICK_LIVE_CLEAN/rbotzilla_golden_age.py (MomentumDetector & SmartTrailingSystem)
         to fulfill Charter requirement for code reuse (PIN 841921).
         """
+        # ========================================================================
+        # 🛡️ TRADE MANAGER ACTIVATION (NEW - Per User Requirement)
+        # ========================================================================
+        self.trade_manager_active = True
+        self.trade_manager_last_heartbeat = datetime.now(timezone.utc)
+        
+        self.display.success("✅ TRADE MANAGER ACTIVATED AND CONNECTED")
+        log_narration(
+            event_type="TRADE_MANAGER_ACTIVATED",
+            details={
+                "status": "ACTIVE",
+                "timestamp": self.trade_manager_last_heartbeat.isoformat(),
+                "min_position_age_seconds": self.min_position_age_seconds,
+                "hive_trigger_confidence": self.hive_trigger_confidence
+            },
+            symbol="SYSTEM",
+            venue="trade_manager"
+        )
+        
         while self.is_running:
             try:
                 now = datetime.now(timezone.utc)
@@ -1255,9 +1420,30 @@ class OandaTradingEngine:
 
                 # Sleep short interval before next pass
                 await asyncio.sleep(5)
+                
+                # ========================================================================
+                # 🛡️ UPDATE TRADE MANAGER HEARTBEAT (NEW - Per User Requirement)
+                # ========================================================================
+                self.trade_manager_last_heartbeat = datetime.now(timezone.utc)
+                
             except Exception as e:
                 self.display.error(f"TradeManager loop error: {e}")
                 await asyncio.sleep(5)
+        
+        # ========================================================================
+        # 🛡️ TRADE MANAGER DEACTIVATION (NEW - Per User Requirement)
+        # ========================================================================
+        self.trade_manager_active = False
+        self.display.warning("⚠️  TRADE MANAGER DEACTIVATED")
+        log_narration(
+            event_type="TRADE_MANAGER_DEACTIVATED",
+            details={
+                "status": "INACTIVE",
+                "timestamp": datetime.now(timezone.utc).isoformat()
+            },
+            symbol="SYSTEM",
+            venue="trade_manager"
+        )
     
     def _handle_position_closed(self, trade_id: str):
         """Handle a closed position"""
@@ -1293,6 +1479,17 @@ class OandaTradingEngine:
             
             # Remove from active positions
             del self.active_positions[trade_id]
+            
+            # ========================================================================
+            # 🛡️ REMOVE FROM ACTIVE PAIRS (NEW - Per User Requirement)
+            # ========================================================================
+            if position['symbol'] in self.active_pairs:
+                self.active_pairs.discard(position['symbol'])
+                # Update global tracker
+                global_pairs = self._load_global_active_pairs()
+                global_pairs.discard(position['symbol'])
+                self._save_global_active_pairs(global_pairs)
+                self.display.info(f"✅ Pair {position['symbol']} removed from active pairs ({len(self.active_pairs)}/{self.max_pairs_per_platform})", "", Colors.BRIGHT_CYAN)
             
             # Display stats
             self._display_stats()
