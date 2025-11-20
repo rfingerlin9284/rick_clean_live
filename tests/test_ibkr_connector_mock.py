@@ -125,12 +125,15 @@ class FakeIB:
         # Get symbol from contract
         symbol = contract.symbol if hasattr(contract, 'symbol') else 'EUR.USD'
         
-        # Return mock data if available
+        # Return mock data if available, otherwise return -1 (no data)
         if symbol in self._market_data:
             data = self._market_data[symbol]
             ticker.bid = data['bid']
             ticker.ask = data['ask']
             ticker.last = data['last']
+        else:
+            # Symbol not found - keep -1 values to simulate no data
+            logger.warning(f"FakeIB: No mock data for symbol {symbol}")
         
         return ticker
     
@@ -351,6 +354,43 @@ def test_account_summary():
         return False
 
 
+def test_error_handling():
+    """Test error handling for invalid symbols and orders"""
+    print("\n" + "=" * 80)
+    print("TEST 4: Error Handling")
+    print("=" * 80)
+    
+    try:
+        ib = IBConnector(pin=841921, environment='paper')
+        
+        # Test with an invalid/unknown symbol that has no mock data
+        price = ib.get_current_bid_ask('INVALID_SYMBOL')
+        print(f"Invalid symbol result: {price}")
+        
+        # Should return zeros or error without crashing
+        assert 'symbol' in price, "Result should have symbol field"
+        
+        ib.disconnect()
+        print("✅ TEST PASSED: Error Handling")
+        return True
+        
+    except Exception as e:
+        print(f"❌ TEST FAILED: {e}")
+        return False
+        
+        assert 'account_id' in summary, "Account ID should be present"
+        assert 'balance' in summary, "Balance should be present"
+        assert summary['balance'] > 0, "Balance should be positive"
+        
+        ib.disconnect()
+        print("✅ TEST PASSED: Get Account Summary")
+        return True
+        
+    except Exception as e:
+        print(f"❌ TEST FAILED: {e}")
+        return False
+
+
 def main():
     """Run all tests"""
     print("=" * 80)
@@ -363,6 +403,7 @@ def main():
     results.append(("Get Best Bid/Ask", test_get_best_bid_ask()))
     results.append(("Place Limit Order", test_place_limit_and_broker_order_created()))
     results.append(("Account Summary", test_account_summary()))
+    results.append(("Error Handling", test_error_handling()))
     
     # Summary
     print("\n" + "=" * 80)
