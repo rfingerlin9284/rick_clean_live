@@ -33,7 +33,7 @@ cd /path/to/rick_clean_live
 - Updates progress file references
 
 **Files Removed**:
-- `ghost_charter_progress.json` (recreated as `canary_charter_progress.json` on next run)
+- `canary_charter_progress.json` (recreated as `canary_charter_progress.json` on next run)
 - Any ghost-related log files in `logs/` directory
 
 ---
@@ -100,7 +100,7 @@ After running the obliteration script, only these modes are available:
 
 ### What Changed
 - All `GHOST_CHARTER` references → `CANARY_CHARTER`
-- All `ghost_charter_progress.json` → `canary_charter_progress.json`
+- All `canary_charter_progress.json` → `canary_charter_progress.json`
 - Ghost/simulation flags removed from active codebase
 - Mode toggles now limited to CANARY and DEMO
 
