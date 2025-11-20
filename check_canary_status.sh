@@ -24,20 +24,20 @@ echo "   Process ID: $CANARY_PID"
 echo ""
 
 # Show progress
-if [ -f ghost_charter_progress.json ]; then
+if [ -f canary_charter_progress.json ]; then
     echo "📊 CURRENT PROGRESS:"
     echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
     
-    START_TIME=$(jq -r '.session_start' ghost_charter_progress.json)
-    CURRENT_TIME=$(jq -r '.current_time' ghost_charter_progress.json)
-    TOTAL_TRADES=$(jq -r '.total_trades' ghost_charter_progress.json)
-    OPEN_TRADES=$(jq -r '.open_trades' ghost_charter_progress.json)
-    WINS=$(jq -r '.wins' ghost_charter_progress.json)
-    LOSSES=$(jq -r '.losses' ghost_charter_progress.json)
-    WIN_RATE=$(jq -r '.win_rate' ghost_charter_progress.json)
-    TOTAL_PNL=$(jq -r '.total_pnl' ghost_charter_progress.json)
-    CURRENT_CAPITAL=$(jq -r '.current_capital' ghost_charter_progress.json)
-    VIOLATIONS=$(jq -r '.charter_violations' ghost_charter_progress.json)
+    START_TIME=$(jq -r '.session_start' canary_charter_progress.json)
+    CURRENT_TIME=$(jq -r '.current_time' canary_charter_progress.json)
+    TOTAL_TRADES=$(jq -r '.total_trades' canary_charter_progress.json)
+    OPEN_TRADES=$(jq -r '.open_trades' canary_charter_progress.json)
+    WINS=$(jq -r '.wins' canary_charter_progress.json)
+    LOSSES=$(jq -r '.losses' canary_charter_progress.json)
+    WIN_RATE=$(jq -r '.win_rate' canary_charter_progress.json)
+    TOTAL_PNL=$(jq -r '.total_pnl' canary_charter_progress.json)
+    CURRENT_CAPITAL=$(jq -r '.current_capital' canary_charter_progress.json)
+    VIOLATIONS=$(jq -r '.charter_violations' canary_charter_progress.json)
     
     # Calculate elapsed time
     START_SEC=$(date -d "$START_TIME" +%s 2>/dev/null || echo 0)
@@ -73,7 +73,7 @@ echo ""
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo "📋 COMMANDS:"
 echo "   • Watch live: watch -n 5 './check_canary_status.sh'"
-echo "   • View progress: cat ghost_charter_progress.json | jq ."
+echo "   • View progress: cat canary_charter_progress.json | jq ."
 echo "   • View report: cat canary_trading_report.json | jq . (after completion)"
 echo "   • Stop early: kill $CANARY_PID"
 echo ""

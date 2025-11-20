@@ -303,7 +303,7 @@ class CharterCompliantGhostEngine:
     
     async def execute_charter_compliant_trade(self, signal: Dict):
         """Execute trade with full Charter enforcement"""
-        trade_id = f"GHOST_CHARTER_{len(self.trades) + 1}_{int(time.time())}"
+        trade_id = f"CANARY_CHARTER_{len(self.trades) + 1}_{int(time.time())}"
         
         # Create trade record
         trade = CharterCompliantTrade(
@@ -486,7 +486,7 @@ class CharterCompliantGhostEngine:
             'charter_violations': self.charter_violations
         }
         
-        with open('ghost_charter_progress.json', 'w') as f:
+        with open('canary_charter_progress.json', 'w') as f:
             json.dump(progress, f, indent=2)
     
     async def generate_final_report(self):

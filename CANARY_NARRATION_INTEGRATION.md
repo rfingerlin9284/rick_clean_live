@@ -105,7 +105,7 @@ Successfully integrated comprehensive `log_narration` calls throughout the CANAR
   "symbol": "EUR_USD",
   "venue": "oanda_practice",
   "details": {
-    "trade_id": "GHOST_CHARTER_1_1760395109",
+    "trade_id": "CANARY_CHARTER_1_1760395109",
     "side": "BUY",
     "entry_price": 1.00918,
     "tp_price": 1.01686,
@@ -142,7 +142,7 @@ Successfully integrated comprehensive `log_narration` calls throughout the CANAR
   "symbol": "EUR_USD",
   "venue": "oanda_practice",
   "details": {
-    "trade_id": "GHOST_CHARTER_1_1760395109",
+    "trade_id": "CANARY_CHARTER_1_1760395109",
     "reason": "TP_HIT",
     "outcome": "win",
     "entry_price": 1.00918,

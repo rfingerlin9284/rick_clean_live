@@ -146,7 +146,7 @@ class CanaryTradingEngine(CharterCompliantGhostEngine):
         
         # Phase 4: Auto-Hedging (After successful order placement)
         # Check if this trade was actually opened (not rejected by Guardian Gates)
-        trade_id = f"GHOST_CHARTER_{len(self.trades)}_{int(__import__('time').time())}"
+        trade_id = f"CANARY_CHARTER_{len(self.trades)}_{int(__import__('time').time())}"
         
         if trade_id in self.open_trades or len(self.open_trades) > 0:
             # Find optimal hedge for this position
