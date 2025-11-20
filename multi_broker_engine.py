@@ -87,6 +87,14 @@ class MultiBrokerEngine:
         self.open_positions = defaultdict(list)  # {broker: [positions]}
         self.execution_queue = []
         
+        # ========================================================================
+        # 🛡️ CROSS-PLATFORM PAIR MANAGEMENT (NEW - Per User Requirement)
+        # ========================================================================
+        # Max 3-4 pairs per platform, no duplicates across platforms
+        self.max_pairs_per_platform = 4
+        self.active_pairs_by_broker = defaultdict(set)  # {broker: set(symbols)}
+        self.global_active_pairs_file = '/tmp/rick_trading_global_pairs.json'
+        
         # Stats
         self.stats = {
             'total_trades': 0,
@@ -134,6 +142,53 @@ class MultiBrokerEngine:
         
         if not self.brokers:
             raise RuntimeError("No brokers available!")
+    
+    def _load_global_active_pairs(self) -> set:
+        """Load active pairs from all platforms to prevent duplicates"""
+        try:
+            if os.path.exists(self.global_active_pairs_file):
+                with open(self.global_active_pairs_file, 'r') as f:
+                    data = json.load(f)
+                    return set(data.get('pairs', []))
+        except Exception as e:
+            print(f"⚠️  Could not load global active pairs: {e}")
+        return set()
+    
+    def _save_global_active_pairs(self):
+        """Save active pairs from all brokers to global tracker"""
+        try:
+            all_pairs = set()
+            for broker, pairs in self.active_pairs_by_broker.items():
+                all_pairs.update(pairs)
+            
+            with open(self.global_active_pairs_file, 'w') as f:
+                json.dump({
+                    'pairs': list(all_pairs),
+                    'by_broker': {broker: list(pairs) for broker, pairs in self.active_pairs_by_broker.items()},
+                    'timestamp': datetime.now(timezone.utc).isoformat()
+                }, f)
+        except Exception as e:
+            print(f"⚠️  Could not save global active pairs: {e}")
+    
+    def _can_trade_pair(self, broker: str, symbol: str) -> tuple:
+        """
+        Check if we can trade this pair on the specified broker
+        
+        Returns:
+            Tuple of (can_trade: bool, reason: str)
+        """
+        # Check platform-specific limit (3-4 pairs max)
+        broker_pairs = self.active_pairs_by_broker[broker]
+        if len(broker_pairs) >= self.max_pairs_per_platform:
+            if symbol not in broker_pairs:
+                return False, f"Platform {broker} limit reached ({self.max_pairs_per_platform} pairs max)"
+        
+        # Check cross-platform duplicates
+        for other_broker, pairs in self.active_pairs_by_broker.items():
+            if other_broker != broker and symbol in pairs:
+                return False, f"Pair {symbol} already active on {other_broker}"
+        
+        return True, "OK"
     
     def get_market_data(self):
         """Fetch market data from all active brokers"""
