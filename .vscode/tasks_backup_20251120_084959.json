@@ -318,19 +318,6 @@
       },
       "problemMatcher": [],
       "detail": "Check if persistent monitor is running"
-    },
-    {
-      "label": "RICK: 💬 Ask RICK (Plain English Interface)",
-      "type": "shell",
-      "command": "./ask_rick.sh",
-      "presentation": {
-        "reveal": "always",
-        "panel": "dedicated",
-        "focus": true
-      },
-      "isBackground": false,
-      "problemMatcher": [],
-      "detail": "Interactive plain English interface - Ask questions, get answers (No coding required!)"
     }
   ]
 }
