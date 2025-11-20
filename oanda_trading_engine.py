@@ -1184,10 +1184,73 @@ class OandaTradingEngine:
             return None
     
     def check_positions(self):
-        """Check status of open positions via OANDA API"""
-        # Positions managed by TradeManager background loop
-        # This method can be extended to sync state with OANDA API if needed
-        return
+        """Check status of open positions via OANDA API and clean up closed ones"""
+        try:
+            # Get currently open trades from OANDA API
+            open_trades = self.oanda.get_trades()
+            
+            # Create set of open trade IDs for quick lookup
+            open_trade_ids = set()
+            for trade in open_trades:
+                trade_id = trade.get('id') or trade.get('tradeID') or trade.get('trade_id')
+                if trade_id:
+                    open_trade_ids.add(str(trade_id))
+            
+            # Check each position we're tracking
+            positions_to_remove = []
+            for order_id, position in list(self.active_positions.items()):
+                # If this position is not in the open trades, it has been closed
+                if str(order_id) not in open_trade_ids:
+                    positions_to_remove.append(order_id)
+            
+            # Remove closed positions and clean up active pairs
+            for order_id in positions_to_remove:
+                position = self.active_positions[order_id]
+                symbol = position['symbol']
+                
+                # Log the position closure
+                log_narration(
+                    event_type="POSITION_CLOSED_DETECTED",
+                    details={
+                        "order_id": order_id,
+                        "symbol": symbol,
+                        "direction": position['direction'],
+                        "entry_price": position['entry'],
+                        "units": position['units']
+                    },
+                    symbol=symbol,
+                    venue="oanda"
+                )
+                
+                # Remove from active positions
+                del self.active_positions[order_id]
+                
+                # Remove from active pairs
+                if symbol in self.active_pairs:
+                    self.active_pairs.discard(symbol)
+                    # Update global tracker
+                    global_pairs = self._load_global_active_pairs()
+                    global_pairs.discard(symbol)
+                    self._save_global_active_pairs(global_pairs)
+                    self.display.info(
+                        f"✅ Position closed - Pair {symbol} removed from active pairs "
+                        f"({len(self.active_pairs)}/{self.max_pairs_per_platform})",
+                        "",
+                        Colors.BRIGHT_CYAN
+                    )
+                
+                # Remove from guardian gate tracking
+                self.current_positions = [
+                    pos for pos in self.current_positions 
+                    if pos.position_id != order_id
+                ]
+                
+                self.display.success(f"✅ Cleaned up closed position: {symbol} (Order ID: {order_id})")
+        
+        except Exception as e:
+            self.display.error(f"Error checking positions: {e}")
+            # Don't crash the trading loop on position check errors
+            pass
 
     async def trade_manager_loop(self):
         """Background loop that evaluates active positions and asks the Hive for momentum signals.
@@ -1543,12 +1606,27 @@ class OandaTradingEngine:
                 # Check existing positions
                 self.check_positions()
                 
+                # Log current status
+                self.display.info(
+                    "Current Status",
+                    f"Active positions: {len(self.active_positions)}/3 | "
+                    f"Active pairs: {len(self.active_pairs)}/{self.max_pairs_per_platform} | "
+                    f"Pairs: {sorted(list(self.active_pairs)) if self.active_pairs else 'None'}",
+                    Colors.BRIGHT_CYAN
+                )
+                
                 # Place new trade if we have less than 3 active positions
                 if len(self.active_positions) < 3:
                     # Deterministic signal scan across configured pairs
                     symbol = None
                     direction = None
                     for _candidate in self.trading_pairs:
+                        # Skip pairs that would violate pair limits
+                        can_trade, reason = self._can_trade_pair(_candidate)
+                        if not can_trade:
+                            self.display.info(f"  Skipping {_candidate}: {reason}", "", Colors.BRIGHT_BLACK)
+                            continue
+                        
                         try:
                             candles = self.oanda.get_historical_data(_candidate, count=120, granularity="M15")
                             sig, conf = generate_signal(_candidate, candles)  # returns ("BUY"/"SELL", confidence) or (None, 0)
@@ -1570,9 +1648,16 @@ class OandaTradingEngine:
                     
                     if trade_id:
                         trade_count += 1
+                    else:
+                        self.display.warning(f"⚠️  Trade not placed for {symbol} {direction} - check logs for details")
                     
                     self.display.divider()
                     print()
+                else:
+                    self.display.warning(
+                        f"⚠️  Position limit reached: {len(self.active_positions)}/3 positions active. "
+                        f"Waiting for positions to close..."
+                    )
                 
                 # Wait before next trade (M15 Charter compliance)
                 wait_minutes = self.min_trade_interval / 60
