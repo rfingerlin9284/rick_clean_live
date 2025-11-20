@@ -626,7 +626,8 @@ class OandaTradingEngine:
         if not reasons:
             reasons.append("Base position (no confidence boost)")
         
-        reason_str = "; ".join(reasons)
+        # Convert all reasons to strings and join (safety for non-string values)
+        reason_str = "; ".join(str(reason) for reason in reasons)
         
         # Log the leverage decision
         log_narration(
@@ -703,10 +704,12 @@ class OandaTradingEngine:
         # Apply multiplier if above base (1.0)
         if leverage_multiplier > 1.0:
             original_size = position_size
-            position_size = int(position_size * leverage_multiplier)
+            # Use round() for more accurate position sizing
+            position_size = round(position_size * leverage_multiplier)
             
             # Round to nearest 100 for clean sizing
-            position_size = math.ceil(position_size / 100) * 100
+            POSITION_SIZE_ROUNDING = 100
+            position_size = math.ceil(position_size / POSITION_SIZE_ROUNDING) * POSITION_SIZE_ROUNDING
             
             self.display.info(
                 "Dynamic Leverage Applied",
