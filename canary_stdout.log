@@ -1,0 +1,74 @@
+nohup: ignoring input
+ERROR:ghost_trading_charter_compliant:❌ BREAKPOINT 13: Error in trading loop: log_pnl() got an unexpected keyword argument 'position_size'
+Traceback (most recent call last):
+  File "/home/ing/RICK/RICK_LIVE_CLEAN/ghost_trading_charter_compliant.py", line 170, in start_ghost_trading
+    await self.update_open_trades()
+  File "/home/ing/RICK/RICK_LIVE_CLEAN/ghost_trading_charter_compliant.py", line 374, in update_open_trades
+    await self.close_trade(trade_id, reason="TP_HIT")
+  File "/home/ing/RICK/RICK_LIVE_CLEAN/ghost_trading_charter_compliant.py", line 453, in close_trade
+    log_pnl(
+TypeError: log_pnl() got an unexpected keyword argument 'position_size'
+ERROR:ghost_trading_charter_compliant:❌ BREAKPOINT 13: Error in trading loop: log_pnl() got an unexpected keyword argument 'position_size'
+Traceback (most recent call last):
+  File "/home/ing/RICK/RICK_LIVE_CLEAN/ghost_trading_charter_compliant.py", line 170, in start_ghost_trading
+    await self.update_open_trades()
+  File "/home/ing/RICK/RICK_LIVE_CLEAN/ghost_trading_charter_compliant.py", line 374, in update_open_trades
+    await self.close_trade(trade_id, reason="TP_HIT")
+  File "/home/ing/RICK/RICK_LIVE_CLEAN/ghost_trading_charter_compliant.py", line 453, in close_trade
+    log_pnl(
+TypeError: log_pnl() got an unexpected keyword argument 'position_size'
+ERROR:ghost_trading_charter_compliant:❌ BREAKPOINT 13: Error in trading loop: log_pnl() got an unexpected keyword argument 'position_size'
+Traceback (most recent call last):
+  File "/home/ing/RICK/RICK_LIVE_CLEAN/ghost_trading_charter_compliant.py", line 170, in start_ghost_trading
+    await self.update_open_trades()
+  File "/home/ing/RICK/RICK_LIVE_CLEAN/ghost_trading_charter_compliant.py", line 374, in update_open_trades
+    await self.close_trade(trade_id, reason="TP_HIT")
+  File "/home/ing/RICK/RICK_LIVE_CLEAN/ghost_trading_charter_compliant.py", line 453, in close_trade
+    log_pnl(
+TypeError: log_pnl() got an unexpected keyword argument 'position_size'
+⚠️  Phase 22 alerting system not available - using fallback logging
+✅ System confirmed in CANARY mode
+
+================================================================================
+💰 CAPITAL MANAGEMENT SYSTEM
+================================================================================
+Starting Capital:     $2,271.38
+Monthly Addition:     $1,000.00
+Current Capital:      $2,271.38
+Start Date:           2025-10-12
+================================================================================
+
+================================================================================
+🐤 CANARY MODE - Quick Validation Trading (45 minutes)
+================================================================================
+This CANARY session will:
+  ✅ Enforce ALL Charter rules ($15K notional, 3.2 RR, 6h max hold)
+  ✅ Use OANDA Practice API (same as LIVE, but practice account)
+  ✅ Calculate proper leverage (6.6x)
+  ✅ Quick validation session (45 minutes)
+  ✅ Expected 2-3 Charter-compliant trades
+  ✅ Session ends at: 2025-10-13T20:59:20.332879+00:00
+================================================================================
+
+Traceback (most recent call last):
+  File "/home/ing/RICK/RICK_LIVE_CLEAN/canary_trading_engine.py", line 175, in <module>
+    asyncio.run(main())
+  File "/usr/lib/python3.12/asyncio/runners.py", line 194, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/asyncio/base_events.py", line 687, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/home/ing/RICK/RICK_LIVE_CLEAN/canary_trading_engine.py", line 172, in main
+    await engine.start_ghost_trading()  # Uses same trading loop
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ing/RICK/RICK_LIVE_CLEAN/ghost_trading_charter_compliant.py", line 211, in start_ghost_trading
+    await self.close_all_trades()
+  File "/home/ing/RICK/RICK_LIVE_CLEAN/ghost_trading_charter_compliant.py", line 471, in close_all_trades
+    await self.close_trade(trade_id, reason="SESSION_END")
+  File "/home/ing/RICK/RICK_LIVE_CLEAN/ghost_trading_charter_compliant.py", line 453, in close_trade
+    log_pnl(
+TypeError: log_pnl() got an unexpected keyword argument 'position_size'

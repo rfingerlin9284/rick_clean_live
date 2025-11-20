@@ -1,0 +1,23 @@
+2025-10-01 19:01:58,017 - __main__ - INFO - Ghost Trading Engine initialized with $2271.38 capital
+2025-10-01 19:01:58,017 - __main__ - INFO - Will run until 2025-10-01T23:46:58.016979+00:00
+2025-10-01 19:01:58,017 - __main__ - INFO - 🔥 STARTING 45-MINUTE GHOST TRADING SESSION
+2025-10-01 19:01:58,017 - __main__ - INFO - 📊 Promotion criteria: {'min_trades': 10, 'min_win_rate': 70.0, 'min_pnl': 50.0, 'max_consecutive_losses': 3, 'min_avg_rr': 2.5}
+2025-10-01 19:01:58,017 - __main__ - INFO - 👻 GHOST TRADE: GHOST_1_1759359718 EUR_USD BUY @ 1.00362
+2025-10-01 19:02:11,731 - __main__ - INFO - 📊 Ghost Trade Result: WIN | PnL: $2.27 | Capital: $2273.65 | Win Rate: 100.0%
+2025-10-01 19:03:02,888 - __main__ - INFO - 👻 GHOST TRADE: GHOST_2_1759359782 GBP_USD SELL @ 1.00102
+2025-10-01 19:03:20,306 - __main__ - INFO - 📊 Ghost Trade Result: WIN | PnL: $2.16 | Capital: $2275.81 | Win Rate: 100.0%
+2025-10-01 19:04:10,197 - __main__ - INFO - 👻 GHOST TRADE: GHOST_3_1759359850 BTC-USD BUY @ 34933.0
+2025-10-01 19:04:14,902 - __main__ - INFO - 📊 Ghost Trade Result: WIN | PnL: $1.46 | Capital: $2277.27 | Win Rate: 100.0%
+2025-10-01 19:05:02,425 - __main__ - INFO - 👻 GHOST TRADE: GHOST_4_1759359902 ETH-USD SELL @ 36467.0
+2025-10-01 19:05:18,426 - __main__ - INFO - 📊 Ghost Trade Result: WIN | PnL: $2.10 | Capital: $2279.37 | Win Rate: 100.0%
+2025-10-01 19:06:06,033 - __main__ - INFO - 👻 GHOST TRADE: GHOST_5_1759359966 AUD_USD BUY @ 1.00241
+2025-10-01 19:06:15,041 - __main__ - INFO - 📊 Ghost Trade Result: LOSS | PnL: $-1.60 | Capital: $2277.77 | Win Rate: 80.0%
+2025-10-11 09:20:16,612 - __main__ - WARNING - ⚠️ OANDA credentials not found in environment!
+2025-10-11 09:20:16,613 - __main__ - WARNING - Set OANDA_ACCOUNT_ID and OANDA_API_TOKEN to use live APIs
+2025-10-11 09:20:16,613 - __main__ - WARNING - Continuing in simulation mode...
+2025-10-11 09:20:16,613 - __main__ - INFO - 🔌 Connecting to LIVE APIs...
+2025-10-11 09:20:16,613 - __main__ - WARNING - ⚠️ OANDA connection failed: name 'os' is not defined. Using fallback mode.
+2025-10-11 09:20:16,613 - __main__ - INFO - 💰 Ghost Capital: $2271.38
+2025-10-11 09:20:16,613 - __main__ - INFO - 📊 Risk per trade: $45.43 (2%)
+2025-10-11 09:20:16,613 - __main__ - INFO - 🚀 LIVE GHOST TRADING STARTED
+2025-10-11 09:20:16,613 - __main__ - INFO - 📡 Polling live market data every 0.75s
