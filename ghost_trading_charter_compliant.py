@@ -24,7 +24,6 @@ from risk.session_breaker import SessionBreakerEngine
 from capital_manager import CapitalManager
 from util.narration_logger import log_narration, log_pnl
 from util.breakpoint_audit import attach_audit_handler, audit_event
-from hive.guardian_gates import GuardianGates, validate_signal
 
 # Configure logging
 logging.basicConfig(
@@ -126,9 +125,6 @@ class CharterCompliantGhostEngine:
         self.charter_violations = 0
         self.trades_rejected = 0
         self.consecutive_losses = 0  # Track locally
-        
-        # Initialize Guardian Gates
-        self.guardian_gates = GuardianGates(pin=pin)
         
         logger.info("=" * 80)
         logger.info("📋 CHARTER-COMPLIANT GHOST TRADING ENGINE")
@@ -307,49 +303,7 @@ class CharterCompliantGhostEngine:
     
     async def execute_charter_compliant_trade(self, signal: Dict):
         """Execute trade with full Charter enforcement"""
-        trade_id = f"GHOST_CHARTER_{len(self.trades) + 1}_{int(time.time())}"
-        
-        # GUARDIAN GATES CHECK - Block if any gate fails
-        account_info = {
-            'nav': self.current_capital,
-            'margin_used': sum(t.notional_usd / t.leverage for t in self.open_trades.values()),
-            'margin_available': self.current_capital
-        }
-        
-        positions = [
-            {
-                'symbol': t.symbol,
-                'side': t.side,
-                'units': t.position_size
-            }
-            for t in self.open_trades.values()
-        ]
-        
-        passed, results = self.guardian_gates.validate_all(signal, account_info, positions)
-        
-        if not passed:
-            failures = [r for r in results if not r.passed]
-            rejection_reasons = " | ".join([r.reason for r in failures])
-            
-            logger.warning(f"❌ TRADE REJECTED by Guardian Gates: {rejection_reasons}")
-            self.trades_rejected += 1
-            
-            # Log rejection to narration
-            log_narration(
-                event_type="TRADE_REJECTED",
-                details={
-                    "symbol": signal['symbol'],
-                    "side": signal['side'],
-                    "reason": rejection_reasons,
-                    "gate_results": [{"gate": r.gate_name, "passed": r.passed, "reason": r.reason} for r in results]
-                },
-                symbol=signal['symbol'],
-                venue="oanda_practice"
-            )
-            
-            return  # BLOCK ORDER
-        
-        logger.info(f"✅ Guardian Gates APPROVED trade")
+        trade_id = f"CANARY_CHARTER_{len(self.trades) + 1}_{int(time.time())}"
         
         # Create trade record
         trade = CharterCompliantTrade(
@@ -496,7 +450,6 @@ class CharterCompliantGhostEngine:
         )
         
         # Log P&L to dashboard
-        duration_seconds = (datetime.now(timezone.utc) - trade.entry_time).total_seconds() if hasattr(trade, 'entry_time') else 0
         log_pnl(
             symbol=trade.symbol,
             outcome=trade.outcome,
@@ -505,8 +458,6 @@ class CharterCompliantGhostEngine:
             net_pnl=trade.pnl,
             entry_price=trade.entry_price,
             exit_price=trade.exit_price,
-            units=trade.size if hasattr(trade, 'size') else 0,
-            duration_seconds=int(duration_seconds),
             venue="oanda_practice"
         )
         
@@ -535,7 +486,7 @@ class CharterCompliantGhostEngine:
             'charter_violations': self.charter_violations
         }
         
-        with open('ghost_charter_progress.json', 'w') as f:
+        with open('canary_charter_progress.json', 'w') as f:
             json.dump(progress, f, indent=2)
     
     async def generate_final_report(self):

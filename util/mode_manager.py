@@ -2,11 +2,11 @@
 """
 Mode Manager - .upgrade_toggle Integration
 Reads system mode from .upgrade_toggle file and maps to connector environments
-PIN: 841921
+Supports two modes: CANARY (real paper/practice) and DEMO (sandbox/simulation)
 """
 
 from pathlib import Path
-from typing import Dict, Optional
+from typing import Dict
 import sys
 
 # Simple logger replacement (avoid util/logging.py conflict)
@@ -17,14 +17,19 @@ class SimpleLogger:
 
 logger = SimpleLogger()
 
-# Project paths
-PROJECT_ROOT = Path("/home/ing/RICK/RICK_LIVE_CLEAN")
+# Project paths - Use script's parent directory or fallback to hardcoded path
+try:
+    PROJECT_ROOT = Path(__file__).parent.parent.resolve()
+except NameError:
+    # Fallback for interactive mode
+    PROJECT_ROOT = Path("/home/ing/RICK/RICK_LIVE_CLEAN")
+
 TOGGLE_FILE = PROJECT_ROOT / ".upgrade_toggle"
 
-# Mode mappings - Simplified to just PAPER and LIVE
+# Mode mappings - Two modes only: CANARY (real paper) and DEMO (simulation)
 MODE_MAP = {
-    "PAPER": {"oanda": "practice", "coinbase": "sandbox", "description": "PAPER mode - Paper trading only (api=true)", "api": True},
-    "LIVE": {"oanda": "live", "coinbase": "live", "description": "LIVE mode - REAL MONEY TRADING (api=false)", "api": False}
+    "CANARY": {"oanda": "practice", "coinbase": "sandbox", "description": "CANARY mode - Real paper/practice trading with real API endpoints", "api": True},
+    "DEMO": {"oanda": "sandbox", "coinbase": "sandbox", "description": "DEMO mode - Sandbox/simulation for testing (no real API calls)", "api": False}
 }
 
 
@@ -33,36 +38,36 @@ def read_upgrade_toggle() -> str:
     Read current mode from .upgrade_toggle file
     
     Returns:
-        str: Current mode ('PAPER', 'LIVE')
+        str: Current mode ('CANARY', 'DEMO')
     """
     try:
         if not TOGGLE_FILE.exists():
-            logger.warning(f".upgrade_toggle file not found at {TOGGLE_FILE}, defaulting to PAPER")
-            # Create with PAPER default
-            write_upgrade_toggle("PAPER")
-            return "PAPER"
+            logger.warning(f".upgrade_toggle file not found at {TOGGLE_FILE}, defaulting to CANARY")
+            # Create with CANARY default
+            write_upgrade_toggle("CANARY")
+            return "CANARY"
         
         with open(TOGGLE_FILE, 'r') as f:
             mode = f.read().strip().upper()
         
         # Validate mode
         if mode not in MODE_MAP:
-            logger.warning(f"Invalid mode '{mode}' in .upgrade_toggle, defaulting to PAPER")
-            return "PAPER"
+            logger.warning(f"Invalid mode '{mode}' in .upgrade_toggle, defaulting to CANARY")
+            return "CANARY"
         
         return mode
     
     except Exception as e:
-        logger.error(f"Failed to read .upgrade_toggle: {e}, defaulting to PAPER")
-        return "PAPER"
+        logger.error(f"Failed to read .upgrade_toggle: {e}, defaulting to CANARY")
+        return "CANARY"
 
 
 def write_upgrade_toggle(mode: str) -> bool:
     """
-    Write mode to .upgrade_toggle file (requires PIN validation in production)
+    Write mode to .upgrade_toggle file
     
     Args:
-        mode: Mode to set ('OFF', 'GHOST', 'CANARY', 'LIVE')
+        mode: Mode to set ('CANARY', 'DEMO')
     
     Returns:
         bool: Success
@@ -123,39 +128,18 @@ def get_mode_info() -> Dict[str, any]:
         "oanda_environment": mode_config["oanda"],
         "coinbase_environment": mode_config["coinbase"],
         "description": mode_config["description"],
-        "is_live": mode == "LIVE",
-        "api": mode_config["api"],  # True for PAPER, False for LIVE
+        "is_demo": mode == "DEMO",
+        "api": mode_config["api"],  # True for CANARY, False for DEMO
         "toggle_file": str(TOGGLE_FILE)
     }
 
 
-def validate_live_mode_switch(pin: int) -> bool:
+def switch_mode(new_mode: str) -> bool:
     """
-    Validate PIN before switching to LIVE mode
+    Switch system mode between CANARY and DEMO
     
     Args:
-        pin: Charter PIN (841921)
-    
-    Returns:
-        bool: True if PIN valid
-    """
-    REQUIRED_PIN = 841921
-    
-    if pin != REQUIRED_PIN:
-        logger.error("Invalid PIN - LIVE mode switch rejected")
-        return False
-    
-    logger.info("✅ PIN validated - LIVE mode switch authorized")
-    return True
-
-
-def switch_mode(new_mode: str, pin: Optional[int] = None) -> bool:
-    """
-    Switch system mode with optional PIN validation for LIVE
-    
-    Args:
-        new_mode: Target mode ('OFF', 'GHOST', 'CANARY', 'LIVE')
-        pin: Required for LIVE mode (841921)
+        new_mode: Target mode ('CANARY', 'DEMO')
     
     Returns:
         bool: Success
@@ -164,17 +148,8 @@ def switch_mode(new_mode: str, pin: Optional[int] = None) -> bool:
     
     # Validate mode
     if new_mode not in MODE_MAP:
-        logger.error(f"Invalid mode '{new_mode}'")
+        logger.error(f"Invalid mode '{new_mode}', must be CANARY or DEMO")
         return False
-    
-    # Require PIN for LIVE mode
-    if new_mode == "LIVE":
-        if pin is None:
-            logger.error("PIN required for LIVE mode switch")
-            return False
-        
-        if not validate_live_mode_switch(pin):
-            return False
     
     # Write new mode
     if write_upgrade_toggle(new_mode):
@@ -196,6 +171,6 @@ if __name__ == "__main__":
     print(f"Description: {info['description']}")
     print(f"OANDA: {info['oanda_environment']}")
     print(f"Coinbase: {info['coinbase_environment']}")
-    print(f"Is Live: {info['is_live']}")
+    print(f"Is Demo: {info['is_demo']}")
     print(f"API Enabled: {info['api']}")
     print(f"Toggle File: {info['toggle_file']}")

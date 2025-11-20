@@ -68,7 +68,7 @@ tail -f canary_session.log
 
 ### Progress File
 ```bash
-cat ghost_charter_progress.json | python3 -m json.tool
+cat canary_charter_progress.json | python3 -m json.tool
 ```
 
 ### Live Logs
@@ -80,7 +80,7 @@ tail -f logs/ghost_charter_compliant.log
 ```bash
 python3 -c "
 import json
-p = json.load(open('ghost_charter_progress.json'))
+p = json.load(open('canary_charter_progress.json'))
 print(f'Trades: {p[\"total_trades\"]}')
 print(f'Win Rate: {p[\"win_rate\"]:.1f}%')
 print(f'P&L: \${p[\"total_pnl\"]:.2f}')

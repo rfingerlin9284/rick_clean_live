@@ -7,55 +7,31 @@ VENV := .venv
 PY := $(VENV)/bin/python
 PIP := $(VENV)/bin/pip
 
-.PHONY: market-help
-market-help:
-	@echo "Market API Targets:"
-	@echo "  market-venv       - create local venv"
-	@echo "  install-market    - install market API deps"
-	@echo "  run-market        - start market data API (127.0.0.1:5560)"
-	@echo "  mode-canary       - switch to CANARY mode (non-interactive)"
-	@echo "  mode-live         - switch to LIVE (PIN required: make mode-live PIN=841921)"
-
-.PHONY: market-venv
-market-venv:
-	@test -d $(VENV) || python3 -m venv $(VENV)
-	. $(VENV)/bin/activate; python -m pip -q install --upgrade pip
-
-.PHONY: install-market
-install-market: market-venv
-	$(PIP) -q install -r services/requirements-market.txt
-
-.PHONY: run-market
-run-market: install-market
-	@echo "Loading environment and starting Market Data API..."
-	@bash services/start_market_api.sh
-
-.PHONY: mode-canary
-mode-canary: market-venv
-	. $(VENV)/bin/activate
-	$(PY) -c "from util.mode_manager import switch_mode; switch_mode('CANARY')"
-
-.PHONY: mode-live
-mode-live: market-venv
-	@if [ -z "$$PIN" ]; then echo "PIN required: make mode-live PIN=841921"; exit 2; fi
-	. $(VENV)/bin/activate
-	$(PY) -c "from util.mode_manager import switch_mode; switch_mode('LIVE', pin=int('$$PIN'))"
-.PHONY: help status clean stop install test
-.PHONY: paper canary ghost live dashboard
-.PHONY: paper-48h canary-session monitor logs
-
-# Default target
-.DEFAULT_GOAL := help
-
 # Colors for output
 RED := \033[0;31m
 GREEN := \033[0;32m
 YELLOW := \033[1;33m
 BLUE := \033[0;34m
 CYAN := \033[0;36m
+BOLD := \033[1m
 NC := \033[0m # No Color
 
-##@ General
+# Group .PHONY declarations logically
+.PHONY: market-help market-venv install-market run-market mode-canary mode-live
+.PHONY: help status clean stop install test
+.PHONY: paper canary ghost live dashboard
+.PHONY: paper-48h canary-session monitor logs
+.PHONY: deploy-full-auto deploy-full dashboard-supervised restart-paper clean-logs
+.PHONY: report capital timezone preflight verify
+.PHONY: snapshot verify-snapshot baseline-init baseline-audit auto-backup
+.PHONY: cron-install-backup self-preserve check-dashboard run-hive-ml run-rbotzilla enable-autonomy
+.PHONY: income-target phase-status income-projection ai-hive-status
+.PHONY: crypto-gates-status crypto-gates-test crypto-gates-integrate
+
+# Default target
+.DEFAULT_GOAL := help
+
+##@ Market API
 
 help: ## Display this help message
 	@echo "════════════════════════════════════════════════════════════════"
@@ -64,6 +40,7 @@ help: ## Display this help message
 	@echo ""
 	@awk 'BEGIN {FS = ":.*##"; printf ""} /^[a-zA-Z_-]+:.*?##/ { printf "  $(CYAN)%-20s$(NC) %s\n", $$1, $$2 } /^##@/ { printf "\n$(YELLOW)%s$(NC)\n", substr($$0, 5) } ' $(MAKEFILE_LIST)
 	@echo ""
+	@echo "Self-Preservation Quick Links: make snapshot verify baseline-init baseline-audit auto-backup"
 
 status: ## Check current mode and running processes
 	@echo "$(CYAN)═══════════════════════════════════════════════════════════════$(NC)"
@@ -96,7 +73,109 @@ status: ## Check current mode and running processes
 	fi
 	@echo ""
 	@echo "$(BOLD)Timezone & Session Info:$(NC)"
-	@python3 util/timezone_manager.py
+	@python3 util/timezone_manager.py 2>/dev/null || echo "  Timezone manager not available"
+	@echo ""
+
+market-help:
+	@echo "Market API Targets:"
+	@echo "  market-venv       - create local venv"
+	@echo "  install-market    - install market API deps"
+	@echo "  run-market        - start market data API (127.0.0.1:5560)"
+	@echo "  mode-canary       - switch to CANARY mode (non-interactive)"
+	@echo "  mode-live         - switch to LIVE (PIN required: make mode-live PIN=841921)"
+
+.PHONY: market-venv
+market-venv:
+	@test -d $(VENV) || python3 -m venv $(VENV)
+	. $(VENV)/bin/activate; python -m pip -q install --upgrade pip
+
+.PHONY: install-market
+install-market: market-venv
+	$(PIP) -q install -r services/requirements-market.txt
+
+.PHONY: run-market
+run-market: install-market
+	@echo "Loading environment and starting Market Data API..."
+	@bash services/start_market_api.sh
+
+.PHONY: mode-canary
+mode-canary: market-venv
+	. $(VENV)/bin/activate
+	$(PY) -c "from util.mode_manager import switch_mode; switch_mode('CANARY')"
+
+.PHONY: mode-live
+mode-live: market-venv
+	@if [ -z "$$PIN" ]; then echo "PIN required: make mode-live PIN=841921"; exit 2; fi
+	. $(VENV)/bin/activate
+	$(PY) -c "from util.mode_manager import switch_mode; switch_mode('LIVE', pin=int('$$PIN'))"
+
+##@ General
+
+.PHONY: help status clean stop install test
+.PHONY: paper canary ghost live dashboard
+.PHONY: paper-48h canary-session monitor logs
+.PHONY: deploy-full-auto deploy-full dashboard-supervised restart-paper clean-logs
+.PHONY: report capital timezone preflight verify
+.PHONY: snapshot verify-snapshot baseline-init baseline-audit auto-backup
+.PHONY: cron-install-backup self-preserve check-dashboard run-hive-ml run-rbotzilla enable-autonomy
+.PHONY: income-target phase-status income-projection ai-hive-status
+.PHONY: crypto-gates-status crypto-gates-test crypto-gates-integrate
+
+# Default target
+.DEFAULT_GOAL := help
+
+# Colors for output
+RED := \033[0;31m
+GREEN := \033[0;32m
+YELLOW := \033[1;33m
+BLUE := \033[0;34m
+CYAN := \033[0;36m
+BOLD := \033[1m
+NC := \033[0m # No Color
+
+##@ General
+
+help: ## Display this help message
+	@echo "════════════════════════════════════════════════════════════════"
+	@echo "🤖 RICK Trading System - Makefile Commands"
+	@echo "════════════════════════════════════════════════════════════════"
+	@echo ""
+	@awk 'BEGIN {FS = ":.*##"; printf ""} /^[a-zA-Z_-]+:.*?##/ { printf "  $(CYAN)%-20s$(NC) %s\n", $$1, $$2 } /^##@/ { printf "\n$(YELLOW)%s$(NC)\n", substr($$0, 5) } ' $(MAKEFILE_LIST)
+	@echo ""
+	@echo "Self-Preservation Quick Links: make snapshot verify baseline-init baseline-audit auto-backup"
+
+status: ## Check current mode and running processes
+	@echo "$(CYAN)═══════════════════════════════════════════════════════════════$(NC)"
+	@echo "$(CYAN)🤖 RICK Trading System Status$(NC)"
+	@echo "$(CYAN)═══════════════════════════════════════════════════════════════$(NC)"
+	@echo ""
+	@echo "$(BOLD)Current Mode:$(NC)"
+	@cat .upgrade_toggle 2>/dev/null || echo "  No mode set"
+	@echo ""
+	@echo "$(BOLD)Running Processes:$(NC)"
+	@if [ -f .paper_trading.pid ] && ps -p $$(cat .paper_trading.pid 2>/dev/null) > /dev/null 2>&1; then \
+		echo "  ✓ Paper Trading Engine (PID: $$(cat .paper_trading.pid))"; \
+	else \
+		echo "  ✗ Paper Trading Engine: NOT RUNNING"; \
+	fi
+	@if [ -f .dashboard_supervisor.pid ] && ps -p $$(cat .dashboard_supervisor.pid 2>/dev/null) > /dev/null 2>&1; then \
+		echo "  ✓ Dashboard Supervisor (PID: $$(cat .dashboard_supervisor.pid))"; \
+	else \
+		echo "  ✗ Dashboard Supervisor: NOT RUNNING"; \
+	fi
+	@if ps aux | grep -E "python3.*dashboard/app.py" | grep -v grep > /dev/null; then \
+		echo "  ✓ Dashboard Web Interface: RUNNING"; \
+	else \
+		echo "  ✗ Dashboard Web Interface: NOT RUNNING"; \
+	fi
+	@if ps aux | grep -E "python3.*rick_hive_mind" | grep -v grep > /dev/null; then \
+		echo "  ✓ Rick Hive Mind: CONNECTED"; \
+	else \
+		echo "  ✗ Rick Hive Mind: NOT CONNECTED"; \
+	fi
+	@echo ""
+	@echo "$(BOLD)Timezone & Session Info:$(NC)"
+	@python3 util/timezone_manager.py 2>/dev/null || echo "  Timezone manager not available"
 	@echo ""
 
 install: ## Install Python dependencies
@@ -328,8 +407,9 @@ restart-paper: stop paper-48h ## Stop and restart paper trading
 
 clean: ## Clean logs and temporary files
 	@echo "$(YELLOW)Cleaning temporary files...$(NC)"
-	@rm -f .paper_trading.pid
-	@rm -f __pycache__/*.pyc
+	@rm -f .paper_trading.pid .dashboard_supervisor.pid
+	@find . -name "*.pyc" -delete 2>/dev/null || true
+	@find . -name "__pycache__" -type d -exec rm -rf {} + 2>/dev/null || true
 	@echo "$(GREEN)✓ Cleaned$(NC)"
 
 clean-logs: ## Clear all log files (keep directory)
@@ -360,7 +440,7 @@ capital: ## Show capital summary
 	fi
 
 timezone: ## Show timezone and session info
-	@python3 util/timezone_manager.py
+	@python3 util/timezone_manager.py 2>/dev/null || echo "Timezone manager not available"
 
 ##@ Safety Checks
 
@@ -371,6 +451,29 @@ preflight: ## Run pre-flight safety checks
 verify: ## Verify live safety settings
 	@echo "$(CYAN)Verifying safety settings...$(NC)"
 	@bash verify_live_safety.sh
+
+##@ Memory / Self-Preservation
+
+snapshot: ## Create system memory snapshot (logs/system_memory_*.json)
+	@bash scripts/snapshot_memory.sh
+
+verify-snapshot: ## Verify latest memory snapshot integrity
+	@python3 scripts/memory_snapshot_verify.py || true
+
+baseline-init: ## Initialize master baseline from latest snapshot + metrics
+	@python3 scripts/memory_baseline.py init
+
+baseline-audit: ## Audit current state vs master baseline
+	@python3 scripts/memory_baseline.py audit || true
+
+auto-backup: ## Run snapshot + verify + baseline audit + commit/push
+	@bash scripts/auto_memory_backup.sh
+
+cron-install-backup: ## Install daily & weekly cron for auto memory backup
+	@bash scripts/install_cron_memory_backup.sh
+
+self-preserve: ## Run snapshot + verify + baseline-audit (no git push)
+	@bash scripts/snapshot_memory.sh && python3 scripts/memory_snapshot_verify.py || true && python3 scripts/memory_baseline.py audit || true
 
 ##@ Rick Hive ML, Rbotzilla Automation, and Autonomy
 
@@ -456,8 +559,11 @@ try: \
     print(f'Daily Income Target: \$\${target:.2f}'); \
     print(f'Phase Capital Target: \$\${capital_target:,.2f}'); \
     print(f'Phase Progress: {progress_pct:.1f}%'); \
+except ImportError as e: \
+    print(f'Import error: {e}'); \
+    print('Required modules not available'); \
 except Exception as e: \
-    print(f'Error: {e}');"
+    print(f'Error: {e}');" 2>/dev/null || echo "Phase status not available"
 
 income-projection: ## Project daily income based on current capital and win rate
 	@python3 -c "\
@@ -479,32 +585,11 @@ try: \
     print(f'Trades per day: {trades_per_day}'); \
     print(f'Projected daily income: \$\${daily_income:.2f}'); \
     print(f'Distance to \$600/day: \$\${600 - daily_income:.2f}'); \
+except ImportError as e: \
+    print(f'Import error: {e}'); \
+    print('Required modules not available'); \
 except Exception as e: \
-    print(f'Error: {e}');"
-
-ai-hive-status: ## Show AI hive members and trading status
-	@echo "$(CYAN)═══════════════════════════════════════════════════════════════$(NC)"
-	@echo "$(CYAN)🤖 AI HIVE STATUS - Smart Aggression Autonomous Trading$(NC)"
-	@echo "$(CYAN)═══════════════════════════════════════════════════════════════$(NC)"
-	@echo ""
-	@echo "$(YELLOW)AI Hive Members:$(NC)"
-	@echo "  • RICK         - Trade orchestration & risk management"
-	@echo "  • GPT          - Pattern analysis & market structure"
-	@echo "  • Deepseek     - Risk optimization & position sizing"
-	@echo "  • Github       - Strategy discovery & code reuse"
-	@echo "  • Grok         - Creative entries & unconventional tactics"
-	@echo ""
-	@echo "$(YELLOW)Trading Mode:$(NC)"
-	@echo "  Autonomous: Hive-driven trading (no manual intervention)"
-	@echo "  Consensus:  80% agreement required for aggressive positions"
-	@echo "  Confidence: 75% ML pattern confidence minimum"
-	@echo ""
-	@echo "$(YELLOW)Smart Aggression Rules:$(NC)"
-	@echo "  Bootstrap (0-3mo):   Conservative | 60% win rate target"
-	@echo "  Scale (3-6mo):       Moderate     | Scale 2.5x with capital"
-	@echo "  Aggressive (6-12mo): Aggressive   | 3x leverage allowed"
-	@echo "  Automation (12+mo):  Proven only  | Automate high-confidence patterns"
-	@echo ""
+    print(f'Error: {e}');" 2>/dev/null || echo "Income projection not available"
 
 ##@ Crypto Entry Gate System (All 4 Improvements)
 

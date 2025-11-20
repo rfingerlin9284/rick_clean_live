@@ -340,7 +340,7 @@ capital_summary.json                 ← Capital summary data
 SYSTEM_READY.md                      ← System ready status
 SESSION_SUMMARY.md                   ← Current session summary
 PROGRESS_LOG.json                    ← Progress tracking
-ghost_charter_progress.json          ← Ghost mode progress
+canary_charter_progress.json          ← Ghost mode progress
 SYSTEM_MAP.json                      ← System architecture map
 ```
 

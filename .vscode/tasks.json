@@ -283,6 +283,54 @@
       },
       "problemMatcher": [],
       "detail": "Kill running engine process"
+    },
+    {
+      "label": "RICK: \ud83d\udcfa Persistent Monitor (All Features)",
+      "type": "shell",
+      "command": "./rick_persistent_monitor.sh start",
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "focus": true
+      },
+      "isBackground": false,
+      "problemMatcher": [],
+      "detail": "Persistent autonomous system monitor - Shows all 100+ features, live narration, auto-refreshes every 30s"
+    },
+    {
+      "label": "RICK: \u23f9\ufe0f Stop Persistent Monitor",
+      "type": "shell",
+      "command": "./rick_persistent_monitor.sh stop",
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated"
+      },
+      "problemMatcher": [],
+      "detail": "Stop the persistent monitoring terminal"
+    },
+    {
+      "label": "RICK: \ud83d\udcca Monitor Status",
+      "type": "shell",
+      "command": "./rick_persistent_monitor.sh status",
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated"
+      },
+      "problemMatcher": [],
+      "detail": "Check if persistent monitor is running"
+    },
+    {
+      "label": "RICK: 💬 Ask RICK (Plain English Interface)",
+      "type": "shell",
+      "command": "./ask_rick.sh",
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "focus": true
+      },
+      "isBackground": false,
+      "problemMatcher": [],
+      "detail": "Interactive plain English interface - Ask questions, get answers (No coding required!)"
     }
   ]
 }

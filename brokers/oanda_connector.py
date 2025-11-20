@@ -16,7 +16,7 @@ from dataclasses import dataclass, asdict
 from enum import Enum
 from datetime import datetime, timezone, timedelta
 import websocket
-from urllib.parse import urljoin
+from urllib.parse import urljoin, urlencode
 
 # Charter compliance imports
 try:
@@ -95,7 +95,7 @@ class OandaConnector:
     Supports dynamic mode switching via .upgrade_toggle
     """
     
-    def __init__(self, pin: int = None, environment: str = None):
+    def __init__(self, pin: Optional[int] = None, environment: Optional[str] = None):
         """
         Initialize OANDA connector
         
@@ -555,7 +555,7 @@ class OandaConnector:
                 "environment": self.environment
             }
     
-    def _make_request(self, method: str, endpoint: str, data: Dict = None, params: Dict = None) -> Dict[str, Any]:
+    def _make_request(self, method: str, endpoint: str, data: Optional[Dict[str, Any]] = None, params: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         """
         Make authenticated API request with performance tracking - LIVE VERSION
         
@@ -563,7 +563,7 @@ class OandaConnector:
             method: HTTP method (GET, POST, PUT, DELETE)
             endpoint: API endpoint path
             data: Request payload for POST/PUT
-            params: Query parameters for GET requests (e.g., {"count": 120, "granularity": "M15"})
+            params: Query string parameters (for GET requests)
             
         Returns:
             Dict with API response
@@ -574,6 +574,7 @@ class OandaConnector:
         try:
             # Prepare request
             if method.upper() == "GET":
+                # Pass params for query string support (e.g., candles)
                 response = requests.get(url, headers=self.headers, params=params, timeout=self.default_timeout)
             elif method.upper() == "POST":
                 response = requests.post(url, headers=self.headers, json=data, timeout=self.default_timeout)
@@ -696,6 +697,29 @@ class OandaConnector:
         return []
 
 
+    def _safe_request_get(self, endpoint: str, params: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+        """Runtime-safe GET wrapper that ALWAYS bypasses _make_request.
+        Directly uses requests.get() for maximum compatibility with legacy stubs.
+        """
+        try:
+            url = urljoin(self.api_base, endpoint)
+            r = requests.get(url, headers=self.headers, params=params, timeout=self.default_timeout)
+            r.raise_for_status()
+            latency_ms = 0  # Direct call timing
+            with self._lock:
+                self.request_times.append(latency_ms)
+                if len(self.request_times) > 100:
+                    self.request_times = self.request_times[-100:]
+            return {
+                "success": True,
+                "data": r.json() if r.content else {},
+                "latency_ms": latency_ms,
+                "status_code": r.status_code
+            }
+        except Exception as e:
+            self.logger.error(f"_safe_request_get failed: {e}")
+            return {"success": False, "error": str(e)}
+
     def get_historical_data(self, instrument: str, count: int = 120, granularity: str = "M15") -> List[Dict[str, Any]]:
         """Fetch historical candle data from OANDA for signal generation
         
@@ -713,24 +737,66 @@ class OandaConnector:
             params = {
                 "count": count,
                 "granularity": granularity,
-                "price": "M"  # Mid prices
+                "price": "M"   # Mid prices only
             }
+            # Use safe wrapper that handles legacy signatures
+            resp = self._safe_request_get(endpoint, params=params)
             
-            resp = self._make_request("GET", endpoint, params=params)
-            
-            # _make_request wraps response in {"success": True, "data": {...}, ...}
-            # Extract the actual OANDA API response
             if resp.get("success"):
-                data = resp.get("data", {})
-                if "candles" in data:
-                    return data["candles"]
-            
-            self.logger.warning(f"No candles in response for {instrument}")
-            return []
-            
+                data = resp.get("data") or {}
+                candles = data.get("candles", [])
+                if candles:
+                    return candles
+                self.logger.warning(f"No candles in response for {instrument}")
+                return []
+            else:
+                err = resp.get("error", "unknown error")
+                self.logger.error(f"OANDA candles error for {instrument}: {err}")
+                return []
         except Exception as e:
             self.logger.error(f"Failed to fetch candles for {instrument}: {e}")
             return []
+
+    def get_live_prices(self, instruments: List[str]) -> Dict[str, Dict[str, Any]]:
+        """Fetch real-time price snapshots (bid/ask/mid) for instruments.
+
+        Args:
+            instruments: list like ["EUR_USD", "GBP_USD"]
+
+        Returns:
+            Dict mapping instrument -> { bid, ask, mid, time }
+        """
+        if not instruments:
+            return {}
+
+        try:
+            endpoint = f"/v3/accounts/{self.account_id}/pricing"
+            params = {"instruments": ",".join(instruments)}
+            resp = self._safe_request_get(endpoint, params=params)
+            if not resp.get("success"):
+                self.logger.error(f"Pricing API error: {resp.get('error')}")
+                return {}
+
+            data = resp.get("data", {})
+            prices = data.get("prices", [])
+            out: Dict[str, Dict[str, Any]] = {}
+            for p in prices:
+                inst = p.get("instrument")
+                bids = p.get("bids", [])
+                asks = p.get("asks", [])
+                bid = float(bids[0]["price"]) if bids else None
+                ask = float(asks[0]["price"]) if asks else None
+                mid = (bid + ask) / 2.0 if (bid is not None and ask is not None) else None
+                out[inst] = {
+                    "bid": bid,
+                    "ask": ask,
+                    "mid": mid,
+                    "time": p.get("time")
+                }
+            return out
+        except Exception as e:
+            self.logger.error(f"Failed to fetch live prices: {e}")
+            return {}
 
     def cancel_order(self, order_id: str) -> Dict[str, Any]:
         """Cancel a pending order by id."""
@@ -762,7 +828,7 @@ class OandaConnector:
             return {"success": False, "error": str(e)}
 
 # Convenience functions
-def get_oanda_connector(pin: int = None, environment: str = "practice") -> OandaConnector:
+def get_oanda_connector(pin: Optional[int] = None, environment: str = "practice") -> OandaConnector:
     """Get OANDA connector instance"""
     return OandaConnector(pin=pin, environment=environment)
 
