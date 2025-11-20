@@ -1,7 +1,34 @@
 #!/bin/bash
+# ============================================================================
 # RICK Plain English Narration Viewer
 # Real-time monitoring of trading activities in human-readable format
 # PIN: 841921
+# ============================================================================
+#
+# USAGE:
+#   From util directory:    ./plain_english_narration.sh
+#   From project root:      ./util/plain_english_narration.sh
+#
+# DESCRIPTION:
+#   Monitors the narration.jsonl file and displays trading events in
+#   real-time with color-coded output for easy readability.
+#
+# FEATURES:
+#   - Live streaming of trading events
+#   - Color-coded event types (signals, trades, errors, etc.)
+#   - Displays last 10 events on startup
+#   - Supports all event types: SIGNAL_GENERATED, TRADE_OPENED,
+#     TRADE_CLOSED, HIVE_ANALYSIS, RISK_CHECK, and more
+#
+# REQUIREMENTS:
+#   - jq (JSON processor) must be installed
+#   - narration.jsonl file must exist (created by trading system)
+#
+# NOTES:
+#   - Press Ctrl+C to stop the viewer
+#   - Events are displayed as they occur in real-time
+#   - Works with OANDA, Coinbase, and IBKR trading venues
+# ============================================================================
 
 # Path to narration log (relative to project root)
 NARRATION_LOG="../narration.jsonl"
