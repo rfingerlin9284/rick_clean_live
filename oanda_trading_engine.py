@@ -39,6 +39,7 @@ from util.terminal_display import TerminalDisplay, Colors
 from util.narration_logger import log_narration, log_pnl
 from util.rick_narrator import RickNarrator
 from util.usd_converter import get_usd_notional
+from util.positions_registry import PositionsRegistry
 from systems.momentum_signals import generate_signal
 
 # ML Intelligence imports
@@ -146,6 +147,14 @@ class OandaTradingEngine:
             self.hedge_engine = None
             self.active_hedges = {}
             self.display.warning("⚠️  Hedge Engine not available")
+        
+        # Initialize Positions Registry (cross-platform position tracking)
+        try:
+            self.positions_registry = PositionsRegistry()
+            self.display.success("✅ Positions Registry initialized")
+        except Exception as e:
+            self.positions_registry = None
+            self.display.warning(f"⚠️  Positions Registry unavailable: {e}")
         
         # Charter-compliant trading parameters
         self.charter = RickCharter
@@ -801,6 +810,24 @@ class OandaTradingEngine:
                 )
                 return None
             
+            # ========================================================================
+            # 🛡️ POSITIONS REGISTRY CHECK (Prevent duplicate positions across platforms)
+            # ========================================================================
+            if self.positions_registry:
+                if not self.positions_registry.is_symbol_available(symbol):
+                    self.display.error(f"❌ BROKER_REGISTRY_BLOCK: {symbol} already in use on another platform")
+                    log_narration(
+                        event_type="BROKER_REGISTRY_BLOCK",
+                        details={
+                            "symbol": symbol,
+                            "reason": "Symbol already has active position on another platform",
+                            "active_positions": self.positions_registry.get_active_positions()
+                        },
+                        symbol=symbol,
+                        venue="oanda"
+                    )
+                    return None
+            
             # Get current price
             price_data = self.get_current_price(symbol)
             if not price_data:
@@ -1048,6 +1075,25 @@ class OandaTradingEngine:
                 )
                 self.current_positions.append(gate_position)
                 self.display.info("🛡️ Position tracked for guardian gate monitoring", "", Colors.BRIGHT_CYAN)
+                
+                # ========================================================================
+                # 🛡️ REGISTER POSITION IN CROSS-PLATFORM REGISTRY
+                # ========================================================================
+                if self.positions_registry:
+                    try:
+                        registered = self.positions_registry.register_position(
+                            symbol=symbol,
+                            platform='oanda',
+                            order_id=order_id,
+                            direction=direction,
+                            notional_usd=notional_value
+                        )
+                        if registered:
+                            self.display.info("📋 Position registered in cross-platform registry", "", Colors.BRIGHT_CYAN)
+                        else:
+                            self.display.warning("⚠️  Position registry update failed (may already exist)")
+                    except Exception as e:
+                        self.display.warning(f"⚠️  Could not register position: {e}")
                 
                 self.total_trades += 1
                 
@@ -1490,6 +1536,20 @@ class OandaTradingEngine:
                 global_pairs.discard(position['symbol'])
                 self._save_global_active_pairs(global_pairs)
                 self.display.info(f"✅ Pair {position['symbol']} removed from active pairs ({len(self.active_pairs)}/{self.max_pairs_per_platform})", "", Colors.BRIGHT_CYAN)
+            
+            # ========================================================================
+            # 🛡️ UNREGISTER POSITION FROM CROSS-PLATFORM REGISTRY
+            # ========================================================================
+            if self.positions_registry:
+                try:
+                    unregistered = self.positions_registry.unregister_position(
+                        symbol=position['symbol'],
+                        platform='oanda'
+                    )
+                    if unregistered:
+                        self.display.info("📋 Position removed from cross-platform registry", "", Colors.BRIGHT_CYAN)
+                except Exception as e:
+                    self.display.warning(f"⚠️  Could not unregister position: {e}")
             
             # Display stats
             self._display_stats()
