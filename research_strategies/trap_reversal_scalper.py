@@ -297,7 +297,7 @@ class TrapReversalScalper:
 # Convenience function for easy integration
 def create_trap_reversal_scalper(**kwargs) -> TrapReversalScalper:
     """Create Trap Reversal Scalper with optional parameter overrides"""
-    strategy = TrapReversalScalper()
+    strategy = TrapReversalScalper(pin=841921)
     
     # Override parameters if provided
     for key, value in kwargs.items():

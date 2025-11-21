@@ -299,7 +299,7 @@ def create_default_pack_manager() -> StrategyPackManager:
     from .price_action_holy_grail import create_price_action_holy_grail
     from .fib_confluence import create_fib_confluence
     
-    manager = StrategyPackManager()
+    manager = StrategyPackManager(pin=841921)
     
     # Register strategies with equal weights initially
     manager.register_strategy(create_trap_reversal_scalper(), weight=1.0)

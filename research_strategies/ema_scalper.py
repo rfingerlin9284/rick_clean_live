@@ -266,7 +266,7 @@ class EMAScalper:
 # Convenience function for easy integration
 def create_ema_scalper(**kwargs) -> EMAScalper:
     """Create EMA Scalper with optional parameter overrides"""
-    strategy = EMAScalper()
+    strategy = EMAScalper(pin=841921)
     
     # Override parameters if provided
     for key, value in kwargs.items():

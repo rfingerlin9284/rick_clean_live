@@ -363,7 +363,7 @@ class PriceActionHolyGrail:
 # Convenience function for easy integration
 def create_price_action_holy_grail(**kwargs) -> PriceActionHolyGrail:
     """Create Price Action Holy Grail with optional parameter overrides"""
-    strategy = PriceActionHolyGrail()
+    strategy = PriceActionHolyGrail(pin=841921)
     
     # Override parameters if provided
     for key, value in kwargs.items():

@@ -286,7 +286,7 @@ class FibConfluence:
 # Convenience function for easy integration
 def create_fib_confluence(**kwargs) -> FibConfluence:
     """Create Fibonacci Confluence with optional parameter overrides"""
-    strategy = FibConfluence()
+    strategy = FibConfluence(pin=841921)
     
     # Override parameters if provided
     for key, value in kwargs.items():
