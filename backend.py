@@ -4,10 +4,14 @@ Handles bot lifecycle, metrics streaming, and broker API integration.
 """
 
 import os
+import io
 import json
 import logging
 import asyncio
 import queue
+import zipfile
+import pathlib
+import tempfile
 import multiprocessing as mp
 from typing import Dict, List, Optional, Any
 from datetime import datetime, timezone
@@ -16,7 +20,7 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, WebSocket, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, StreamingResponse
 from pydantic import BaseModel
 import uvicorn
 
@@ -549,6 +553,47 @@ async def get_coinbase_account():
         return summary or {"error": "Failed to fetch account"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/api/download/zip")
+async def download_zip():
+    """Create and return a ZIP archive of the project files"""
+    root = pathlib.Path(__file__).parent.resolve()
+
+    # Directories and patterns to skip
+    skip_dirs = {".git", "__pycache__", ".venv", "venv", "venv_coinbase", "node_modules"}
+    skip_suffixes = {".pyc", ".pyo", ".log", ".pid", ".zip"}
+
+    # Use a spooled temp file so large projects spill to disk rather than RAM
+    tmp = tempfile.SpooledTemporaryFile(max_size=50 * 1024 * 1024)
+    with zipfile.ZipFile(tmp, mode="w", compression=zipfile.ZIP_DEFLATED) as zf:
+        for path in root.rglob("*"):
+            # Skip directories themselves (added implicitly via files)
+            if path.is_dir():
+                continue
+            rel = path.relative_to(root)
+            parts = rel.parts
+            # Skip if any parent dir is in skip_dirs
+            if any(p in skip_dirs for p in parts):
+                continue
+            # Skip by file suffix
+            if path.suffix.lower() in skip_suffixes:
+                continue
+            # Skip any file whose name contains ".env" (covers .env, .env.*, env_new.env, etc.)
+            if ".env" in parts[-1]:
+                continue
+            try:
+                zf.write(path, arcname=str(rel))
+            except (PermissionError, OSError):
+                pass  # Skip unreadable files
+
+    tmp.seek(0)
+
+    return StreamingResponse(
+        tmp,
+        media_type="application/zip",
+        headers={"Content-Disposition": "attachment; filename=rick_clean_live.zip"},
+    )
+
 
 @app.get("/api/health")
 async def health():
