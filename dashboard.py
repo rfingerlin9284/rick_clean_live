@@ -463,6 +463,32 @@ def render_config_panel():
         **Docs**: [GitHub](https://github.com) | [Docs](https://docs.example.com)
         """)
 
+        # Download ZIP
+        st.markdown("---")
+        st.subheader("⬇️ Download Project")
+        if st.button("Generate ZIP", key="gen_zip_btn", use_container_width=True):
+            with st.spinner("Creating ZIP archive…"):
+                try:
+                    resp = requests.get(
+                        f"{BACKEND_URL}/api/download/zip", timeout=60, stream=True
+                    )
+                    resp.raise_for_status()
+                    zip_bytes = resp.content
+                    st.session_state["zip_bytes"] = zip_bytes
+                    st.success("✅ ZIP ready — click Download below")
+                except Exception as e:
+                    st.error(f"❌ Failed to generate ZIP: {e}")
+
+        if st.session_state.get("zip_bytes"):
+            st.download_button(
+                label="📦 Download ZIP",
+                data=st.session_state["zip_bytes"],
+                file_name="rick_clean_live.zip",
+                mime="application/zip",
+                key="download_zip_btn",
+                use_container_width=True,
+            )
+
 # =====================================================================
 # MAIN APP
 # =====================================================================
