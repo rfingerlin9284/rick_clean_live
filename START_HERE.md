@@ -452,6 +452,16 @@ You have everything needed to:
 ---
 # ⚡ START HERE - RICK System Activation
 
+---
+
+## 🆕 NEW HERE? No local files and can't code?
+
+👉 **Read this guide first:** [`BUILD_FROM_SCRATCH_ANTIGRAVITY.md`](BUILD_FROM_SCRATCH_ANTIGRAVITY.md)
+
+It walks you through cloning the repo from GitHub and using copy-paste prompts with your **VSCode Antigravity agent** to set up and run the entire system — no coding required.
+
+---
+
 **YOU ASKED:** "i have all of the files already i need the set of instructional full code no talib, bash only in python code commands guiding my vs code agent to use all of my local and github repos to put together all that is described in which i have all the code already just will need to 'frankenstein them' from other repos"
 
 **I DELIVERED:** Complete VSCode agent instructions to Frankenstein your existing code into RICK system - NO TA-LIB, pure Python only.
