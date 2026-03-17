@@ -78,7 +78,7 @@ class SwarmBot:
         if broker_connector is None:
             self.logger.warning(
                 "⚠️ No broker connector provided - will use simulated prices. "
-                "This is OK for GHOST/CANARY but NOT for LIVE trading!"
+                "This is OK for PAPER but NOT for LIVE trading!"
             )
         
         # Volatility-based trailing parameters
@@ -117,7 +117,7 @@ class SwarmBot:
                     return float(price)
             
             # FALLBACK: If no broker connector, simulate for testing
-            # ⚠️ WARNING: This should ONLY be used in GHOST/CANARY modes!
+            # ⚠️ WARNING: This should ONLY be used in PAPER mode!
             self.logger.warning(f"No broker connector - using simulated price for {self.position.symbol}")
             
             import random
@@ -363,7 +363,7 @@ class SwarmManager:
         if broker_connector is None:
             self.logger.warning(
                 "⚠️ SwarmManager initialized WITHOUT broker connector. "
-                "This is OK for GHOST/CANARY but NOT for LIVE trading! "
+                "This is OK for PAPER but NOT for LIVE trading! "
                 "All position monitoring will use simulated data."
             )
         else:

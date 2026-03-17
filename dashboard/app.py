@@ -1453,6 +1453,13 @@ def index():
 def change_mode(new_mode):
     """Change system mode"""
     new_mode = new_mode.upper()
+    # Reject deprecated mode names explicitly
+    if new_mode in ('GHOST', 'CANARY', 'DEMO'):
+        import logging
+        logging.getLogger(__name__).error(
+            f"Mode '{new_mode}' is no longer supported. Use PAPER or LIVE."
+        )
+        return f"Mode '{new_mode}' is no longer supported. Use PAPER or LIVE.", 400
     if new_mode in ['OFF', 'PAPER', 'LIVE']:
         switch_mode(new_mode)
     return redirect(url_for('index'))

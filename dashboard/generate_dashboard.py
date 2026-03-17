@@ -28,8 +28,7 @@ def generate_dashboard():
     # Mode styling
     mode_classes = {
         'OFF': 'mode-off',
-        'GHOST': 'mode-ghost',
-        'CANARY': 'mode-canary',
+        'PAPER': 'mode-paper',
         'LIVE': 'mode-live'
     }
     mode_class = mode_classes.get(mode_info['mode'], 'mode-off')
@@ -47,7 +46,7 @@ def generate_dashboard():
                         Latency: {event['details'].get('latency_ms', 0):.1f}ms
                     </div>
                 """
-            elif event['event_type'] == 'GHOST_SESSION_END':
+            elif event['event_type'] == 'PAPER_SESSION_END':
                 details_html = f"""
                     <div style="margin-top: 5px; opacity: 0.7; font-size: 0.85em;">
                         Trades: {event['details'].get('total_trades', 0)} | 
@@ -110,8 +109,7 @@ def generate_dashboard():
             margin-top: 10px;
         }}
         .mode-off {{ background: #6c757d; }}
-        .mode-ghost {{ background: #17a2b8; }}
-        .mode-canary {{ background: #ffc107; color: #000; }}
+        .mode-paper {{ background: #17a2b8; }}
         .mode-live {{ background: #dc3545; animation: pulse 2s infinite; }}
         @keyframes pulse {{
             0%, 100% {{ opacity: 1; }}
@@ -248,14 +246,14 @@ def generate_dashboard():
             <div class="card">
                 <h2>⚙️ Mode Commands</h2>
                 <div style="background: rgba(0,0,0,0.3); padding: 15px; border-radius: 8px; font-family: monospace; font-size: 0.9em;">
-                    <div style="margin-bottom: 8px;"># Switch to GHOST mode</div>
-                    <div style="color: #28a745;">python3 -c "from util.mode_manager import switch_mode; switch_mode('GHOST')"</div>
+                    <div style="margin-bottom: 8px;"># Switch to PAPER mode</div>
+                    <div style="color: #28a745;">python3 -c "from util.mode_manager import switch_mode; switch_mode('PAPER')"</div>
                     
                     <div style="margin: 15px 0 8px;">## Switch to OFF</div>
                     <div style="color: #28a745;">python3 -c "from util.mode_manager import switch_mode; switch_mode('OFF')"</div>
                     
-                    <div style="margin: 15px 0 8px;"># Run ghost test</div>
-                    <div style="color: #28a745;">python3 test_ghost_trading.py</div>
+                    <div style="margin: 15px 0 8px;"># Run paper test</div>
+                    <div style="color: #28a745;">python3 tests/test_paper_trading.py</div>
                 </div>
             </div>
         </div>

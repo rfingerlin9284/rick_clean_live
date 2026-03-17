@@ -283,7 +283,7 @@ RICK_LIVE_CLEAN/
 
 ### Run Paper Trading Session (45 minutes)
 ```bash
-# Switch to GHOST mode
+# Switch to PAPER mode
 python3 -c "from util.mode_manager import switch_mode; switch_mode('PAPER')"
 
 # Start validation session

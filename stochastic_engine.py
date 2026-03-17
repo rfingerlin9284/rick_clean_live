@@ -128,7 +128,7 @@ class StochasticSignalGenerator:
 
 class StochasticTradingEngine:
     """
-    Stochastic Trading Engine - extracted from RICK ghost_trading_engine.py
+    Stochastic Trading Engine - extracted from RICK paper_trading_engine.py
     Random market simulation without deterministic indicators
     """
 

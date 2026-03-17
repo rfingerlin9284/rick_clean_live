@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Portfolio Status Check for CANARY Mode
+Portfolio Status Check for PAPER Mode
 Shows current balances and positions in Coinbase Sandbox and OANDA Practice
 """
 
@@ -8,7 +8,7 @@ import sys
 from datetime import datetime
 
 print("=" * 80)
-print("📊 RICK Trading System - CANARY Mode Portfolio Status")
+print("📊 RICK Trading System - PAPER Mode Portfolio Status")
 print("=" * 80)
 print(f"Time: {datetime.now().strftime('%Y-%m-%d %I:%M:%S %p EST')}")
 print()
@@ -85,10 +85,10 @@ except Exception as e:
 
 print()
 print("=" * 80)
-print("🎯 CANARY MODE SUMMARY")
+print("🎯 PAPER MODE SUMMARY")
 print("=" * 80)
 print()
-print("CANARY Mode means:")
+print("PAPER Mode means:")
 print("  ✅ Paper/Sandbox trading ONLY")
 print("  ✅ NO real money at risk")
 print("  ✅ Practice API accounts")

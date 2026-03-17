@@ -415,7 +415,7 @@ class CryptoEntryGateSystem:
                 from brokers.oanda_connector import OandaConnector
                 oanda = OandaConnector()
                 result["oanda_connected"] = True
-                result["details"].append(f"✓ OANDA: {self.charter.OANDA_ENVIRONMENT_CANARY} account ready")
+                result["details"].append(f"✓ OANDA: {self.charter.OANDA_ENVIRONMENT_PAPER} account ready")
             except Exception as e:
                 result["oanda_connected"] = False
                 result["details"].append(f"✗ OANDA: Connection failed - {str(e)}")

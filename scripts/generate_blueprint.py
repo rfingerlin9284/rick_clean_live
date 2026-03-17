@@ -81,7 +81,7 @@ class RickBlueprintGenerator:
         
         # ML Learning layer
         ml_files = list((self.project_root / 'ml_learning').glob('*.py')) if (self.project_root / 'ml_learning').exists() else []
-        # Check if integrated (look for imports in ghost engine)
+        # Check if integrated (look for imports in paper engine)
         ml_integrated = self._check_ml_integration()
         nodes['ml_learning'] = {
             'name': 'ML MODELS',
