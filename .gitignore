@@ -2,6 +2,7 @@
 .env
 env_new.env
 .env.*
+!.env.example
 .state/
 
 # Ignore Python virtualenv
