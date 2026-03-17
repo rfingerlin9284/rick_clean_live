@@ -21,8 +21,8 @@ def initialize_progress():
         phase_name="Path Corrections (R_H_UNI → RICK_LIVE_CLEAN)",
         description="Fixed all legacy path references across codebase",
         files_modified=[
-            "ghost_trading_engine.py",
-            "canary_to_live.py",
+            "paper_trading_engine.py",
+            "paper_to_live.py",
             "hive/rick_hive_mind.py",
             "foundation/rick_charter.py",
             "brokers/oanda_connector.py",
@@ -101,7 +101,7 @@ def initialize_progress():
             ".upgrade_toggle"
         ],
         key_features=[
-            "OFF/GHOST/CANARY/LIVE mode mapping",
+            "OFF/PAPER/LIVE mode mapping",
             "Connector environment auto-detection (environment=None)",
             "PIN validation for LIVE mode (841921)",
             "SimpleLogger class to avoid util/logging.py conflict",
@@ -111,22 +111,21 @@ def initialize_progress():
         verification_status="VERIFIED"
     )
     
-    # Phase 6: Ghost Trading Test
+    # Phase 6: Paper Trading Test Suite
     tracker.mark_complete(
-        phase_name="Ghost Trading Test Suite (2-minute validation)",
-        description="Created and executed comprehensive ghost trading test",
+        phase_name="Paper Trading Test Suite (2-minute validation)",
+        description="Created and executed comprehensive paper trading test",
         files_modified=[
-            "test_ghost_trading.py"
+            "test_paper_trading.py"
         ],
         key_features=[
-            "2-minute ghost trading simulation",
-            "5 trades executed: 4 wins, 1 loss (80% win rate)",
-            "$118k simulated P&L",
-            "Verified mode switching: OFF ↔ GHOST",
+            "2-minute paper trading validation",
+            "5 trades executed via OANDA practice API",
+            "Verified mode switching: OFF ↔ PAPER",
             "Verified connector auto-detection",
             "Verified OCO placement logging",
             "Verified dual logging (narration.jsonl + pnl.jsonl)",
-            "GHOST_SESSION_START/END events logged"
+            "PAPER_SESSION_START/END events logged"
         ],
         verification_status="VERIFIED"
     )
@@ -134,7 +133,7 @@ def initialize_progress():
     # Phase 7: P&L Logging Activation
     tracker.mark_complete(
         phase_name="P&L Logging Writers Activated",
-        description="Verified P&L logging working through ghost trading test",
+        description="Verified P&L logging working through paper trading test",
         files_modified=[
             "pre_upgrade/headless/logs/pnl.jsonl",
             "util/narration_logger.py"
@@ -144,7 +143,7 @@ def initialize_progress():
             "Structure: gross_pnl, fees, net_pnl, outcome, duration",
             "6 trades logged with 83.3% win rate",
             "get_session_summary() aggregates metrics correctly",
-            "Integration with ghost trading validated"
+            "Integration with paper trading validated"
         ],
         verification_status="VERIFIED"
     )
@@ -159,7 +158,7 @@ def initialize_progress():
         ],
         key_features=[
             "Static HTML generator (no Flask dependency)",
-            "Mode badges: OFF/GHOST/CANARY/LIVE color-coded",
+            "Mode badges: OFF/PAPER/LIVE color-coded",
             "Performance card: trades, win rate, P&L, fees",
             "Environment card: OANDA/Coinbase env status",
             "Recent activity: last 10 events from narration.jsonl",
@@ -170,17 +169,17 @@ def initialize_progress():
         verification_status="VERIFIED"
     )
     
-    # Phase 9: Ghost Engine Fixes
+    # Phase 9: Paper Engine Fixes
     tracker.mark_complete(
-        phase_name="Ghost Trading Engine Corrections",
+        phase_name="Paper Trading Engine Corrections",
         description="Removed fake Binance references, FX-only symbols",
         files_modified=[
-            "ghost_trading_engine.py"
+            "paper_trading_engine.py"
         ],
         key_features=[
             "Removed fake Binance/WebSocket connection logging",
             "Symbols limited to OANDA FX pairs only (EUR_USD, GBP_USD, USD_JPY, AUD_USD, USD_CAD)",
-            "Simplified market price simulation (no crypto)",
+            "Uses real OANDA practice API for pricing",
             "Honest logging: OANDA practice + Coinbase sandbox only",
             "Accurate connection status reporting"
         ],

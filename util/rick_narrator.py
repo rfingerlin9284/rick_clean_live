@@ -36,7 +36,7 @@ class RickNarrator:
             response = requests.get("http://127.0.0.1:11434/api/tags", timeout=2)
             return response.status_code == 200
         except:
-            logger.warning("⚠️ Ollama not available - using fallback narration")
+            logger.error("❌ Ollama not available — narration will use templates. Start Ollama for AI narration: https://ollama.ai")
             return False
     
     def generate_commentary(self, event_type: str, details: Dict[str, Any]) -> str:
@@ -227,8 +227,8 @@ Give a brief one-sentence comment. Be casual and informative. Under 30 words."""
             except Exception as e:
                 logger.warning(f"Ollama query failed: {e}")
         
-        # Fallback to template-based narration
-        return self.fallback_narration(event_type, details)
+        # Use template narration (Ollama unavailable)
+        return self._template_narration(event_type, details)
     
     def query_ollama(self, prompt: str) -> Optional[str]:
         """Query Ollama for commentary"""
@@ -256,8 +256,8 @@ Give a brief one-sentence comment. Be casual and informative. Under 30 words."""
             logger.error(f"Ollama query error: {e}")
         return None
     
-    def fallback_narration(self, event_type: str, details: Dict[str, Any]) -> str:
-        """Template-based fallback when Ollama unavailable"""
+    def _template_narration(self, event_type: str, details: Dict[str, Any]) -> str:
+        """Template-based narration when Ollama unavailable"""
         
         if event_type == "OCO_PLACED":
             symbol = details.get('symbol', 'Unknown')

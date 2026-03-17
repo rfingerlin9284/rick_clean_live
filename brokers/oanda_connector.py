@@ -189,7 +189,11 @@ class OandaConnector:
         if self.environment == "live" and (not self.api_token or not self.account_id):
             self.logger.warning("LIVE OANDA credentials not configured - trading will be disabled")
         elif self.environment == "practice" and (not self.api_token or self.api_token == "your_practice_token_here"):
-            self.logger.warning("Practice OANDA credentials not configured - using simulation mode")
+            raise RuntimeError(
+                "OANDA practice credentials not configured. "
+                "Set OANDA_API_TOKEN and OANDA_ACCOUNT_ID in your .env file. "
+                "Cannot start in simulation mode — real credentials required."
+            )
         else:
             self.logger.info(f"OANDA {self.environment} credentials validated")
     

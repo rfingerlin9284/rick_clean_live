@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Automated Canary-to-Live Promotion System
-Runs ghost trading sessions, tracks performance, auto-promotes when ready
+Automated Paper-to-Live Promotion System
+Runs paper trading sessions, tracks performance, auto-promotes when ready
 Integrates with narration_logger and mode_manager
 """
 import json
@@ -21,7 +21,7 @@ logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(message)s',
     handlers=[
-        logging.FileHandler('/home/ing/RICK/RICK_LIVE_CLEAN/logs/canary_promotion.log'),
+        logging.FileHandler('/home/ing/RICK/RICK_LIVE_CLEAN/logs/paper_promotion.log'),
         logging.StreamHandler()
     ]
 )
@@ -39,9 +39,8 @@ except ImportError:
 # Paths
 ROOT = Path("/home/ing/RICK/RICK_LIVE_CLEAN")
 TOGGLE_FILE = ROOT / ".upgrade_toggle"
-CANARY_RESULTS = ROOT / "canary_results.jsonl"
+PAPER_RESULTS = ROOT / "paper_results.jsonl"
 PROMOTION_REPORT = ROOT / "promotion_report.json"
-GHOST_ENGINE = ROOT / "ghost_trading_engine.py"
 
 # Promotion criteria
 CRITERIA = {
@@ -54,68 +53,68 @@ CRITERIA = {
     "consistency_threshold": 0.85 # 85% of sessions must be profitable
 }
 
-class CanaryPromotion:
-    """Manages automated canary testing and live promotion"""
-    
+class PaperPromotion:
+    """Manages automated paper testing and live promotion"""
+
     def __init__(self):
         self.results: List[Dict] = []
         self.load_results()
-    
+
     def load_results(self):
-        """Load previous canary session results"""
-        if CANARY_RESULTS.exists():
-            with open(CANARY_RESULTS, 'r') as f:
+        """Load previous paper session results"""
+        if PAPER_RESULTS.exists():
+            with open(PAPER_RESULTS, 'r') as f:
                 for line in f:
                     try:
                         self.results.append(json.loads(line))
                     except json.JSONDecodeError:
                         continue
-        logger.info(f"Loaded {len(self.results)} previous canary sessions")
-    
-    def run_canary_session(self, duration_minutes: int = 45) -> Dict:
-        """Run a single ghost trading session"""
-        logger.info(f"🎯 Starting canary session ({duration_minutes} minutes)")
-        
+        logger.info(f"Loaded {len(self.results)} previous paper sessions")
+
+    def run_paper_session(self, duration_minutes: int = 45) -> Dict:
+        """Run a single paper trading session"""
+        logger.info(f"🎯 Starting paper session ({duration_minutes} minutes)")
+
         start_time = datetime.now()
-        
-        # Run ghost trading engine
+
+        # Run paper trading engine
         try:
             result = subprocess.run(
-                ['python3', str(GHOST_ENGINE)],
+                ['python3', 'paper_trading_engine.py'],
                 cwd=str(ROOT),
                 capture_output=True,
                 text=True,
                 timeout=duration_minutes * 60 + 300  # Extra 5 min buffer
             )
-            
+
             # Parse results from output
-            session_data = self._parse_session_output(result.stdout)
+            session_data = self._parse_paper_output(result.stdout)
             session_data['start_time'] = start_time.isoformat()
             session_data['end_time'] = datetime.now().isoformat()
-            
+
             # Save result
-            with open(CANARY_RESULTS, 'a') as f:
+            with open(PAPER_RESULTS, 'a') as f:
                 f.write(json.dumps(session_data) + '\n')
-            
+
             self.results.append(session_data)
             logger.info(f"✅ Session complete: Win Rate={session_data.get('win_rate', 0):.1f}%, PnL=${session_data.get('pnl', 0):.2f}")
-            
+
             return session_data
-            
+
         except subprocess.TimeoutExpired:
             logger.error("❌ Session timeout")
             return {"status": "timeout", "timestamp": datetime.now().isoformat()}
         except Exception as e:
             logger.error(f"❌ Session error: {e}")
             return {"status": "error", "error": str(e), "timestamp": datetime.now().isoformat()}
-    
-    def _parse_session_output(self, output: str) -> Dict:
-        """Parse ghost trading engine output using narration_logger"""
+
+    def _parse_paper_output(self, output: str) -> Dict:
+        """Parse paper trading engine output using narration_logger"""
         data = {
             "status": "completed",
             "timestamp": datetime.now().isoformat()
         }
-        
+
         if INTEGRATED_LOGGING:
             # Use our new logging system
             try:
@@ -134,7 +133,7 @@ class CanaryPromotion:
                 logger.error(f"Failed to load from narration logs: {e}")
         else:
             # Legacy: Look for final report file
-            report_files = list(ROOT.glob("ghost_trading_final_report*.json"))
+            report_files = list(ROOT.glob("paper_trading_report.json"))
             if report_files:
                 with open(report_files[-1], 'r') as f:
                     report = json.load(f)
@@ -147,36 +146,36 @@ class CanaryPromotion:
                         "avg_pnl_per_trade": report.get("avg_pnl_per_trade", 0),
                         "consecutive_losses": report.get("consecutive_losses", 0)
                     })
-        
+
         return data
-    
+
     def evaluate_promotion_readiness(self) -> Dict:
         """Evaluate if system is ready for live promotion"""
         logger.info("📊 Evaluating promotion readiness...")
-        
+
         # Get recent successful sessions
         successful_sessions = [r for r in self.results if r.get("status") == "completed"]
-        
+
         if len(successful_sessions) < CRITERIA["min_sessions"]:
             return {
                 "ready": False,
                 "reason": f"Need {CRITERIA['min_sessions']} sessions, have {len(successful_sessions)}"
             }
-        
+
         # Calculate aggregate metrics
         total_trades = sum(s.get("total_trades", 0) for s in successful_sessions)
         total_pnl = sum(s.get("pnl", 0) for s in successful_sessions)
         avg_pnl = total_pnl / len(successful_sessions) if successful_sessions else 0
-        
+
         # Win rate across all sessions
         total_wins = sum(s.get("wins", 0) for s in successful_sessions)
         total_losses = sum(s.get("losses", 0) for s in successful_sessions)
         overall_win_rate = (total_wins / (total_wins + total_losses) * 100) if (total_wins + total_losses) > 0 else 0
-        
+
         # Consistency check
         profitable_sessions = sum(1 for s in successful_sessions if s.get("pnl", 0) > 0)
         consistency = (profitable_sessions / len(successful_sessions)) if successful_sessions else 0
-        
+
         # Check all criteria
         checks = {
             "total_sessions": len(successful_sessions) >= CRITERIA["min_sessions"],
@@ -185,9 +184,9 @@ class CanaryPromotion:
             "avg_pnl": avg_pnl >= CRITERIA["min_avg_pnl"],
             "consistency": consistency >= CRITERIA["consistency_threshold"]
         }
-        
+
         all_passed = all(checks.values())
-        
+
         report = {
             "ready": all_passed,
             "timestamp": datetime.now().isoformat(),
@@ -202,50 +201,50 @@ class CanaryPromotion:
             "checks": checks,
             "criteria": CRITERIA
         }
-        
+
         if all_passed:
             logger.info("🎉 ✅ SYSTEM READY FOR LIVE PROMOTION!")
         else:
             failed = [k for k, v in checks.items() if not v]
             logger.info(f"⏳ Not ready yet. Failed checks: {', '.join(failed)}")
-        
+
         return report
-    
+
     def promote_to_live(self, reason: str) -> bool:
         """Promote system to live trading"""
         logger.info("🚀 INITIATING LIVE PROMOTION")
-        
+
         # Final safety check
         readiness = self.evaluate_promotion_readiness()
         if not readiness["ready"]:
             logger.error("❌ Cannot promote: System not ready")
             return False
-        
+
         # Create promotion report
         promotion_data = {
             "promoted": True,
             "timestamp": datetime.now().isoformat(),
             "reason": reason,
             "readiness_report": readiness,
-            "final_canary_sessions": self.results[-3:]
+            "final_paper_sessions": self.results[-3:]
         }
-        
+
         with open(PROMOTION_REPORT, 'w') as f:
             json.dump(promotion_data, f, indent=2)
-        
+
         # Create backup
         backup_dir = ROOT / "pre_upgrade_backups"
         backup_dir.mkdir(exist_ok=True)
         backup_file = backup_dir / f"pre_live_{datetime.now().strftime('%Y%m%d_%H%M%S')}.tar.gz"
-        
+
         subprocess.run([
             'tar', '-czf', str(backup_file),
             '-C', str(ROOT),
-            '.upgrade_toggle', 'canary_results.jsonl', 'promotion_report.json'
+            '.upgrade_toggle', 'paper_results.jsonl', 'promotion_report.json'
         ])
-        
+
         logger.info(f"✅ Backup created: {backup_file}")
-        
+
         # Flip the toggle to LIVE mode (requires PIN)
         if INTEGRATED_LOGGING:
             try:
@@ -261,87 +260,87 @@ class CanaryPromotion:
             # Legacy: Direct file write (no PIN validation)
             TOGGLE_FILE.write_text("LIVE")
             logger.info("✅ .upgrade_toggle = LIVE (legacy mode - no PIN check)")
-        
+
         # Log to audit
         audit_file = backup_dir / "enable_live_audit.log"
         with open(audit_file, 'a') as f:
             f.write(f"[{datetime.now().isoformat()}] AUTO_PROMOTION reason={reason}\n")
-        
+
         logger.info("🎉 LIVE TRADING ENABLED!")
         return True
-    
+
     def run_automated_path(self, max_sessions: int = 5, session_duration: int = 45):
-        """Run automated canary-to-live path"""
-        logger.info("🤖 Starting automated canary-to-live promotion path")
+        """Run automated paper-to-live path"""
+        logger.info("🤖 Starting automated paper-to-live promotion path")
         logger.info(f"Will run up to {max_sessions} sessions of {session_duration} minutes each")
-        
+
         for session_num in range(1, max_sessions + 1):
             logger.info(f"\n{'='*60}")
-            logger.info(f"📊 CANARY SESSION {session_num}/{max_sessions}")
+            logger.info(f"📊 PAPER SESSION {session_num}/{max_sessions}")
             logger.info(f"{'='*60}\n")
-            
+
             # Run session
-            result = self.run_canary_session(duration_minutes=session_duration)
-            
+            result = self.run_paper_session(duration_minutes=session_duration)
+
             # Check if ready for promotion
             readiness = self.evaluate_promotion_readiness()
-            
+
             if readiness["ready"]:
                 logger.info("\n🎉 PROMOTION CRITERIA MET!")
                 logger.info(f"Metrics: {json.dumps(readiness['metrics'], indent=2)}")
-                
+
                 # Auto-promote
-                reason = f"Automated promotion after {len(self.results)} successful canary sessions with {readiness['metrics']['overall_win_rate']:.1f}% win rate"
+                reason = f"Automated promotion after {len(self.results)} successful paper sessions with {readiness['metrics']['overall_win_rate']:.1f}% win rate"
                 self.promote_to_live(reason)
                 break
             else:
                 logger.info(f"\n⏳ Continue testing... (Session {session_num}/{max_sessions})")
                 logger.info(f"Next check after session {session_num + 1}")
-                
+
                 # Wait 5 minutes between sessions
                 if session_num < max_sessions:
                     logger.info("⏰ Waiting 5 minutes before next session...")
                     time.sleep(300)
-        
+
         else:
             logger.info(f"\n⚠️ Completed {max_sessions} sessions without meeting promotion criteria")
-            logger.info("System will continue in canary mode. Review results and adjust criteria if needed.")
+            logger.info("System will continue in paper mode. Review results and adjust criteria if needed.")
 
 
 def main():
     """Main entry point"""
     import argparse
-    
-    parser = argparse.ArgumentParser(description="Automated Canary-to-Live Promotion")
-    parser.add_argument('--sessions', type=int, default=5, help='Max canary sessions to run')
+
+    parser = argparse.ArgumentParser(description="Automated Paper-to-Live Promotion")
+    parser.add_argument('--sessions', type=int, default=5, help='Max paper sessions to run')
     parser.add_argument('--duration', type=int, default=45, help='Duration per session (minutes)')
     parser.add_argument('--check-only', action='store_true', help='Only check readiness, don\'t run sessions')
     parser.add_argument('--promote-now', action='store_true', help='Force promotion if criteria met')
-    
+
     args = parser.parse_args()
-    
-    canary = CanaryPromotion()
-    
+
+    paper = PaperPromotion()
+
     if args.check_only:
-        readiness = canary.evaluate_promotion_readiness()
+        readiness = paper.evaluate_promotion_readiness()
         print(json.dumps(readiness, indent=2))
         return
-    
+
     if args.promote_now:
-        readiness = canary.evaluate_promotion_readiness()
+        readiness = paper.evaluate_promotion_readiness()
         if readiness["ready"]:
             reason = input("Enter promotion reason (5+ words): ")
             if len(reason.split()) >= 5:
-                canary.promote_to_live(reason)
+                paper.promote_to_live(reason)
             else:
                 print("❌ Reason must be at least 5 words")
         else:
             print("❌ System not ready for promotion")
             print(json.dumps(readiness, indent=2))
         return
-    
+
     # Run automated path
-    canary.run_automated_path(
+    paper.run_automated_path(
         max_sessions=args.sessions,
         session_duration=args.duration
     )

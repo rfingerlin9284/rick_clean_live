@@ -1,9 +1,9 @@
 import os, sys, importlib
-os.environ['RICK_MODE'] = 'CANARY'
+os.environ['RICK_MODE'] = 'PAPER'
 from orchestration.monkey_patch_gateway import activate
 activate()
 # choose default engine if none supplied
-target = (sys.argv[1] if len(sys.argv)>1 else 'canary_trading_engine').replace('.py','')
+target = (sys.argv[1] if len(sys.argv)>1 else 'paper_trading_engine').replace('.py','')
 try:
     mod = importlib.import_module(target)
     # try common main entry

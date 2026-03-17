@@ -401,15 +401,15 @@ def build_rick_system_map(root_dir: str = '/home/ing/RICK/RICK_LIVE_CLEAN') -> S
     })
     
     # ===== BUSINESS LOGIC LAYER =====
-    mapper.add_node('Ghost_Engine', 'engine', 'business', {
-        'engine_file': 'ghost_trading_charter_compliant.py',
-        'mode': 'GHOST',
-        'description': 'Charter-compliant ghost trading with 15 breakpoints'
+    mapper.add_node('Paper_Engine', 'engine', 'business', {
+        'engine_file': 'paper_trading_base.py',
+        'mode': 'PAPER',
+        'description': 'Charter-compliant paper trading with 15 breakpoints'
     })
-    
-    mapper.add_node('Canary_Engine', 'engine', 'business', {
-        'engine_file': 'canary_trading_engine.py',
-        'mode': 'CANARY',
+
+    mapper.add_node('Paper_Trading_Engine', 'engine', 'business', {
+        'engine_file': 'paper_trading_engine.py',
+        'mode': 'PAPER',
         'description': '45-minute validation session'
     })
     

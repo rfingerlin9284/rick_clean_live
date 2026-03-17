@@ -6,8 +6,8 @@ for permanent pre-live trace mapping.
 
 Usage:
     from util.breakpoint_audit import attach_audit_handler, audit_event
-    attach_audit_handler(engine_mode="CANARY")
-    audit_event("SESSION_START", {"mode": "CANARY"})
+    attach_audit_handler(engine_mode="PAPER")
+    audit_event("SESSION_START", {"mode": "PAPER"})
 """
 
 from __future__ import annotations
@@ -38,7 +38,7 @@ class _JsonlAuditHandler(logging.Handler):
             if "BREAKPOINT" in msg:
                 # Extract label text after BREAKPOINT
                 event_type = "BREAKPOINT"
-            elif any(k in msg for k in ("CANARY MODE", "CHARTER-COMPLIANT GHOST")):
+            elif any(k in msg for k in ("PAPER MODE", "CHARTER-COMPLIANT PAPER")):
                 event_type = "ENGINE_BANNER"
 
             payload = {

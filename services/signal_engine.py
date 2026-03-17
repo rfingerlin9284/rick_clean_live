@@ -84,7 +84,7 @@ class _PriceFetcher:
             self._session.headers.update({
                 "User-Agent": "Mozilla/5.0 RickSignalEngine/1.0"
             })
-            logger.debug("FreeMarketDataConnector unavailable; using raw requests fallback.")
+            logger.debug("FreeMarketDataConnector unavailable; using direct requests to Yahoo Finance.")
 
     # Map from internal symbol to Yahoo ticker
     _YAHOO_MAP: Dict[str, str] = {
@@ -107,9 +107,9 @@ class _PriceFetcher:
 
         # Fallback: direct Yahoo Finance
         yahoo_sym = self._YAHOO_MAP.get(symbol, symbol)
-        return self._yahoo_fallback(yahoo_sym)
+        return self._yahoo_source(yahoo_sym)
 
-    def _yahoo_fallback(self, yahoo_symbol: str) -> Optional[float]:
+    def _yahoo_source(self, yahoo_symbol: str) -> Optional[float]:
         import requests as _req
 
         session = self._session or _req.Session()
@@ -124,7 +124,7 @@ class _PriceFetcher:
                 if price:
                     return float(price)
         except Exception as exc:
-            logger.debug("Yahoo fallback failed for %s: %s", yahoo_symbol, exc)
+            logger.debug("Yahoo Finance request failed for %s: %s", yahoo_symbol, exc)
         return None
 
 

@@ -117,15 +117,15 @@ class RickBlueprintGenerator:
             'dependencies': ['foundation', 'ml_learning']
         }
         
-        # Ghost engine
-        ghost_running = self._check_ghost_running()
-        nodes['ghost_engine'] = {
-            'name': 'GHOST ENGINE',
-            'files': ['live_ghost_engine.py'],
-            'description': 'Real-time market scanner with 750ms polling (no real trades)',
-            'size': self._get_file_size(self.project_root / 'RICK_LIVE_DEPLOYMENT' / 'live_ghost_engine.py'),
-            'status': 'active' if ghost_running else 'inactive',
-            'color': self.COLORS['active'] if ghost_running else self.COLORS['inactive'],
+        # Paper engine
+        paper_running = self._check_paper_running()
+        nodes['paper_engine'] = {
+            'name': 'PAPER ENGINE',
+            'files': ['paper_trading_engine.py'],
+            'description': 'Real-time market scanner with 750ms polling (paper account)',
+            'size': self._get_file_size(self.project_root / 'paper_trading_engine.py'),
+            'status': 'active' if paper_running else 'inactive',
+            'color': self.COLORS['active'] if paper_running else self.COLORS['inactive'],
             'dependencies': ['foundation', 'brokers', 'risk', 'wolf_packs']
         }
         
@@ -157,21 +157,21 @@ class RickBlueprintGenerator:
         return f"{size:.1f} GB"
     
     def _check_ml_integration(self) -> bool:
-        """Check if ML models are integrated into ghost engine"""
-        ghost_engine = self.project_root / 'RICK_LIVE_DEPLOYMENT' / 'live_ghost_engine.py'
-        if not ghost_engine.exists():
+        """Check if ML models are integrated into paper engine"""
+        paper_engine = self.project_root / 'paper_trading_engine.py'
+        if not paper_engine.exists():
             return False
-        
+
         try:
-            content = ghost_engine.read_text()
+            content = paper_engine.read_text()
             return 'ml_learning' in content or 'MLModel' in content
-        except:
+        except Exception:
             return False
-    
-    def _check_ghost_running(self) -> bool:
-        """Check if ghost engine is currently running"""
+
+    def _check_paper_running(self) -> bool:
+        """Check if paper engine is currently running"""
         try:
-            result = subprocess.run(['pgrep', '-f', 'live_ghost_engine'], capture_output=True, timeout=2)
+            result = subprocess.run(['pgrep', '-f', 'paper_trading_engine'], capture_output=True, timeout=2)
             return result.returncode == 0
         except:
             return False
@@ -295,11 +295,11 @@ class RickBlueprintGenerator:
             ('foundation', 'brokers', 'Charter\\nValidation'),
             ('foundation', 'risk', 'Rules\\nEnforcement'),
             ('foundation', 'ml_learning', 'PIN\\nGate'),
-            ('brokers', 'ghost_engine', 'Market\\nPricing'),
+            ('brokers', 'paper_engine', 'Market\\nPricing'),
             ('ml_learning', 'wolf_packs', 'ML\\nSignals'),
-            ('wolf_packs', 'ghost_engine', 'Trading\\nSignals'),
-            ('risk', 'ghost_engine', 'Risk\\nChecks'),
-            ('ghost_engine', 'risk', 'Trade\\nEvents'),
+            ('wolf_packs', 'paper_engine', 'Trading\\nSignals'),
+            ('risk', 'paper_engine', 'Risk\\nChecks'),
+            ('paper_engine', 'risk', 'Trade\\nEvents'),
         ]
         
         for src, dst, label in edges:

@@ -151,8 +151,7 @@ INDEX_HTML = '''
             margin-top: 10px;
         }
         .mode-off { background: #6c757d; }
-        .mode-ghost { background: #17a2b8; }
-        .mode-canary { background: #ffc107; color: #000; }
+        .mode-paper { background: #17a2b8; }
         .mode-live { background: #dc3545; animation: pulse 2s infinite; }
         @keyframes pulse {
             0%, 100% { opacity: 1; }
@@ -1062,7 +1061,7 @@ INDEX_HTML = '''
                         html += `<span class="narration-text">Entry: ${event.details.entry_price.toFixed(5)} | Units: ${event.details.units} | Latency: ${event.details.latency_ms.toFixed(1)}ms</span>`;
                     } else if (event.event_type === 'NOTIONAL_ADJUSTMENT') {
                         html += `<span class="narration-text">${event.details.original_units} → ${event.details.adjusted_units} units</span>`;
-                    } else if (event.event_type === 'GHOST_SESSION_END') {
+                    } else if (event.event_type === 'PAPER_SESSION_END') {
                         html += `<span class="narration-text">Trades: ${event.details.total_trades} | Win Rate: ${event.details.win_rate.toFixed(1)}% | P&L: $${event.details.net_pnl.toFixed(2)}</span>`;
                     } else if (event.event_type === 'TRADE_CLOSED') {
                         html += `<span class="narration-text">Exit: ${event.details.exit_price ? event.details.exit_price.toFixed(5) : 'N/A'} | P&L: $${event.details.net_pnl ? event.details.net_pnl.toFixed(2) : '0.00'}</span>`;
@@ -1175,7 +1174,7 @@ INDEX_HTML = '''
             }
         }
 
-        // Poll for new narration every 3 seconds (fallback)
+        // Poll for new narration every 3 seconds
         setInterval(loadNarration, 3000);
         
         // Load initial narration and initialize companion
@@ -1326,11 +1325,8 @@ INDEX_HTML = '''
             <div class="card">
                 <h2>⚙️ Controls</h2>
                 <div class="controls">
-                    <form method="post" action="/mode/ghost" style="display: inline;">
-                        <button type="submit" class="btn-primary">GHOST Mode</button>
-                    </form>
-                    <form method="post" action="/mode/canary" style="display: inline;">
-                        <button type="submit" class="btn-success">CANARY Mode</button>
+                    <form method="post" action="/mode/paper" style="display: inline;">
+                        <button type="submit" class="btn-primary">PAPER Mode</button>
                     </form>
                     <form method="post" action="/mode/off" style="display: inline;">
                         <button type="submit" class="btn-secondary">OFF</button>
@@ -1400,7 +1396,7 @@ INDEX_HTML = '''
                             Latency: {{ "%.1f"|format(event.details.latency_ms) }}ms
                         {% elif event.event_type == 'NOTIONAL_ADJUSTMENT' %}
                             {{ event.details.original_units }} → {{ event.details.adjusted_units }} units
-                        {% elif event.event_type == 'GHOST_SESSION_END' %}
+                        {% elif event.event_type == 'PAPER_SESSION_END' %}
                             Trades: {{ event.details.total_trades }} | 
                             Win Rate: {{ "%.1f"|format(event.details.win_rate) }}% | 
                             P&L: ${{ "%.2f"|format(event.details.net_pnl) }}
@@ -1457,7 +1453,7 @@ def index():
 def change_mode(new_mode):
     """Change system mode"""
     new_mode = new_mode.upper()
-    if new_mode in ['OFF', 'GHOST', 'CANARY']:
+    if new_mode in ['OFF', 'PAPER', 'LIVE']:
         switch_mode(new_mode)
     return redirect(url_for('index'))
 
@@ -1564,18 +1560,18 @@ def narration():
                 outcome = "Win" if net_pnl > 0 else "Loss"
                 event['rick_says'] = f"Trade closed: {symbol} @ {exit_price:.5f}. {outcome} ${net_pnl:.2f}. On to the next one."
             
-            elif event_type == 'GHOST_SESSION_START':
-                mode = details.get('mode', 'ghost')
-                event['rick_says'] = f"Ghost session started. Running in simulation mode - no real capital at risk."
-            
-            elif event_type == 'GHOST_SESSION_END':
+            elif event_type == 'PAPER_SESSION_START':
+                mode = details.get('mode', 'paper')
+                event['rick_says'] = f"Paper session started. Running with OANDA practice account - real market data, no real capital at risk."
+
+            elif event_type == 'PAPER_SESSION_END':
                 total_trades = details.get('total_trades', 0)
                 win_rate = details.get('win_rate', 0)
                 net_pnl = details.get('net_pnl', 0)
-                event['rick_says'] = f"Ghost session complete: {total_trades} trades, {win_rate:.1f}% win rate, ${net_pnl:.2f} simulated P&L."
-            
-            elif event_type == 'CANARY_PROMOTION':
-                event['rick_says'] = "System promoted to CANARY mode. Now trading with paper accounts - real market data, no real money."
+                event['rick_says'] = f"Paper session complete: {total_trades} trades, {win_rate:.1f}% win rate, ${net_pnl:.2f} P&L."
+
+            elif event_type == 'PAPER_PROMOTION':
+                event['rick_says'] = "System promoted from paper mode. Now transitioning to LIVE - real market data, real money."
             
             elif event_type == 'LIVE_ACTIVATION':
                 event['rick_says'] = "⚠️ LIVE MODE ACTIVATED. Real capital is now at risk. All systems armed and operational."
