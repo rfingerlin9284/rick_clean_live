@@ -7,9 +7,10 @@ Uses OANDA practice API with real Charter rules
 
 import asyncio
 import json
+import logging
 import sys
 from pathlib import Path
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 
 # Import the Charter-compliant paper engine as base
 sys.path.insert(0, str(Path(__file__).parent))
@@ -35,7 +36,7 @@ class PaperTradingEngine(CharterCompliantPaperEngine):
 
         # Override session duration for PAPER (45 minutes - quick validation)
         self.session_duration_hours = 0.75  # 45 minutes
-        self.end_time = self.start_time + __import__('datetime').timedelta(hours=self.session_duration_hours)
+        self.end_time = self.start_time + timedelta(hours=self.session_duration_hours)
 
         print("=" * 80)
         print("📄 PAPER MODE - Quick Validation Trading (45 minutes)")
@@ -64,7 +65,7 @@ class PaperTradingEngine(CharterCompliantPaperEngine):
 
     async def generate_final_report(self):
         """Generate PAPER-specific final report"""
-        session_duration = (__import__('datetime').datetime.now(__import__('datetime').timezone.utc) - self.start_time).total_seconds() / 60
+        session_duration = (datetime.now(timezone.utc) - self.start_time).total_seconds() / 60
         completed_trades = self.wins + self.losses
 
         report = {
@@ -96,7 +97,7 @@ class PaperTradingEngine(CharterCompliantPaperEngine):
                 self.total_pnl > 0 and
                 self.charter_violations == 0
             ),
-            'timestamp': __import__('datetime').datetime.now(__import__('datetime').timezone.utc).isoformat()
+            'timestamp': datetime.now(timezone.utc).isoformat()
         }
 
         # Save PAPER-specific report
@@ -108,7 +109,7 @@ class PaperTradingEngine(CharterCompliantPaperEngine):
             pass
 
         # Print summary
-        logger = __import__('logging').getLogger(__name__)
+        logger = logging.getLogger(__name__)
         logger.info("=" * 80)
         logger.info("📄 PAPER MODE - FINAL REPORT")
         logger.info("=" * 80)

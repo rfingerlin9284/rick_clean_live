@@ -5,10 +5,10 @@ Runs paper trading sessions, tracks performance, auto-promotes when ready
 Integrates with narration_logger and mode_manager
 """
 import json
+import sys
 import time
 import subprocess
 import logging
-import sys
 from pathlib import Path
 from datetime import datetime, timedelta
 from typing import Dict, List, Optional
@@ -80,7 +80,7 @@ class PaperPromotion:
         # Run paper trading engine
         try:
             result = subprocess.run(
-                ['python3', 'paper_trading_engine.py'],
+                [sys.executable, 'paper_trading_engine.py'],
                 cwd=str(ROOT),
                 capture_output=True,
                 text=True,

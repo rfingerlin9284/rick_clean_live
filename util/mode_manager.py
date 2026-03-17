@@ -28,6 +28,8 @@ TOGGLE_FILE = PROJECT_ROOT / ".upgrade_toggle"
 
 MODE_MAP = {
     "PAPER": {"oanda": "practice", "coinbase": "sandbox", "description": "PAPER mode - Paper/practice trading with real API endpoints", "api": True},
+    "OFF": {"oanda": "practice", "coinbase": "sandbox", "description": "OFF mode - No trading (safe default)", "api": False},
+    "LIVE": {"oanda": "live", "coinbase": "live", "description": "LIVE mode - Real money trading (requires PIN)", "api": True},
 }
 
 
@@ -127,7 +129,8 @@ def get_mode_info() -> Dict[str, any]:
         "coinbase_environment": mode_config["coinbase"],
         "description": mode_config["description"],
         "is_paper": mode == "PAPER",
-        "api": mode_config["api"],  # True for PAPER
+        "is_live": mode == "LIVE",
+        "api": mode_config["api"],
         "toggle_file": str(TOGGLE_FILE)
     }
 
