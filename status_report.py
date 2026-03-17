@@ -48,7 +48,7 @@ print()
 print("=" * 80)
 print("🔥 TRADING ENGINE")
 print("=" * 80)
-engine_running, engine_info = get_process_status("canary_trading_engine")
+engine_running, engine_info = get_process_status("paper_trading_engine")
 engine_pid = get_pid_from_file(".paper_trading.pid")
 
 if engine_running:

@@ -56,10 +56,10 @@ ACTIVE_COMPONENTS_MAP = {
         "components": {
             "mode_manager.py": {
                 "path": "util/mode_manager.py",
-                "purpose": ".upgrade_toggle integration for OFF/GHOST/CANARY/LIVE modes",
+                "purpose": ".upgrade_toggle integration for OFF/PAPER/LIVE modes",
                 "status": "ACTIVE",
                 "key_features": [
-                    "Mode mappings: OFF/GHOST/CANARY/LIVE",
+                    "Mode mappings: OFF/PAPER/LIVE",
                     "Environment auto-detection",
                     "PIN validation for LIVE mode",
                     "Connector environment mapping",
@@ -67,8 +67,8 @@ ACTIVE_COMPONENTS_MAP = {
                 ],
                 "modes": {
                     "OFF": {"oanda": "practice", "coinbase": "sandbox"},
-                    "GHOST": {"oanda": "practice", "coinbase": "sandbox"},
-                    "CANARY": {"oanda": "practice", "coinbase": "sandbox"},
+                    "PAPER": {"oanda": "practice", "coinbase": "sandbox"},
+                    
                     "LIVE": {"oanda": "live", "coinbase": "live", "requires_pin": True}
                 },
                 "dependencies": ["rick_charter.py"],
@@ -129,7 +129,7 @@ ACTIVE_COMPONENTS_MAP = {
                     "Auto-upsize units (500→12,907)",
                     "OCO placement with latency logging",
                     "Narration event logging",
-                    "Import fallback chain"
+                    "Import chain"
                 ],
                 "asset_class": "FX",
                 "symbols": ["EUR_USD", "GBP_USD", "USD_JPY", "AUD_USD", "USD_CAD"],
@@ -145,7 +145,7 @@ ACTIVE_COMPONENTS_MAP = {
                     "Min-notional enforcement ($15k)",
                     "OCO placement logging",
                     "Advanced API integration",
-                    "Import fallback chain"
+                    "Import chain"
                 ],
                 "asset_class": "CRYPTO",
                 "symbols": ["BTC-USD", "ETH-USD", "BNB-USD", "SOL-USD", "XRP-USD"],
@@ -456,15 +456,15 @@ ACTIVE_COMPONENTS_MAP = {
         }
     },
     
-    "ghost_trading": {
+    "paper_trading": {
         "description": "45-minute validation sessions before live promotion",
         "components": {
-            "ghost_trading_engine.py": {
-                "path": "ghost_trading_engine.py",
-                "purpose": "45-minute ghost trading validation",
+            "paper_trading_engine.py": {
+                "path": "paper_trading_engine.py",
+                "purpose": "45-minute paper trading validation",
                 "status": "ACTIVE - CURRENTLY RUNNING",
                 "key_features": [
-                    "Real-time paper trading simulation",
+                    "Real-time paper trading via OANDA Practice API",
                     "OANDA FX pairs only",
                     "45-minute session duration",
                     "Promotion criteria evaluation",
@@ -481,28 +481,28 @@ ACTIVE_COMPONENTS_MAP = {
                 "dependencies": ["narration_logger.py", "mode_manager.py"],
                 "verification": "RUNNING"
             },
-            "test_ghost_trading.py": {
-                "path": "test_ghost_trading.py",
-                "purpose": "2-minute ghost trading test suite",
+            "tests/test_paper_trading.py": {
+                "path": "tests/test_paper_trading.py",
+                "purpose": "Paper trading test suite",
                 "status": "ACTIVE",
                 "key_features": [
                     "Quick validation (2 minutes)",
-                    "5 trade simulation",
+                    "5 trade validation",
                     "Mode switching verification",
                     "Logging verification"
                 ],
-                "dependencies": ["ghost_trading_engine.py"],
+                "dependencies": ["paper_trading_engine.py"],
                 "verification": "VERIFIED"
             }
         }
     },
     
     "promotion_system": {
-        "description": "Automated canary-to-live promotion logic",
+        "description": "Automated paper-to-live promotion logic",
         "components": {
-            "canary_to_live.py": {
-                "path": "canary_to_live.py",
-                "purpose": "Automated GHOST→CANARY→LIVE promotion",
+            "paper_to_live.py": {
+                "path": "paper_to_live.py",
+                "purpose": "Automated PAPER→LIVE promotion",
                 "status": "ACTIVE",
                 "key_features": [
                     "Reads from narration_logger",
@@ -538,9 +538,9 @@ ACTIVE_COMPONENTS_MAP = {
                 "dependencies": ["narration_logger.py", "mode_manager.py"],
                 "verification": "VERIFIED"
             },
-            "monitor_ghost_session.py": {
-                "path": "scripts/monitor_ghost_session.py",
-                "purpose": "Real-time ghost session monitoring",
+            "monitor_paper_session.py": {
+                "path": "scripts/monitor_paper_session.py",
+                "purpose": "Real-time paper session monitoring",
                 "status": "ACTIVE",
                 "key_features": [
                     "Live session tracking",

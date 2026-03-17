@@ -94,13 +94,13 @@ def test_wolf_packs():
 
 test_component("Wolf Pack Orchestrator (Strategy Coordination)", test_wolf_packs)
 
-# Test 8: Ghost Trading Engine
-def test_ghost_engine():
+# Test 8: Paper Trading Engine
+def test_paper_engine():
     # Check file exists and compiles
     import py_compile
-    py_compile.compile('ghost_trading_charter_compliant.py', doraise=True)
+    py_compile.compile('paper_trading_base.py', doraise=True)
 
-test_component("Ghost Trading Engine (Automated Trading)", test_ghost_engine)
+test_component("Paper Trading Engine (Automated Trading)", test_paper_engine)
 
 # Test 9: OANDA Trading Engine
 def test_oanda_engine():

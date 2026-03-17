@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Performance Comparison Tool
-Compares baseline ghost trading vs ML-enhanced capabilities
+Compares baseline paper trading vs ML-enhanced capabilities
 PIN: 841921
 """
 
@@ -12,15 +12,15 @@ from datetime import datetime, timezone
 from typing import Dict, List, Any
 import subprocess
 
-def load_ghost_report() -> Dict[str, Any]:
-    """Load current ghost trading report"""
+def load_paper_report() -> Dict[str, Any]:
+    """Load current paper trading report"""
     try:
-        with open('ghost_trading_final_report.json', 'r') as f:
+        with open('paper_trading_report.json', 'r') as f:
             return json.load(f)
     except FileNotFoundError:
         return {}
     except Exception as e:
-        print(f"⚠️  Error loading ghost report: {e}")
+        print(f"⚠️  Error loading paper report: {e}")
         return {}
 
 def load_ml_test_report() -> Dict[str, Any]:
@@ -34,12 +34,12 @@ def load_ml_test_report() -> Dict[str, Any]:
         print(f"⚠️  Error loading ML report: {e}")
         return {}
 
-def check_ghost_process() -> Dict[str, Any]:
-    """Check if ghost trading process is running"""
+def check_paper_process() -> Dict[str, Any]:
+    """Check if paper trading process is running"""
     try:
         result = subprocess.run(['ps', 'aux'], capture_output=True, text=True)
-        if 'ghost_trading_engine.py' in result.stdout:
-            lines = [l for l in result.stdout.split('\n') if 'ghost_trading_engine.py' in l]
+        if 'paper_trading_engine.py' in result.stdout:
+            lines = [l for l in result.stdout.split('\n') if 'paper_trading_engine.py' in l]
             if lines:
                 parts = lines[0].split()
                 return {
@@ -88,9 +88,9 @@ def main():
     print("="*80 + "\n")
     
     # Load reports
-    ghost_report = load_ghost_report()
+    paper_report = load_paper_report()
     ml_report = load_ml_test_report()
-    process_info = check_ghost_process()
+    process_info = check_paper_process()
     components = get_component_status()
     
     # ==========================================
@@ -99,24 +99,24 @@ def main():
     print("🎯 CURRENT BASELINE (Ghost Trading - No ML)")
     print("-" * 80)
     
-    if ghost_report:
-        timestamp = ghost_report.get('timestamp', 'Unknown')
-        promotion = "✅ Eligible" if ghost_report.get('promotion_eligible', False) else "⏳ Not yet"
+    if paper_report:
+        timestamp = paper_report.get('timestamp', 'Unknown')
+        promotion = "✅ Eligible" if paper_report.get('promotion_eligible', False) else "⏳ Not yet"
         print(f"Session:             {timestamp}")
         print(f"Promotion Status:    {promotion}")
-        print(f"Duration:            {ghost_report.get('session_duration_minutes', 0):.1f} minutes")
-        print(f"Total Trades:        {ghost_report.get('total_trades', 0)}")
-        print(f"Winning Trades:      {ghost_report.get('wins', 0)}")
-        print(f"Losing Trades:       {ghost_report.get('losses', 0)}")
-        print(f"Win Rate:            {ghost_report.get('win_rate', 0):.1f}%")
-        print(f"Total P&L:           ${ghost_report.get('total_pnl', 0):.2f}")
-        print(f"Avg P&L per Trade:   ${ghost_report.get('avg_pnl_per_trade', 0):.2f}")
-        print(f"Consecutive Losses:  {ghost_report.get('consecutive_losses', 0)}")
+        print(f"Duration:            {paper_report.get('session_duration_minutes', 0):.1f} minutes")
+        print(f"Total Trades:        {paper_report.get('total_trades', 0)}")
+        print(f"Winning Trades:      {paper_report.get('wins', 0)}")
+        print(f"Losing Trades:       {paper_report.get('losses', 0)}")
+        print(f"Win Rate:            {paper_report.get('win_rate', 0):.1f}%")
+        print(f"Total P&L:           ${paper_report.get('total_pnl', 0):.2f}")
+        print(f"Avg P&L per Trade:   ${paper_report.get('avg_pnl_per_trade', 0):.2f}")
+        print(f"Consecutive Losses:  {paper_report.get('consecutive_losses', 0)}")
         
         # Calculate metrics
-        trades = ghost_report.get('total_trades', 0)
-        wins = ghost_report.get('wins', 0)
-        losses = ghost_report.get('losses', 0)
+        trades = paper_report.get('total_trades', 0)
+        wins = paper_report.get('wins', 0)
+        losses = paper_report.get('losses', 0)
         
         print(f"\nDecision Logic:      Basic (No ML enhancement)")
         print(f"Pattern Learning:    Not active (0 patterns stored)")
@@ -203,8 +203,8 @@ def main():
     print("\n\n📈 EXPECTED IMPROVEMENTS WITH ML")
     print("-" * 80)
     
-    if ghost_report and ghost_report.get('win_rate', 0) > 0:
-        baseline_wr = ghost_report.get('win_rate', 0)
+    if paper_report and paper_report.get('win_rate', 0) > 0:
+        baseline_wr = paper_report.get('win_rate', 0)
         print(f"Current Win Rate:    {baseline_wr:.1f}%")
         print(f"\nExpected Improvements:")
         print(f"  • Regime Detection:     +5-10% win rate (avoid bad market conditions)")
@@ -233,11 +233,11 @@ def main():
     if process_info['running']:
         print("1. ⏳ Wait for current baseline session to complete")
         print("2. 📊 Review final performance metrics")
-        print("3. 🔥 Launch ML-enhanced ghost session")
+        print("3. 🔥 Launch ML-enhanced paper session")
         print("4. 📈 Compare baseline vs ML-enhanced results")
-        print("5. ✅ Promote to CANARY if ML metrics exceed baseline by ≥10%")
+        print("5. ✅ Promote to LIVE if ML metrics exceed baseline by ≥10%")
     else:
-        print("1. 🔥 Launch ML-enhanced ghost session")
+        print("1. 🔥 Launch ML-enhanced paper session")
         print("2. 📊 Compare against baseline (48 trades, 66.7% win rate)")
         print("3. 📈 Monitor pattern learning effectiveness")
         print("4. 🧠 Evaluate regime detection accuracy")
@@ -245,10 +245,10 @@ def main():
     
     print("\nCommands:")
     print("  # Launch ML-enhanced session:")
-    print("  python3 ghost_trading_engine.py --with-ml")
+    print("  python3 paper_trading_engine.py --with-ml")
     print()
     print("  # Monitor ML performance:")
-    print("  python3 scripts/monitor_ghost_session.py --ml-metrics")
+    print("  python3 scripts/monitor_paper_session.py --ml-metrics")
     print()
     print("  # Compare results:")
     print("  python3 scripts/compare_performance.py")
@@ -260,9 +260,9 @@ def main():
     print("📋 COMPARISON SUMMARY")
     print("="*80)
     
-    if ghost_report:
-        baseline_trades = ghost_report.get('total_trades', 0)
-        baseline_wr = ghost_report.get('win_rate', 0)
+    if paper_report:
+        baseline_trades = paper_report.get('total_trades', 0)
+        baseline_wr = paper_report.get('win_rate', 0)
         baseline_status = "Running" if process_info['running'] else "Completed"
         
         print(f"Baseline Session:    {baseline_status} ({baseline_trades} trades, {baseline_wr:.1f}% win rate)")
@@ -274,10 +274,10 @@ def main():
     
     print(f"ML Intelligence:     {ml_status} ({ml_components} components)")
     print(f"Total Components:    {components['active']}/{components['total']} active")
-    print(f"System Mode:         GHOST")
+    print(f"System Mode:         PAPER")
     print(f"Ready for ML:        ✅ YES")
     
-    print("\n✅ System ready for ML-enhanced ghost trading")
+    print("\n✅ System ready for ML-enhanced paper trading")
     print("🔥 Intelligence stack operational with all 6 components tested")
     print("📊 Baseline data available for performance comparison")
     

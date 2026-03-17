@@ -215,7 +215,7 @@ echo "📊 View positions via SwarmBot interface"
 echo "🔴 Stop trading: Ctrl+C"
 
 # Uncomment to auto-launch:
-# python3 ghost_trading_charter_compliant.py --mode=paper
+# python3 paper_trading_base.py
 # python3 dashboard/app.py &
 """
     

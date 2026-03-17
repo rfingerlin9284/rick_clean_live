@@ -122,13 +122,13 @@ class ProgressTracker:
 
 ---
 
-## 🎯 System Status: GHOST MODE (45-min validation active)
+## 🎯 System Status: PAPER MODE (45-min validation active)
 
 ### Current Configuration
 - **Risk/Reward Ratio**: {constants['MIN_RISK_REWARD_RATIO']} (Charter validated)
 - **Min Notional**: ${constants['MIN_NOTIONAL_USD']:,} (enforced both connectors)
 - **Max Latency**: {constants['MAX_PLACEMENT_LATENCY_MS']}ms (OCO placement)
-- **Mode**: GHOST → .upgrade_toggle managed
+- **Mode**: PAPER → .upgrade_toggle managed
 - **Environments**: OANDA=practice, Coinbase=sandbox
 
 ---
@@ -191,7 +191,7 @@ This section documents all currently active code files and their purpose.
 
 2. **Mode Manager** (`util/mode_manager.py`)
    - .upgrade_toggle integration
-   - OFF/GHOST/CANARY/LIVE modes
+   - OFF/PAPER/LIVE modes
    - Connector auto-detection
 
 3. **Narration Logger** (`util/narration_logger.py`)
@@ -208,15 +208,15 @@ This section documents all currently active code files and their purpose.
 ### Trading Modes
 ```
 OFF     → OANDA: practice, Coinbase: sandbox (safe default)
-GHOST   → OANDA: practice, Coinbase: sandbox (45-min validation)
-CANARY  → OANDA: practice, Coinbase: sandbox (extended testing)
+PAPER → OANDA: practice, Coinbase: sandbox (paper validation)
+
 LIVE    → OANDA: live,     Coinbase: live     (requires PIN: 841921)
 ```
 
 ### Promotion Flow
-1. **GHOST** session runs 45 minutes
+1. **PAPER** session runs 45 minutes
 2. System logs to `narration.jsonl` + `pnl.jsonl`
-3. **CANARY** evaluates: 70% win rate, 10+ trades, $50+ P&L
+3. **PAPER** evaluates: 70% win rate, 10+ trades, $50+ P&L
 4. If criteria met → promote to **LIVE** with PIN validation
 5. Live trading begins with full guardrails
 
@@ -231,7 +231,7 @@ LIVE    → OANDA: live,     Coinbase: live     (requires PIN: 841921)
 
 ### Mode Protection
 - LIVE mode requires PIN (841921)
-- Practice/sandbox default for GHOST/CANARY
+- Practice/sandbox default for PAPER
 - .upgrade_toggle file controls all mode switches
 
 ### Min-Notional Enforcement
@@ -264,15 +264,15 @@ RICK_LIVE_CLEAN/
 │   ├── generate_dashboard.py  # Static HTML generator (ACTIVE)
 │   └── dashboard.html          # Auto-refreshing UI
 ├── logs/                       # Session logs
-│   ├── ghost_trading.log       # Ghost session output
-│   └── ghost_session.log       # Background process log
+│   ├── paper_trading.log       # Paper session output
+│   └── paper_session.log       # Background process log
 ├── pre_upgrade/headless/logs/  # Event logs
 │   ├── narration.jsonl         # All trading events (232k+ lines)
 │   └── pnl.jsonl              # P&L tracking (ACTIVE)
-├── ghost_trading_engine.py     # 45-min validation (ACTIVE)
-├── canary_to_live.py          # Promotion logic (ACTIVE)
-├── test_ghost_trading.py      # 2-min test suite (VERIFIED)
-├── .upgrade_toggle            # Mode control (GHOST/OFF/CANARY/LIVE)
+├── paper_trading_engine.py     # 45-min validation (ACTIVE)
+├── paper_to_live.py            # Promotion logic (ACTIVE)
+├── test_paper_trading.py       # validation test suite (VERIFIED)
+├── .upgrade_toggle             # Mode control (PAPER/OFF/LIVE)
 ├── PROGRESS_LOG.json          # Immutable progress log
 └── README.md                  # This file (auto-generated)
 ```
@@ -281,16 +281,16 @@ RICK_LIVE_CLEAN/
 
 ## 🚀 Quick Start
 
-### Run Ghost Trading Session (45 minutes)
+### Run Paper Trading Session (45 minutes)
 ```bash
-# Switch to GHOST mode
-python3 -c "from util.mode_manager import switch_mode; switch_mode('GHOST')"
+# Switch to PAPER mode
+python3 -c "from util.mode_manager import switch_mode; switch_mode('PAPER')"
 
 # Start validation session
-nohup python3 ghost_trading_engine.py > logs/ghost_session.log 2>&1 &
+nohup python3 paper_trading_engine.py > logs/paper_session.log 2>&1 &
 
 # Monitor progress
-tail -f logs/ghost_session.log
+tail -f logs/paper_session.log
 ```
 
 ### Check System Status
@@ -314,7 +314,7 @@ python3 dashboard/generate_dashboard.py
 xdg-open dashboard/dashboard.html
 ```
 
-### Promote to LIVE (requires passing GHOST/CANARY)
+### Promote to LIVE (requires passing PAPER)
 ```bash
 # Switch to LIVE mode (requires PIN: 841921)
 python3 -c "from util.mode_manager import switch_mode; switch_mode('LIVE', pin=841921)"
@@ -339,13 +339,13 @@ python3 -c "from brokers.coinbase_connector import CoinbaseConnector; cc = Coinb
 python3 -c "from foundation.rick_charter import RickCharter; print('Charter valid ✅')"
 ```
 
-### Check Ghost Session Status
+### Check Paper Session Status
 ```bash
 # Check if running
-ps aux | grep ghost_trading_engine | grep -v grep
+ps aux | grep paper_trading_engine | grep -v grep
 
 # View recent trades
-grep "Ghost Trade Result" logs/ghost_session.log | tail -5
+grep "Paper Trade Result" logs/paper_session.log | tail -5
 ```
 
 ---

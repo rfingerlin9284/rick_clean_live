@@ -676,18 +676,7 @@ class SmartLogicFilter:
                 "smart_logic",
                 f"Validation error: {str(e)}"
             )
-            
-            # Return safe fallback
-            return SignalValidation(
-                passed=False,
-                score=0.0,
-                reject_reason=f"Validation system error: {str(e)}",
-                filter_scores=[],
-                risk_reward_ratio=0,
-                confluence_count=0,
-                validation_timestamp=datetime.now(timezone.utc).isoformat(),
-                charter_compliant=False
-            )
+            raise RuntimeError(f"Signal validation system error: {e}") from e
     
     def get_filter_summary(self, validation: SignalValidation) -> Dict[str, Any]:
         """Get human-readable validation summary"""

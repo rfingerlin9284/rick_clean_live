@@ -95,7 +95,7 @@ if both_connected:
     print()
     print("You can now proceed with:")
     print("   • make deploy-full    - Deploy complete 48h system")
-    print("   • make canary         - Run CANARY validation session")
+    print("   • make paper-session   - Run PAPER validation session")
     print()
     sys.exit(0)
 else:

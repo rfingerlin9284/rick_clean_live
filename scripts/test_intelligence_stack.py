@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Full Intelligence Stack Test - GHOST Mode
+Full Intelligence Stack Test - PAPER Mode
 Tests ML models, pattern learner, and regime detector integration
 PIN: 841921
 """
@@ -249,22 +249,22 @@ def test_full_intelligence_pipeline():
         traceback.print_exc()
         return False
 
-def test_integration_with_ghost():
-    """Test integration with ghost trading engine"""
-    logger.info("👻 Testing Ghost Trading Integration...")
+def test_integration_with_paper():
+    """Test integration with paper trading engine"""
+    logger.info("📄 Testing Paper Trading Integration...")
     
     try:
-        # Check if ghost session is running
+        # Check if paper session is running
         import subprocess
         result = subprocess.run(['ps', 'aux'], capture_output=True, text=True)
         
-        if 'ghost_trading_engine.py' in result.stdout:
-            logger.info("  ✅ Ghost trading engine is running")
+        if 'paper_trading_engine.py' in result.stdout:
+            logger.info("  ✅ Paper trading engine is running")
             logger.info("  ✅ Intelligence stack can provide signals")
-            logger.info("  ✅ Ready for enhanced ghost trading")
+            logger.info("  ✅ Ready for enhanced paper trading")
             return True
         else:
-            logger.info("  ⚠️  Ghost trading engine not running")
+            logger.info("  ⚠️  Paper trading engine not running")
             logger.info("  ✅ Intelligence stack ready for next session")
             return True
             
@@ -275,7 +275,7 @@ def test_integration_with_ghost():
 def main():
     """Run full intelligence stack tests"""
     print("\n╔══════════════════════════════════════════════════════════════════════════╗")
-    print("║           🧠 FULL INTELLIGENCE STACK TEST - GHOST MODE                   ║")
+    print("║           🧠 FULL INTELLIGENCE STACK TEST - PAPER MODE                   ║")
     print("╚══════════════════════════════════════════════════════════════════════════╝\n")
     
     results = {}
@@ -296,7 +296,7 @@ def main():
     results['full_pipeline'] = test_full_intelligence_pipeline()
     print()
     
-    results['ghost_integration'] = test_integration_with_ghost()
+    results['paper_integration'] = test_integration_with_paper()
     print()
     
     # Summary
@@ -315,7 +315,7 @@ def main():
     
     if passed == total:
         print("\n✅ FULL INTELLIGENCE STACK: OPERATIONAL")
-        print("🔥 Ready for enhanced ghost trading with ML signals")
+        print("🔥 Ready for enhanced paper trading with ML signals")
         
         # Save test results
         test_report = {

@@ -2,7 +2,7 @@
 """
 Mode Manager - .upgrade_toggle Integration
 Reads system mode from .upgrade_toggle file and maps to connector environments
-Supports two modes: CANARY (real paper/practice) and DEMO (sandbox/simulation)
+Supports PAPER mode for paper/practice trading with real API endpoints
 """
 
 from pathlib import Path
@@ -26,49 +26,49 @@ except NameError:
 
 TOGGLE_FILE = PROJECT_ROOT / ".upgrade_toggle"
 
-# Mode mappings - Two modes only: CANARY (real paper) and DEMO (simulation)
 MODE_MAP = {
-    "CANARY": {"oanda": "practice", "coinbase": "sandbox", "description": "CANARY mode - Real paper/practice trading with real API endpoints", "api": True},
-    "DEMO": {"oanda": "sandbox", "coinbase": "sandbox", "description": "DEMO mode - Sandbox/simulation for testing (no real API calls)", "api": False}
+    "PAPER": {"oanda": "practice", "coinbase": "sandbox", "description": "PAPER mode - Paper/practice trading with real API endpoints", "api": True},
+    "OFF": {"oanda": "practice", "coinbase": "sandbox", "description": "OFF mode - No trading (safe default)", "api": False},
+    "LIVE": {"oanda": "live", "coinbase": "live", "description": "LIVE mode - Real money trading (requires PIN)", "api": True},
 }
 
 
 def read_upgrade_toggle() -> str:
     """
     Read current mode from .upgrade_toggle file
-    
+
     Returns:
-        str: Current mode ('CANARY', 'DEMO')
+        str: Current mode ('PAPER')
     """
     try:
         if not TOGGLE_FILE.exists():
-            logger.warning(f".upgrade_toggle file not found at {TOGGLE_FILE}, defaulting to CANARY")
-            # Create with CANARY default
-            write_upgrade_toggle("CANARY")
-            return "CANARY"
-        
+            logger.warning(f".upgrade_toggle file not found at {TOGGLE_FILE}, defaulting to PAPER")
+            # Create with PAPER default
+            write_upgrade_toggle("PAPER")
+            return "PAPER"
+
         with open(TOGGLE_FILE, 'r') as f:
             mode = f.read().strip().upper()
-        
+
         # Validate mode
         if mode not in MODE_MAP:
-            logger.warning(f"Invalid mode '{mode}' in .upgrade_toggle, defaulting to CANARY")
-            return "CANARY"
-        
+            logger.warning(f"Invalid mode '{mode}' in .upgrade_toggle, defaulting to PAPER")
+            return "PAPER"
+
         return mode
-    
+
     except Exception as e:
-        logger.error(f"Failed to read .upgrade_toggle: {e}, defaulting to CANARY")
-        return "CANARY"
+        logger.error(f"Failed to read .upgrade_toggle: {e}, defaulting to PAPER")
+        return "PAPER"
 
 
 def write_upgrade_toggle(mode: str) -> bool:
     """
     Write mode to .upgrade_toggle file
-    
+
     Args:
-        mode: Mode to set ('CANARY', 'DEMO')
-    
+        mode: Mode to set ('PAPER')
+
     Returns:
         bool: Success
     """
@@ -128,29 +128,30 @@ def get_mode_info() -> Dict[str, any]:
         "oanda_environment": mode_config["oanda"],
         "coinbase_environment": mode_config["coinbase"],
         "description": mode_config["description"],
-        "is_demo": mode == "DEMO",
-        "api": mode_config["api"],  # True for CANARY, False for DEMO
+        "is_paper": mode == "PAPER",
+        "is_live": mode == "LIVE",
+        "api": mode_config["api"],
         "toggle_file": str(TOGGLE_FILE)
     }
 
 
 def switch_mode(new_mode: str) -> bool:
     """
-    Switch system mode between CANARY and DEMO
-    
+    Switch system mode
+
     Args:
-        new_mode: Target mode ('CANARY', 'DEMO')
-    
+        new_mode: Target mode ('PAPER')
+
     Returns:
         bool: Success
     """
     new_mode = new_mode.strip().upper()
-    
+
     # Validate mode
     if new_mode not in MODE_MAP:
-        logger.error(f"Invalid mode '{new_mode}', must be CANARY or DEMO")
+        logger.error(f"Invalid mode '{new_mode}', must be one of: {list(MODE_MAP.keys())}")
         return False
-    
+
     # Write new mode
     if write_upgrade_toggle(new_mode):
         mode_info = get_mode_info()
@@ -158,19 +159,19 @@ def switch_mode(new_mode: str) -> bool:
         logger.info(f"   OANDA → {mode_info['oanda_environment']}")
         logger.info(f"   Coinbase → {mode_info['coinbase_environment']}")
         return True
-    
+
     return False
 
 
 if __name__ == "__main__":
     # Test mode manager
     print("🧪 Mode Manager Test\n")
-    
+
     info = get_mode_info()
     print(f"Current Mode: {info['mode']}")
     print(f"Description: {info['description']}")
     print(f"OANDA: {info['oanda_environment']}")
     print(f"Coinbase: {info['coinbase_environment']}")
-    print(f"Is Demo: {info['is_demo']}")
+    print(f"Is Paper: {info['is_paper']}")
     print(f"API Enabled: {info['api']}")
     print(f"Toggle File: {info['toggle_file']}")

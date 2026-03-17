@@ -9,35 +9,35 @@ from pathlib import Path
 
 def main():
     print("=" * 80)
-    print("📊 GHOST TRADING COMPARISON: OLD (Fake) vs NEW (Charter-Compliant)")
+    print("📊 PAPER TRADING COMPARISON: OLD (Fake) vs NEW (Charter-Compliant)")
     print("=" * 80)
     print()
     
     # Load old fake results
-    old_report_path = "ghost_trading_final_report.json"
+    old_report_path = "paper_trading_final_report.json"
     if os.path.exists(old_report_path):
         with open(old_report_path, 'r') as f:
             old_report = json.load(f)
-        print("✅ OLD Report Found: ghost_trading_final_report.json")
+        print("✅ OLD Report Found: paper_trading_final_report.json")
     else:
         print("⚠️  OLD report not found")
         old_report = None
     
     # Load new Charter-compliant results
-    new_report_path = "ghost_trading_charter_compliant_report.json"
+    new_report_path = "paper_trading_report.json"
     if os.path.exists(new_report_path):
         with open(new_report_path, 'r') as f:
             new_report = json.load(f)
-        print("✅ NEW Report Found: ghost_trading_charter_compliant_report.json")
+        print("✅ NEW Report Found: paper_trading_report.json")
     else:
-        print("⚠️  NEW report not found - Run ./launch_charter_ghost.sh first")
+        print("⚠️  NEW report not found - Run python3 paper_trading_base.py first")
         new_report = None
     
     print()
     print("=" * 80)
     
     if old_report:
-        print("📋 OLD GHOST ENGINE (Fake Results)")
+        print("📋 OLD SIMULATION ENGINE (Fake Results)")
         print("-" * 80)
         print(f"Duration:            {old_report.get('session_duration_minutes', 0):.1f} minutes")
         print(f"Total Trades:        {old_report.get('total_trades', 0)}")
@@ -149,7 +149,7 @@ def main():
         print("=" * 80)
         print()
         print("To get REAL validation data, run:")
-        print("  $ ./launch_charter_ghost.sh")
+        print("  $ ./paper_trading_base.py")
         print()
         print("This will:")
         print("  • Enforce all Charter rules ($15K notional, 3.2 RR, etc.)")

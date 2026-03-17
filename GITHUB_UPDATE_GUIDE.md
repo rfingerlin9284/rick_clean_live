@@ -33,6 +33,55 @@
 
 ---
 
+## 🌿 Branches & Downloading — What Gets Downloaded?
+
+This is a common question: **"If I download main, do I also download the branches?"**
+
+The answer depends on *how* you download:
+
+### Option A: `git clone` (Recommended)
+```bash
+git clone https://github.com/rfingerlin9284/rick_clean_live.git
+```
+- ✅ Downloads the **entire repository**, including **all branches**
+- You land on `main` by default, but all other branches are available
+- Switch to any branch with:
+  ```bash
+  git checkout <branch-name>
+  # Example:
+  git checkout my-feature-branch
+  ```
+- List all available branches (local + remote) with:
+  ```bash
+  git branch -a
+  ```
+
+### Option B: GitHub "Download ZIP"
+- ⚠️ Downloads **only the currently selected branch** (whichever is shown on GitHub)
+- Other branches are **NOT included** in the ZIP
+- If you download the ZIP from `main`, you only get `main`'s files
+
+### Summary Table
+
+| Method | Gets `main`? | Gets all branches? |
+|---|---|---|
+| `git clone <url>` | ✅ Yes | ✅ Yes |
+| GitHub → Download ZIP | ✅ Yes (only selected branch) | ❌ No |
+
+### Switching Between Branches After Cloning
+```bash
+# See all branches
+git branch -a
+
+# Switch to a specific branch
+git checkout <branch-name>
+
+# Create and switch to a new branch
+git checkout -b <new-branch-name>
+```
+
+---
+
 ## 🔧 Git Commands to Update GitHub
 
 ### **Step 1: Check Status**

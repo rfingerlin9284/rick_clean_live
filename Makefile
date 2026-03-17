@@ -17,10 +17,10 @@ BOLD := \033[1m
 NC := \033[0m # No Color
 
 # Group .PHONY declarations logically
-.PHONY: market-help market-venv install-market run-market mode-canary mode-live
+.PHONY: market-help market-venv install-market run-market mode-paper mode-live
 .PHONY: help status clean stop install test
-.PHONY: paper canary ghost live dashboard
-.PHONY: paper-48h canary-session monitor logs
+.PHONY: paper live dashboard
+.PHONY: paper-48h paper-session monitor logs
 .PHONY: deploy-full-auto deploy-full dashboard-supervised restart-paper clean-logs
 .PHONY: report capital timezone preflight verify
 .PHONY: snapshot verify-snapshot baseline-init baseline-audit auto-backup
@@ -81,7 +81,7 @@ market-help:
 	@echo "  market-venv       - create local venv"
 	@echo "  install-market    - install market API deps"
 	@echo "  run-market        - start market data API (127.0.0.1:5560)"
-	@echo "  mode-canary       - switch to CANARY mode (non-interactive)"
+	@echo "  mode-paper       - switch to PAPER mode (non-interactive)"
 	@echo "  mode-live         - switch to LIVE (PIN required: make mode-live PIN=841921)"
 
 .PHONY: market-venv
@@ -98,10 +98,10 @@ run-market: install-market
 	@echo "Loading environment and starting Market Data API..."
 	@bash services/start_market_api.sh
 
-.PHONY: mode-canary
-mode-canary: market-venv
+.PHONY: mode-paper
+mode-paper: market-venv
 	. $(VENV)/bin/activate
-	$(PY) -c "from util.mode_manager import switch_mode; switch_mode('CANARY')"
+	$(PY) -c "from util.mode_manager import switch_mode; switch_mode('PAPER')"
 
 .PHONY: mode-live
 mode-live: market-venv
@@ -112,8 +112,8 @@ mode-live: market-venv
 ##@ General
 
 .PHONY: help status clean stop install test
-.PHONY: paper canary ghost live dashboard
-.PHONY: paper-48h canary-session monitor logs
+.PHONY: paper live dashboard
+.PHONY: paper-48h paper-session monitor logs
 .PHONY: deploy-full-auto deploy-full dashboard-supervised restart-paper clean-logs
 .PHONY: report capital timezone preflight verify
 .PHONY: snapshot verify-snapshot baseline-init baseline-audit auto-backup
@@ -184,7 +184,7 @@ install: ## Install Python dependencies
 
 test: ## Run system tests
 	@echo "$(GREEN)Running tests...$(NC)"
-	python3 test_ghost_trading.py
+	python3 -m pytest tests/ -q
 
 ##@ Trading Modes
 
@@ -198,15 +198,15 @@ paper-48h: ## Deploy paper trading for 48 hours (background mode)
 	@echo "$(GREEN)════════════════════════════════════════════════════════════════$(NC)"
 	@echo ""
 	@echo "This will:"
-	@echo "  • Switch to CANARY mode"
+	@echo "  • Switch to PAPER mode"
 	@echo "  • Start the trading engine in background"
 	@echo "  • Run for 48 hours continuously"
 	@echo "  • Log all activity to logs/"
 	@echo ""
 	@read -p "Proceed? (y/n): " confirm && [ "$$confirm" = "y" ] || exit 1
 	@echo ""
-	@echo "$(CYAN)Step 1: Switching to CANARY mode...$(NC)"
-	@python3 -c "from util.mode_manager import switch_mode; switch_mode('CANARY')"
+	@echo "$(CYAN)Step 1: Switching to PAPER mode...$(NC)"
+	@python3 -c "from util.mode_manager import switch_mode; switch_mode('PAPER')"
 	@echo "$(GREEN)✓ Mode switched$(NC)"
 	@echo ""
 	@echo "$(CYAN)Step 2: Creating logs directory...$(NC)"
@@ -214,7 +214,7 @@ paper-48h: ## Deploy paper trading for 48 hours (background mode)
 	@echo "$(GREEN)✓ Logs directory ready$(NC)"
 	@echo ""
 	@echo "$(CYAN)Step 3: Starting trading engine in background...$(NC)"
-	@nohup python3 canary_trading_engine.py > logs/paper_trading_48h.log 2>&1 & echo $$! > .paper_trading.pid
+	@nohup python3 paper_trading_engine.py > logs/paper_trading_48h.log 2>&1 & echo $$! > .paper_trading.pid
 	@sleep 2
 	@if ps -p $$(cat .paper_trading.pid 2>/dev/null) > /dev/null 2>&1; then \
 		echo "$(GREEN)✓ Trading engine started (PID: $$(cat .paper_trading.pid))$(NC)"; \
@@ -241,9 +241,9 @@ deploy-full-auto: ## Deploy FULL system automatically (for systemd service)
 	@echo "$(GREEN)════════════════════════════════════════════════════════════════$(NC)"
 	@echo "$(GREEN)🚀 AUTO-DEPLOYING RICK TRADING SYSTEM$(NC)"
 	@echo "$(GREEN)════════════════════════════════════════════════════════════════$(NC)"
-	@python3 -c "from util.mode_manager import switch_mode; switch_mode('CANARY')"
+	@python3 -c "from util.mode_manager import switch_mode; switch_mode('PAPER')"
 	@mkdir -p logs
-	@nohup python3 canary_trading_engine.py > logs/paper_trading_48h.log 2>&1 & echo $$! > .paper_trading.pid
+	@nohup python3 paper_trading_engine.py > logs/paper_trading_48h.log 2>&1 & echo $$! > .paper_trading.pid
 	@sleep 2
 	@nohup python3 dashboard_supervisor.py > logs/dashboard_supervisor.log 2>&1 & echo $$! > .dashboard_supervisor.pid
 	@sleep 3
@@ -255,7 +255,7 @@ deploy-full: ## Deploy FULL system: paper trading + supervised dashboard (COMPLE
 	@echo "$(GREEN)════════════════════════════════════════════════════════════════$(NC)"
 	@echo ""
 	@echo "$(BOLD)This will start:$(NC)"
-	@echo "  ✓ Paper trading engine (48h CANARY mode)"
+	@echo "  ✓ Paper trading engine (48h PAPER mode)"
 	@echo "  ✓ Web dashboard with auto-restart"
 	@echo "  ✓ Rick Hive Mind collective"
 	@echo "  ✓ Plain English narration logging"
@@ -266,9 +266,9 @@ deploy-full: ## Deploy FULL system: paper trading + supervised dashboard (COMPLE
 	@echo ""
 	@echo "$(CYAN)═══ Phase 1: Starting Paper Trading ═══$(NC)"
 	@echo ""
-	@python3 -c "from util.mode_manager import switch_mode; switch_mode('CANARY')"
+	@python3 -c "from util.mode_manager import switch_mode; switch_mode('PAPER')"
 	@mkdir -p logs
-	@nohup python3 canary_trading_engine.py > logs/paper_trading_48h.log 2>&1 & echo $$! > .paper_trading.pid
+	@nohup python3 paper_trading_engine.py > logs/paper_trading_48h.log 2>&1 & echo $$! > .paper_trading.pid
 	@sleep 2
 	@if ps -p $$(cat .paper_trading.pid 2>/dev/null) > /dev/null 2>&1; then \
 		echo "$(GREEN)✓ Trading engine running (PID: $$(cat .paper_trading.pid))$(NC)"; \
@@ -313,19 +313,16 @@ deploy-full: ## Deploy FULL system: paper trading + supervised dashboard (COMPLE
 	@echo "$(YELLOW)System will run for 48 hours or until you stop it$(NC)"
 	@echo ""
 
-canary: ## Start CANARY mode (practice API, charter-compliant)
-	@echo "$(GREEN)Starting CANARY Mode...$(NC)"
-	@bash launch_canary.sh
+canary: ## Start PAPER mode (practice API, charter-compliant) — 'canary' alias retained for backward compat
+	@echo "$(YELLOW)⚠️  'make canary' is deprecated — use 'make paper-session' instead$(NC)"
+	@echo "$(GREEN)Starting PAPER Mode...$(NC)"
+	@bash launch_paper.sh
 
-canary-session: ## Quick CANARY validation session (45 minutes)
-	@echo "$(GREEN)Starting CANARY validation session...$(NC)"
-	@python3 -c "from util.mode_manager import switch_mode; switch_mode('CANARY')"
-	@python3 canary_trading_engine.py 841921
+paper-session: ## Quick PAPER validation session (45 minutes)
+	@echo "$(GREEN)Starting PAPER validation session...$(NC)"
+	@python3 -c "from util.mode_manager import switch_mode; switch_mode('PAPER')"
+	@python3 paper_trading_engine.py 841921
 
-ghost: ## Switch to GHOST mode
-	@echo "$(YELLOW)Switching to GHOST mode...$(NC)"
-	@python3 -c "from util.mode_manager import switch_mode; switch_mode('GHOST')"
-	@cat .upgrade_toggle
 
 live: ## Switch to LIVE mode (requires PIN)
 	@echo "$(RED)⚠️  LIVE MODE - REAL MONEY TRADING$(NC)"
@@ -359,8 +356,8 @@ monitor: ## Monitor live trading logs (tail -f)
 	@echo "$(CYAN)Monitoring logs (Ctrl+C to exit)...$(NC)"
 	@if [ -f .paper_trading.pid ]; then \
 		tail -f logs/paper_trading_48h.log; \
-	elif [ -f logs/ghost_charter_compliant.log ]; then \
-		tail -f logs/ghost_charter_compliant.log; \
+	elif [ -f logs/paper_trading.log ]; then \
+		tail -f logs/paper_trading.log; \
 	else \
 		echo "$(YELLOW)No active log files found$(NC)"; \
 		ls -lt logs/ | head -10; \
@@ -370,8 +367,8 @@ logs: ## Show last 50 lines of recent logs
 	@echo "$(CYAN)Recent logs:$(NC)"
 	@if [ -f .paper_trading.pid ]; then \
 		tail -50 logs/paper_trading_48h.log; \
-	elif [ -f logs/ghost_charter_compliant.log ]; then \
-		tail -50 logs/ghost_charter_compliant.log; \
+	elif [ -f logs/paper_trading.log ]; then \
+		tail -50 logs/paper_trading.log; \
 	else \
 		echo "$(YELLOW)No active log files found$(NC)"; \
 		echo "Available logs:"; \
@@ -395,9 +392,7 @@ stop: ## Stop all trading engines
 		rm -f .paper_trading.pid; \
 		echo "$(GREEN)✓ Paper trading stopped$(NC)"; \
 	fi
-	@pkill -f "python3.*canary_trading_engine" || true
-	@pkill -f "python3.*ghost_trading_engine" || true
-	@pkill -f "python3.*live_ghost_engine" || true
+	@pkill -f "python3.*paper_trading_engine" || true
 	@pkill -f "python3.*dashboard/app.py" || true
 	@pkill -f "python3.*dashboard_supervisor" || true
 	@pkill -f "python3.*rick_hive_mind" || true
@@ -423,8 +418,8 @@ clean-logs: ## Clear all log files (keep directory)
 
 report: ## Show latest trading report
 	@echo "$(CYAN)Latest Trading Report:$(NC)"
-	@if [ -f canary_trading_report.json ]; then \
-		cat canary_trading_report.json | python3 -m json.tool; \
+	@if [ -f paper_trading_report.json ]; then \
+		cat paper_trading_report.json | python3 -m json.tool; \
 	elif [ -f capital_summary.json ]; then \
 		cat capital_summary.json | python3 -m json.tool; \
 	else \
@@ -670,9 +665,7 @@ crypto-gates-integrate: ## Show integration steps for trading engine
 	@echo "      logger.warning(f'Gate rejected: {reason}')"
 	@echo ""
 	@echo "$(YELLOW)Files to modify:$(NC)"
-	@echo "  • canary_trading_engine.py     - Add gate check before BTC/ETH entry"
-	@echo "  • live_ghost_engine.py         - Same gate check for LIVE trading"
-	@echo "  • ghost_trading_engine.py      - Same gate check for GHOST/simulation"
+	@echo "  • paper_trading_engine.py     - Add gate check before BTC/ETH entry"
 	@echo ""
 	@echo "$(GREEN)✅ Ready to integrate into trading engine$(NC)"
 	@echo ""
